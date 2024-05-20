@@ -118,6 +118,10 @@ class SncfApiTravelConfirmWorker(appContext: Context, workerParameters: WorkerPa
                 Log.i("Max Book", "Worker cannot confirm sncf api travel : reservation status is already confirmed")
                 return Result.success()
             }
+            else if (sncfReservation.travelConfirmed == "TOO_LATE_TO_CONFIRM") {
+                Log.i("Max Book", "Worker cannot confirm sncf api travel : reservation status is too late to confirm")
+                return Result.success()
+            }
 
             Log.e("Max Book", "Worker cannot confirm sncf api travel : reservation status is ${sncfReservation.travelConfirmed} (!= TO_BE_CONFIRMED)")
             showErrorNotification(applicationContext, orderId, destinationStation)

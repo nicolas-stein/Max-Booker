@@ -29,7 +29,7 @@ class AlarmSchedulerReceiver: BroadcastReceiver() {
 
         val sncfReservations = MaxBookerDatabase.getInstance(context)
             .sncfReservationDao().getAllLaterThanDateTime(LocalDateTime.now().minusHours(48))
-            .filter { it.travelConfirmed != "CONFIRMED" }
+            .filter { it.travelConfirmed != "CONFIRMED" && it.travelConfirmed != "TOO_LATE_TO_CONFIRM"}
         Log.i("Max Book", "AlarmSchedulerReceiver: ${sncfReservations.count()} notifications to generate !")
 
         val alarmManager = context.getSystemService(AlarmManager::class.java)
