@@ -24,8 +24,8 @@ data class SncfApiTravel(
 data class SncfApiTravelSeat (
     val facingForward: Boolean,
     val seatPosition: String,
-    val spaceType: String,
-    val tgvDeck: String
+    val spaceType: String?,
+    val tgvDeck: String?
 ) {
 
     fun toSncfSeat(): SncfSeat {

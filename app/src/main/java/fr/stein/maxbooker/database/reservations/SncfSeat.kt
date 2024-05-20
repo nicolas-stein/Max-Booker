@@ -3,19 +3,19 @@ package fr.stein.maxbooker.database.reservations
 data class SncfSeat(
     val facingForward: Boolean,
     val seatPosition: String,
-    val spaceType: String,
-    val tgvDeck: String
+    val spaceType: String?,
+    val tgvDeck: String?
 ) {
     fun seatPositionToStr(): String {
         return assignmentToStr(seatPosition)
     }
 
     fun spaceTypeToStr(): String {
-        return assignmentToStr(spaceType)
+        return if(spaceType!=null) assignmentToStr(spaceType) else ""
     }
 
     fun tgvDeckToStr(): String {
-        return assignmentToStr(tgvDeck)
+        return if(tgvDeck!=null) assignmentToStr(tgvDeck) else ""
     }
 
     private fun assignmentToStr(assignment: String): String {
