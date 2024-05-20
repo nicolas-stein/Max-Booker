@@ -112,8 +112,6 @@ fun SettingsTab(settingsTabViewModel: SettingsTabViewModel= viewModel(),
         }
         val appSettings = appSettingsDatastore.data.first()
         val myReservationsSettings = appSettings.myReservationsSettings
-        appSettings.myReservationsSettings
-        appSettings.myReservationsSettings
         settingsTabViewModel.showPastReservationsSwitchStateChanged(myReservationsSettings.showPastReservations)
         val appSettingsPastReservationsDuration = myReservationsSettings.pastReservationsDuration
         if (appSettingsPastReservationsDuration == 0L) {
@@ -125,6 +123,7 @@ fun SettingsTab(settingsTabViewModel: SettingsTabViewModel= viewModel(),
         else {
             settingsTabViewModel.pastReservationsDurationChanged(Duration.ofSeconds(appSettingsPastReservationsDuration))
         }
+        settingsTabViewModel.autoConfirmReservationsSwitchStateChanged(myReservationsSettings.autoConfirmReservations)
     }
 }
 
