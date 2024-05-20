@@ -24,13 +24,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.datastore.core.DataStore
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.work.ExistingWorkPolicy
 import androidx.work.WorkManager
@@ -41,7 +37,6 @@ import fr.stein.maxbooker.database.reservations.SncfSeat
 import fr.stein.maxbooker.database.reservations.SncfStation
 import fr.stein.maxbooker.proto.AppSettings
 import fr.stein.maxbooker.ui.tab.TabsViewModel
-import fr.stein.maxbooker.ui.tab.settings.SettingsTabViewModel
 import kotlinx.coroutines.flow.Flow
 import java.time.Duration
 import java.time.LocalDateTime

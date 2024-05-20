@@ -2,14 +2,12 @@ package fr.stein.maxbooker
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Looper
 import android.util.Log
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -25,9 +23,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -38,17 +33,14 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
-import androidx.work.WorkerParameters
 import com.google.android.material.color.DynamicColors
 import com.google.gson.JsonParser
 import fr.stein.maxbooker.alarm.AlarmSchedulerReceiver
 import fr.stein.maxbooker.api.worker.SncfApiReservationsWorker
-import fr.stein.maxbooker.api.worker.SncfApiTravelConfirmWorker
 import fr.stein.maxbooker.api.worker.SncfApiTravelDetailsWorker
 import fr.stein.maxbooker.api.worker.SncfApiUserWorker
 import fr.stein.maxbooker.database.MaxBookerDatabase
 import fr.stein.maxbooker.datastore.MaxBookerDataStore
-import fr.stein.maxbooker.datastore.MaxBookerDataStore.Companion.appSettings
 import fr.stein.maxbooker.ui.common.TabBarItem
 import fr.stein.maxbooker.ui.common.TabView
 import fr.stein.maxbooker.ui.common.theme.MaxBookerTheme

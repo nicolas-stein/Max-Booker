@@ -2,7 +2,6 @@ package fr.stein.maxbooker.database.reservations
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 import fr.stein.maxbooker.api.data.SncfApiTravel
 import java.time.LocalDateTime
 
