@@ -23,10 +23,14 @@ import java.net.URL
 class LoginWebViewClient(private val recorder: PayloadRecorder,
                          private val authenticationDataObtained: (authToken:String?, refreshToken: String?, sncfCookies: String?) -> Unit, ): WebViewClient() {
     override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
+        if (request == null) {
+            return super.shouldInterceptRequest(view, request as WebResourceRequest?)
+        }
+
         //Log.d("Max Book", "shouldInterceptRequest: ${request!!.method} ${request!!.url}")
 
         // Intercept request to get refresh token
-        if (request != null && request.url.toString() == "https://www.maxjeune-tgvinoui.sncf/api/public/auth/sfc/token"){
+        if (request.url.toString() == "https://www.maxjeune-tgvinoui.sncf/api/public/auth/sfc/token") {
             val payload = recorder.getPayload(request.method, request.url.toString())
             Log.d("Max Book", "Token request payload : $payload")
 
@@ -86,6 +90,9 @@ class LoginWebViewClient(private val recorder: PayloadRecorder,
                 }
             }
         }
+        else if (request.url.toString() == "https://www.maxjeune-tgvinoui.sncf/api/public/customer/read-customer") {
+            authenticationDataObtained(null, null, CookieManager.getInstance().getCookie(request.url.toString()))
+        }
 
         return super.shouldInterceptRequest(view, request)
     }
@@ -97,10 +104,6 @@ class LoginWebViewClient(private val recorder: PayloadRecorder,
 
     override fun onPageFinished(view: WebView?, url: String?) {
         super.onPageFinished(view, url)
-        if (url == "https://www.maxjeune-tgvinoui.sncf/sncf-connect/mes-voyages") {
-            // TODO : faire fonctionner ce truc (marche pas au 1er lancement de l'appli)
-            //authenticationDataObtained(null, null, CookieManager.getInstance().getCookie(url.toString()))
-        }
         view?.evaluateJavascript("for(elem of document.body.getElementsByTagName('*')) {if(elem.style.height == '100vh'){elem.style.height=window.innerHeight}}", null)
     }
 
