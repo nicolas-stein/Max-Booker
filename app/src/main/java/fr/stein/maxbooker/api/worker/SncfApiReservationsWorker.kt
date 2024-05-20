@@ -67,10 +67,11 @@ class SncfApiReservationsWorker(appContext: Context, workerParameters: WorkerPar
             Log.d("Max Book", "Worker updated sncf api reservations (${sncfApiReservations.count()} reservations, ${sncfApiSncfStationSet.count()} stations) successfully !")
             val reservations = JsonArray()
             for(sncfApiReservation in sncfApiReservations) {
-                val reservation = JSONObject()
-                reservation.put("orderId", sncfApiReservation.orderId)
-                reservation.put("origin", sncfApiReservation.origin)
-                reservation.put("destination", sncfApiReservation.destination)
+                val reservation = JsonObject()
+                reservation.addProperty("orderId", sncfApiReservation.orderId)
+                reservation.addProperty("origin", sncfApiReservation.origin.rrCode)
+                reservation.addProperty("destination", sncfApiReservation.destination.rrCode)
+                reservations.add(reservation)
             }
             val outputData = Data.Builder().putString("reservations", reservations.toString()).build()
             return Result.success(outputData)

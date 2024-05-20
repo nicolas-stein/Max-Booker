@@ -18,8 +18,8 @@ interface SncfReservationDao {
     @Query("SELECT * FROM SncfReservation ORDER BY departure_datetime ASC")
     fun getAllObservable(): LiveData<List<SncfReservation>>
 
-    @Query("SELECT * FROM SncfReservation WHERE departure_datetime > :dateTime")
-    fun getAllLaterThanDateTime(dateTime: LocalDateTime): List<SncfReservation>
+    @Query("SELECT * FROM SncfReservation WHERE departure_datetime > :afterDateTime")
+    fun getAllLaterThanDateTime(afterDateTime: LocalDateTime): List<SncfReservation>
 
     @Update
     fun updateReservation(reservation: SncfReservation)
