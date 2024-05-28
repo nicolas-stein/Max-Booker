@@ -5,6 +5,16 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
+val commitCount by project.extra {
+    execCommand("git rev-list --count HEAD")?.toInt()
+        ?: throw GradleException("Unable to get number of commits.")
+}
+
+val latestTag by project.extra {
+    execCommand("git describe --tags")
+        ?: throw GradleException("Unable to get version name using git describe --tags")
+}
+
 android {
     namespace = "fr.stein.maxbooker"
     compileSdk = 34
@@ -13,8 +23,8 @@ android {
         applicationId = "fr.stein.maxbooker"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = commitCount
+        versionName = latestTag
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -111,4 +121,32 @@ protobuf {
             }
         }
     }
+}
+
+tasks.whenTaskAdded {
+    if (name.contains("assemble") &&
+        name.contains("Release")
+    ) {
+        dependsOn("checkReleaseVersion")
+    }
+}
+
+tasks.register("checkReleaseVersion") {
+    doLast {
+        val versionName = android.defaultConfig.versionName
+        if (versionName?.matches("\\d+(\\.\\d+)+".toRegex()) == false) {
+            throw GradleException(
+                "Version name for release builds can only be numeric (like 1.0), but was $versionName\n" +
+                        "Please use git tag to set version name on the current commit and try again\n" +
+                        "For example: git tag -a 1.0 -m 'tag message'")
+        }
+    }
+}
+
+fun execCommand(command: String): String? {
+    val cmd = command.split(" ").toTypedArray()
+    val process = ProcessBuilder(*cmd)
+        .redirectOutput(ProcessBuilder.Redirect.PIPE)
+        .start()
+    return process.inputStream.bufferedReader().readLine()?.trim()
 }
