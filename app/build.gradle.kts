@@ -18,11 +18,10 @@ val latestTag by project.extra {
 android {
     signingConfigs {
         create("release") {
-
             storeFile = file("../maxbooker.keystore")
             storePassword = System.getenv("RELEASE_KEYSTORE_PASSWORD")
-            keyPassword = System.getenv("RELEASE_KEYSTORE_ALIAS")
-            keyAlias = System.getenv("RELEASE_KEY_PASSWORD")
+            keyPassword = System.getenv("RELEASE_KEY_PASSWORD")
+            keyAlias = System.getenv("RELEASE_KEYSTORE_ALIAS")
         }
     }
     namespace = "fr.stein.maxbooker"
