@@ -1,7 +1,9 @@
 package fr.stein.maxbooker.api.data
 
+import androidx.annotation.Keep
 import fr.stein.maxbooker.database.reservations.SncfSeat
 
+@Keep
 data class SncfApiTravel(
     val orderId: String,
     val serviceItemId: String,
@@ -21,6 +23,7 @@ data class SncfApiTravel(
     val exchangeable: Boolean
 )
 
+@Keep
 data class SncfApiTravelSeat (
     val facingForward: Boolean,
     val seatPosition: String,

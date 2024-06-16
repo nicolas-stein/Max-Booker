@@ -1,8 +1,10 @@
 package fr.stein.maxbooker.api.data
 
+import androidx.annotation.Keep
 import fr.stein.maxbooker.database.reservations.SncfReservation
 import java.time.LocalDateTime
 
+@Keep
 data class SncfApiReservation(
     val orderId: String,
     val dvNumber: String,
