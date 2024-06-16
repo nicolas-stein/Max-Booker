@@ -16,6 +16,15 @@ val latestTag by project.extra {
 }
 
 android {
+    signingConfigs {
+        create("release") {
+
+            storeFile = file("../maxbooker.keystore")
+            storePassword = System.getenv("RELEASE_KEYSTORE_PASSWORD")
+            keyPassword = System.getenv("RELEASE_KEYSTORE_ALIAS")
+            keyAlias = System.getenv("RELEASE_KEY_PASSWORD")
+        }
+    }
     namespace = "fr.stein.maxbooker"
     compileSdk = 34
 
@@ -37,9 +46,10 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
