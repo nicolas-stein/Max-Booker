@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -151,7 +150,7 @@ private fun SwitchWithLabel(label: String,
         .height(IntrinsicSize.Min)
         .clickable(
             interactionSource = interactionSource,
-            indication = rememberRipple(),
+            indication = null,
             onClick = {
                 if (onLabelClicked != null) {
                     onLabelClicked()

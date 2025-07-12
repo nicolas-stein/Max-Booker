@@ -9,8 +9,8 @@ import androidx.work.WorkerParameters
 import fr.stein.maxbooker.api.getSncfApi
 import fr.stein.maxbooker.datastore.MaxBookerDataStore
 import kotlinx.coroutines.flow.first
-import okhttp3.MediaType
-import okhttp3.RequestBody
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 
 class SncfApiAuthTokenWorker(appContext: Context, workerParameters: WorkerParameters):
@@ -29,7 +29,8 @@ class SncfApiAuthTokenWorker(appContext: Context, workerParameters: WorkerParame
             requestBodyJson.put("redirectUri", "https://maxjeune-tgvinoui.sncf/auth/login/redirect")
 
             val apiResponse = try {
-                sncfApi.getAuthToken(RequestBody.create(MediaType.parse("application/json"), requestBodyJson.toString()))
+                sncfApi.getAuthToken(requestBodyJson.toString()
+                    .toRequestBody("application/json".toMediaTypeOrNull()))
             } catch (e: Exception) {
                 return Result.failure(
                     Data.Builder()

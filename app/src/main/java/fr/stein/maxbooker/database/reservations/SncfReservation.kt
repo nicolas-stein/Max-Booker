@@ -17,7 +17,7 @@ data class SncfReservation(
     @ColumnInfo(name = "train_number") val trainNumber: String,
     @ColumnInfo(name = "coach_number") val coachNumber: String,
     @ColumnInfo(name = "seat_number") val seatNumber: String,
-    @ColumnInfo(name = "reservation_date") val reservationDate: String,
+    @ColumnInfo(name = "reservation_date") val reservationDate: String? = null,
     @ColumnInfo(name = "travel_confirmed") val travelConfirmed: String,
     @ColumnInfo(name = "travel_status") val travelStatus: String,
     @ColumnInfo(name = "service_item_id") var serviceItemId: String? = null,

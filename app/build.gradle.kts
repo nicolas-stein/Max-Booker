@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.googleProtobuf)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.compose.compiler)
 }
 
 val commitCount by project.extra {
@@ -25,12 +26,12 @@ android {
         }
     }
     namespace = "fr.stein.maxbooker"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "fr.stein.maxbooker"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 36
         versionCode = commitCount
         versionName = latestTag
 
@@ -52,19 +53,19 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
 
         isCoreLibraryDesugaringEnabled = true
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
+    kotlin {
+        jvmToolchain(17)
     }
     buildFeatures {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.11"
+        kotlinCompilerExtensionVersion = "1.5.15"
     }
     packaging {
         resources {
@@ -117,18 +118,25 @@ dependencies {
 
 protobuf {
     protoc {
-        artifact = "com.google.protobuf:protoc:4.26.0"
+        artifact = "com.google.protobuf:protoc:4.31.1"
     }
-    plugins {
-        generateProtoTasks {
-            all().forEach {
-                it.builtins {
-                    create("java") {
-                        option("lite")
-                    }
+    generateProtoTasks {
+        all().forEach { task ->
+            task.builtins {
+                create("java") {
+                    option("lite") // Optional: Use lite if using protobuf-lite
                 }
             }
         }
+    }
+}
+
+afterEvaluate {
+    tasks.named("kspDebugKotlin").configure {
+        dependsOn("generateDebugProto")
+    }
+    tasks.named("kspReleaseKotlin").configure {
+        dependsOn("generateReleaseProto")
     }
 }
 

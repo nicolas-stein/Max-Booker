@@ -13,8 +13,8 @@ import fr.stein.maxbooker.api.getSncfApi
 import fr.stein.maxbooker.database.MaxBookerDatabase
 import fr.stein.maxbooker.datastore.MaxBookerDataStore
 import kotlinx.coroutines.flow.first
-import okhttp3.MediaType
-import okhttp3.RequestBody
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import java.time.LocalDateTime
 
@@ -44,7 +44,8 @@ class SncfApiReservationsWorker(appContext: Context, workerParameters: WorkerPar
             requestBodyJson.put("startDate", LocalDateTime.now().minusMonths(3))
 
             val apiResponse = try {
-                sncfApi.getReservations(RequestBody.create(MediaType.parse("application/json"), requestBodyJson.toString()))
+                sncfApi.getReservations(requestBodyJson.toString()
+                    .toRequestBody("application/json".toMediaTypeOrNull()))
             } catch (e: Exception) {
                 return Result.failure(Data.Builder()
                     .putBoolean("networkException", true)

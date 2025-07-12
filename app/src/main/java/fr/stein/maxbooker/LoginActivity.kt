@@ -76,7 +76,6 @@ class LoginActivity : ComponentActivity() {
                             @SuppressLint("SetJavaScriptEnabled")
                             settings.javaScriptEnabled = true
                             settings.domStorageEnabled = true
-                            settings.databaseEnabled = true
 
                             webViewClient = LoginWebViewClient(recorder = recorder, authenticationDataObtained = { authToken, refreshToken, sncfCookies ->
                                 val data = Intent()

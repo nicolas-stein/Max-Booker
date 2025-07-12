@@ -10,8 +10,8 @@ import fr.stein.maxbooker.api.getSncfApi
 import fr.stein.maxbooker.datastore.MaxBookerDataStore
 import fr.stein.maxbooker.proto.SncfCard
 import kotlinx.coroutines.flow.first
-import okhttp3.MediaType
-import okhttp3.RequestBody
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -33,7 +33,8 @@ class SncfApiUserWorker(appContext: Context, workerParameters: WorkerParameters)
             requestBodyJson.put("productTypes", JSONArray(listOf("TGV_MAX_JEUNE", "FIDEL", "IDTGV_MAX")))
 
             val apiResponse = try {
-                sncfApi.readCustomer(RequestBody.create(MediaType.parse("application/json"), requestBodyJson.toString()))
+                sncfApi.readCustomer(requestBodyJson.toString()
+                    .toRequestBody("application/json".toMediaTypeOrNull()))
             } catch (e: Exception) {
                 return Result.failure(Data.Builder()
                     .putBoolean("networkException", true)

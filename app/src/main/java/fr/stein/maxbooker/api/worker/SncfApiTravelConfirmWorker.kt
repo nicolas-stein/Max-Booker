@@ -22,8 +22,8 @@ import fr.stein.maxbooker.database.reservations.SncfReservation
 import fr.stein.maxbooker.database.reservations.SncfStation
 import fr.stein.maxbooker.datastore.MaxBookerDataStore
 import kotlinx.coroutines.flow.first
-import okhttp3.MediaType
-import okhttp3.RequestBody
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -136,7 +136,8 @@ class SncfApiTravelConfirmWorker(appContext: Context, workerParameters: WorkerPa
         requestBodyJson.put("departureDateTime", sncfReservation.departureDateTime)
 
         val apiResponse = try {
-            sncfApi.confirmTravel(RequestBody.create(MediaType.parse("application/json"), requestBodyJson.toString()))
+            sncfApi.confirmTravel(requestBodyJson.toString()
+                .toRequestBody("application/json".toMediaTypeOrNull()))
         } catch (e: Exception) {
             return Result.failure(
                 Data.Builder()
