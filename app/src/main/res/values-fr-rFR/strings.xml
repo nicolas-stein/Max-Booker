@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Max Booker</string>
+    <string name="app_destinations_book">Réserver</string>
+    <string name="app_destinations_bookings">Réservations</string>
+    <string name="app_destinations_settings">Paramètres</string>
+</resources>

@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Max Booker</string>
+    
+    <string name="app_destinations_book">Book</string>
+    <string name="app_destinations_bookings">Bookings</string>
+    <string name="app_destinations_settings">Settings</string>
+</resources>
