@@ -1,6 +1,5 @@
 package fr.stein.maxbooker.ui.screens.bookings
 
-import android.util.Log
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
@@ -17,6 +16,7 @@ import fr.stein.maxbooker.ui.theme.MaxBookerTheme
 @OptIn(ExperimentalMaterial3AdaptiveApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun BookingsScreen(
+    initialBookingId: String? = null,
     viewModel: BookingsViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -24,12 +24,17 @@ fun BookingsScreen(
     val listDetailNavigator = rememberListDetailPaneScaffoldNavigator<String>()
 
     LaunchedEffect(uiState.selectedBookingId) {
-        Log.i("Max Book", "BookingsScreen: ${listDetailNavigator.currentDestination?.pane}")
         val selectedId = uiState.selectedBookingId
         if (selectedId != null) {
             listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
         } else {
             listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.List)
+        }
+    }
+
+    LaunchedEffect(initialBookingId) {
+        if (initialBookingId != null) {
+            viewModel.selectBooking(initialBookingId)
         }
     }
 
