@@ -46,7 +46,7 @@ fun BookingsDetails(
             modifier = modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Text("Select a booking to see its details.")
+            Text(stringResource(R.string.screen_book_none_selected))
         }
     }
 }

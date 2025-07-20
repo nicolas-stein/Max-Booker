@@ -2,6 +2,14 @@
     <string name="app_name">Max Booker</string>
     
     <string name="app_destinations_book">Book</string>
+    <string name="screen_book_none_selected">Select a booking to see its details.</string>
+
     <string name="app_destinations_bookings">Bookings</string>
+
+
     <string name="app_destinations_settings">Settings</string>
+    <string name="screen_settings_none_selected">Select a setting category.</string>
+    <string name="screen_settings_item_login_headline">Log in to TGV Max</string>
+
+
 </resources>
