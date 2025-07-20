@@ -1,5 +1,6 @@
 package fr.stein.maxbooker.ui.components.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -31,8 +32,21 @@ fun MainNavGraph(navController: NavHostController) {
         composable(MainDestinations.BOOK.route) {
             BookScreen()
         }
-        composable (MainDestinations.SETTINGS.route) {
-            SettingsScreen()
+        composable (
+            route = "${MainDestinations.SETTINGS.route}?itemName={itemName}",
+            arguments = listOf(navArgument("itemName") {
+                nullable = true
+                defaultValue = null
+            }),
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = "maxbooker://settings?itemName={itemName}"
+                }
+            )
+        ) { backStachEntry ->
+            val itemName = backStachEntry.arguments?.getString("itemName")
+            Log.d("Max booker", "MainNavGraph: itemName=$itemName")
+            SettingsScreen(initialItemName = itemName)
         }
     }
 }

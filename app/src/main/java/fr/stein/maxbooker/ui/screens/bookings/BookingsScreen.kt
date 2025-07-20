@@ -25,9 +25,9 @@ fun BookingsScreen(
     LaunchedEffect(uiState.selectedBookingId) {
         val selectedId = uiState.selectedBookingId
         if (selectedId != null) {
-            listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+            listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail, selectedId)
         } else {
-            listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.List)
+            listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.List, selectedId)
         }
     }
 

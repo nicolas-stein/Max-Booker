@@ -18,25 +18,28 @@ fun MainNavigation(initialDeepLinkUri: Uri? = null) {
 
     LaunchedEffect(deepLinkUri) {
         deepLinkUri?.let { uri ->
-            if (uri.scheme == "maxbooker" && uri.host?.uppercase() == MainDestinations.BOOKINGS.route) {
-                val queryParameters = uri.queryParameterNames
-                    .mapNotNull { name ->
-                        uri.getQueryParameter(name)?.let { value ->
-                            "$name=$value"
+            if (uri.scheme == "maxbooker") {
+                val destination = MainDestinations.entries.firstOrNull { uri.host?.uppercase() == it.route }
+                destination?.let {
+                    val queryParameters = uri.queryParameterNames
+                        .mapNotNull { name ->
+                            uri.getQueryParameter(name)?.let { value ->
+                                "$name=$value"
+                            }
                         }
+                        .joinToString("&")
+
+                    val fullRoute = if (queryParameters.isNotEmpty()) {
+                        "${destination.route}?$queryParameters"
+                    } else {
+                        destination.route
                     }
-                    .joinToString("&")
 
-                val route = if (queryParameters.isNotEmpty()) {
-                    "${MainDestinations.BOOKINGS.route}?$queryParameters"
-                } else {
-                    MainDestinations.BOOKINGS.route
-                }
+                    navController.popBackStack(navController.graph.id, true)
 
-                navController.popBackStack(navController.graph.id, true)
-
-                navController.navigate(route) {
-                    launchSingleTop = true
+                    navController.navigate(fullRoute) {
+                        launchSingleTop = true
+                    }
                 }
             }
         }

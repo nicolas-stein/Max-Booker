@@ -33,9 +33,9 @@ fun SettingsScreen(
     LaunchedEffect(uiState.selectedItemName) {
         val selectedItemName = uiState.selectedItemName
         if (selectedItemName != null) {
-            listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+            listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail, selectedItemName)
         } else {
-            listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.List)
+            listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.List, selectedItemName)
         }
     }
 
