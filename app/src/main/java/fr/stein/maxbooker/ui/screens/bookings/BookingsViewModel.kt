@@ -38,7 +38,7 @@ class BookingsViewModel : ViewModel() {
         }
     }
 
-    fun selectBooking(bookingId: String) {
+    fun selectBooking(bookingId: String?) {
         _uiState.update { it.copy(selectedBookingId = bookingId) }
     }
 }
