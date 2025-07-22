@@ -10,6 +10,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import fr.stein.maxbooker.ui.screens.bookings.details.BookingsDetails
 import fr.stein.maxbooker.ui.theme.MaxBookerTheme
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)

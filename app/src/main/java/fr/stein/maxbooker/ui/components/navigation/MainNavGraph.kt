@@ -1,6 +1,5 @@
 package fr.stein.maxbooker.ui.components.navigation
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -45,7 +44,6 @@ fun MainNavGraph(navController: NavHostController) {
             )
         ) { backStachEntry ->
             val itemName = backStachEntry.arguments?.getString("itemName")
-            Log.d("Max booker", "MainNavGraph: itemName=$itemName")
             SettingsScreen(initialItemName = itemName)
         }
     }

@@ -1,4 +1,4 @@
-package fr.stein.maxbooker.ui.screens.bookings
+package fr.stein.maxbooker.ui.screens.bookings.details
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,20 +14,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import fr.stein.maxbooker.R
-import fr.stein.maxbooker.ui.domain.model.Booking
+import fr.stein.maxbooker.domain.model.Booking
+import fr.stein.maxbooker.ui.theme.MaxBookerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BookingsDetails(
     booking: Booking?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     if (booking != null) {
         Scaffold (
             topBar = {
                 TopAppBar(
-                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(),
+                    colors = TopAppBarDefaults.topAppBarColors(),
                     title = { Text(stringResource(R.string.app_destinations_bookings)) }
                 )
             }
@@ -48,5 +50,15 @@ fun BookingsDetails(
         ) {
             Text(stringResource(R.string.screen_book_none_selected))
         }
+    }
+}
+
+@Preview
+@Composable
+private fun BookingsDetailsPreview() {
+    MaxBookerTheme {
+        BookingsDetails(booking = Booking(
+            orderId = "1234"
+        ))
     }
 }

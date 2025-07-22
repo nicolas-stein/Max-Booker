@@ -20,7 +20,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import fr.stein.maxbooker.R
-import fr.stein.maxbooker.ui.domain.model.Booking
+import fr.stein.maxbooker.domain.model.Booking
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

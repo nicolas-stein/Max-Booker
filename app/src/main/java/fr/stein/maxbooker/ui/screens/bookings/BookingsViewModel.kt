@@ -2,7 +2,7 @@ package fr.stein.maxbooker.ui.screens.bookings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import fr.stein.maxbooker.ui.domain.model.Booking
+import fr.stein.maxbooker.domain.model.Booking
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
