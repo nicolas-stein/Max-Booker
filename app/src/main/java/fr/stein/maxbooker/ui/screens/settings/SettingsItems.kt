@@ -13,11 +13,14 @@ enum class SettingsItems() {
         }
 
         @Composable
-        override fun DetailsComposable(modifier: Modifier) {
-            SettingsDetailsLogin(modifier)
+        override fun DetailsComposable(
+            modifier: Modifier,
+            navigateBack: () -> Unit
+        ) {
+            SettingsDetailsLogin(modifier, navigateBack)
         }
     };
 
     @Composable abstract fun ListComposable(modifier: Modifier)
-    @Composable abstract fun DetailsComposable(modifier: Modifier)
+    @Composable abstract fun DetailsComposable(modifier: Modifier, navigateBack: () -> Unit)
 }

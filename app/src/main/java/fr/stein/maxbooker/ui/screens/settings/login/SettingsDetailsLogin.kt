@@ -23,6 +23,7 @@ import fr.stein.maxbooker.R
 @Composable
 fun SettingsDetailsLogin(
     modifier: Modifier = Modifier,
+    navigateBack: () -> Unit,
     viewModel: SettingsDetailsLoginViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -45,7 +46,16 @@ fun SettingsDetailsLogin(
                     settings.javaScriptEnabled = true
                     settings.domStorageEnabled = true
 
-                    val loginWebViewClient = LoginWebViewClient(uiState.recorder)
+                    val loginWebViewClient = LoginWebViewClient(
+                        loginPayloadRecorder = uiState.recorder,
+                        loginFailed = {
+                            // TODO show failed/retry screen
+                            navigateBack()
+                        },
+                        loginSuccess = {
+                            // TODO fetch user details then navigate back
+                            navigateBack()
+                        })
 
                     webViewClient = loginWebViewClient
                     webChromeClient = WebChromeClient()

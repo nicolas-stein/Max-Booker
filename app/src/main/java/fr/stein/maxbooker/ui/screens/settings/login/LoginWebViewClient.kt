@@ -12,13 +12,17 @@ import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import dagger.hilt.android.EntryPointAccessors
-import fr.stein.maxbooker.di.LoginWebViewClientEntryPoint
+import fr.stein.maxbooker.data.exception.SncfRepositoryException
+import fr.stein.maxbooker.di.SncfApiUseCasesEntryPoint
+import fr.stein.maxbooker.domain.model.SncfApiAuthentication
 import fr.stein.maxbooker.domain.model.SncfApiTokenRequest
 import kotlinx.coroutines.runBlocking
 
 
 class LoginWebViewClient(
-    private val loginPayloadRecorder: LoginPayloadRecorder
+    private val loginPayloadRecorder: LoginPayloadRecorder,
+    private val loginFailed: (sncfRepositoryException: SncfRepositoryException) -> Unit,
+    private val loginSuccess: () -> Unit
 ): WebViewClient() {
 
     override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
@@ -45,28 +49,30 @@ class LoginWebViewClient(
                 return null
             }
 
-            val entryPoint = EntryPointAccessors.fromActivity(view.context as Activity, LoginWebViewClientEntryPoint::class.java)
-            val sncfApiRepository = entryPoint.getSncfApiRepository()
+            val entryPoint = EntryPointAccessors.fromActivity(view.context as Activity, SncfApiUseCasesEntryPoint::class.java)
+            val sncfApiAuthenticateUseCase = entryPoint.getSncfApiAuthenticateUseCase()
 
-            return try {
-                Log.d("Max Book", "Retrieving SNCF API token with input : $sncfApiTokenRequest")
+            Log.d("Max Book", "Retrieving SNCF API token with input : $sncfApiTokenRequest")
+            val sncfApiAuthentication: SncfApiAuthentication
+            try {
                 runBlocking {
-                    val sncfApiAuthentication = sncfApiRepository.retrieveSncfApiToken(sncfApiTokenRequest, CookieManager.getInstance().getCookie(request.url.toString()))
-
-                    val content = jacksonObjectMapper().writeValueAsString(sncfApiAuthentication.sncfApiToken)
-                    WebResourceResponse(
-                        "application/json",
-                        "UTF-8",
-                        content.byteInputStream()
-                    )
+                    sncfApiAuthentication = sncfApiAuthenticateUseCase(sncfApiTokenRequest, CookieManager.getInstance().getCookie(request.url.toString()))
                 }
-            } catch (e: Exception) {
-                Log.e("Max book", "Exception while calling SncfApi to retrieve SncfApiToken", e)
-                null
+            } catch (e: SncfRepositoryException) {
+                Log.e("Max Book", "Failed to authenticate to SNCF API", e)
+                loginFailed(e)
+                return null
             }
+
+            val content = jacksonObjectMapper().writeValueAsString(sncfApiAuthentication.sncfApiToken)
+            WebResourceResponse(
+                "application/json",
+                "UTF-8",
+                content.byteInputStream()
+            )
         }
         else if (request.url.toString() == "https://www.maxjeune-tgvinoui.sncf/api/public/customer/read-customer") {
-            // TODO authenticationDataObtained(null, null, CookieManager.getInstance().getCookie(request.url.toString()))
+            loginSuccess()
         }
 
         return super.shouldInterceptRequest(view, request)

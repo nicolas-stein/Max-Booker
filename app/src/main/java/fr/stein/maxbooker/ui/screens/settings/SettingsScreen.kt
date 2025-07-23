@@ -59,7 +59,9 @@ fun SettingsScreen(
         detailPane = {
             val selectedItem = SettingsItems.entries.firstOrNull { it.name == uiState.selectedItemName }
             if (selectedItem != null) {
-                selectedItem.DetailsComposable(modifier)
+                selectedItem.DetailsComposable(modifier, {
+                    viewModel.selectItem(null)
+                })
             } else {
                 Box(
                     modifier = modifier.fillMaxSize(),

@@ -1,7 +1,6 @@
 package fr.stein.maxbooker.di
 
 import android.content.Context
-import android.util.Log
 import androidx.datastore.core.DataStore
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import dagger.Module
@@ -9,7 +8,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import fr.stein.maxbooker.data.local.createSncfApiTokenDataStore
+import fr.stein.maxbooker.data.local.createSncfApiAuthenticationDataStore
 import fr.stein.maxbooker.data.local.sncfapiauthentication.SncfApiAuthenticationProto
 import fr.stein.maxbooker.data.remote.SncfApi
 import fr.stein.maxbooker.data.repository.SncfApiRepositoryImpl
@@ -21,7 +20,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModules {
+object SncfApiModules {
 
     @Provides
     @Singleton
@@ -53,8 +52,8 @@ object AppModules {
 
     @Provides
     @Singleton
-    fun provideSncfApiTokenDataStore(@ApplicationContext context: Context): DataStore<SncfApiAuthenticationProto> =
-        createSncfApiTokenDataStore(context)
+    fun provideSncfApiAuthenticationDataStore(@ApplicationContext context: Context): DataStore<SncfApiAuthenticationProto> =
+        createSncfApiAuthenticationDataStore(context)
 
     @Provides
     @Singleton

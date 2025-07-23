@@ -12,5 +12,4 @@ data class SettingsDetailsLoginUiState(
 class SettingsDetailsLoginViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(SettingsDetailsLoginUiState())
     val uiState: StateFlow<SettingsDetailsLoginUiState> = _uiState.asStateFlow()
-
 }

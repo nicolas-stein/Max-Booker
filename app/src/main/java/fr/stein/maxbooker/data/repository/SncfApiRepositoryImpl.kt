@@ -2,6 +2,10 @@ package fr.stein.maxbooker.data.repository
 
 import android.util.Log
 import androidx.datastore.core.DataStore
+import androidx.datastore.core.IOException
+import com.fasterxml.jackson.core.JsonParseException
+import com.fasterxml.jackson.databind.JsonMappingException
+import fr.stein.maxbooker.data.exception.SncfRepositoryException
 import fr.stein.maxbooker.data.local.sncfapiauthentication.SncfApiAuthenticationProto
 import fr.stein.maxbooker.data.mapper.toDomain
 import fr.stein.maxbooker.data.mapper.toProto
@@ -11,6 +15,7 @@ import fr.stein.maxbooker.domain.model.SncfApiTokenRequest
 import fr.stein.maxbooker.domain.repository.SncfApiRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import retrofit2.Response
 
 class SncfApiRepositoryImpl(
     private val sncfApi: SncfApi,
@@ -24,20 +29,53 @@ class SncfApiRepositoryImpl(
         )
     }
 
-    override suspend fun retrieveSncfApiToken(sncfApiTokenRequest: SncfApiTokenRequest, cookies: String): SncfApiAuthentication {
-        val sncfApiToken = sncfApi.getSncfApiToken(sncfApiTokenRequest, cookies)
-        Log.d("Max Book", "retrieveSncfApiToken: got sncf api token !! $sncfApiToken")
+    override suspend fun storeSncfApiAuthentication(sncfApiAuthentication: SncfApiAuthentication) {
+        sncfApiAuthenticationDataStore.updateData { sncfApiAuthentication.toProto() }
+    }
 
-        val sncfApiAuthentication = SncfApiAuthentication(
-            sncfApiToken.toDomain(),
+    @Throws(SncfRepositoryException::class)
+    override suspend fun authenticate(sncfApiTokenRequest: SncfApiTokenRequest, cookies: String): SncfApiAuthentication {
+        val tokenDto = executeSncfApiCall {
+            sncfApi.getSncfApiToken(sncfApiTokenRequest, cookies)
+        }
+
+        return SncfApiAuthentication(
+            tokenDto.toDomain(),
             cookies
         )
-        sncfApiAuthenticationDataStore.updateData { sncfApiAuthentication.toProto() }
-
-        return sncfApiAuthentication
     }
+
 
     override suspend fun refreshSncfApiToken() {
         TODO("Not yet implemented")
+    }
+
+    suspend fun <T : Any> executeSncfApiCall(call: suspend () -> Response<T>): T {
+        val response = try {
+            call()
+        } catch (e: IOException) {
+            throw SncfRepositoryException.NetworkException(e)
+        } catch (e: JsonParseException) {
+            throw SncfRepositoryException.ParsingException(e)
+        } catch (e: JsonMappingException) {
+            throw SncfRepositoryException.ParsingException(e)
+        } catch (e: Exception) {
+            throw SncfRepositoryException("Unexpected error", e)
+        }
+
+        if (!response.isSuccessful) {
+            val errorBody = response.errorBody()?.string()
+            throw SncfRepositoryException.ApiErrorException(
+                response.code(),
+                errorBody
+            )
+        }
+
+        val body = response.body()
+        if (body == null) {
+            throw SncfRepositoryException.EmptyBodyException()
+        }
+
+        return body
     }
 }
