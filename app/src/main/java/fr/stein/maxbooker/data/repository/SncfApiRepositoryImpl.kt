@@ -44,11 +44,7 @@ class SncfApiRepositoryImpl(
         )
     }
 
-
-    override suspend fun refreshSncfApiToken() {
-        TODO("Not yet implemented")
-    }
-
+    @Throws(SncfRepositoryException::class)
     suspend fun <T : Any> executeSncfApiCall(call: suspend () -> Response<T>): T {
         val response = try {
             call()

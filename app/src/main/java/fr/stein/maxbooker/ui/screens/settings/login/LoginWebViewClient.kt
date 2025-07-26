@@ -29,7 +29,7 @@ class LoginWebViewClient(
         // Intercept request to get refresh token
         if (request.url.toString() == "https://www.maxjeune-tgvinoui.sncf/api/public/auth/sfc/token") {
             val payload = loginPayloadRecorder.getPayload(request.method, request.url.toString())
-            Log.d("Max Book", "SNCF API token request payload : $payload")
+            //Log.d("Max Book", "SNCF API token request payload : $payload")
 
             if (payload == null) {
                 return null
@@ -43,18 +43,6 @@ class LoginWebViewClient(
                 Log.e("Max Book", "Failed to parse payload as a SncfApiTokenRequest object", e)
                 return null
             }
-
-            Log.d("Max Book", "Retrieving SNCF API token with input : $sncfApiTokenRequest")
-            /*val sncfApiAuthentication: SncfApiAuthentication
-            try {
-                runBlocking {
-                    sncfApiAuthentication = sncfApiAuthenticateUseCase(sncfApiTokenRequest, CookieManager.getInstance().getCookie(request.url.toString()))
-                }
-            } catch (e: SncfRepositoryException) {
-                Log.e("Max Book", "Failed to authenticate to SNCF API", e)
-                loginFailed(e)
-                return null
-            }*/
 
             val sncfApiAuthentication = requestLogin(sncfApiTokenRequest, CookieManager.getInstance().getCookie(request.url.toString()))
             if (sncfApiAuthentication == null) {
