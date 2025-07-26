@@ -15,10 +15,7 @@ import fr.stein.maxbooker.ui.theme.MaxBookerTheme
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
-fun BookingsScreen(
-    initialBookingId: String? = null,
-    viewModel: BookingsViewModel = viewModel()
-) {
+fun BookingsScreen(initialBookingId: String? = null, viewModel: BookingsViewModel = viewModel()) {
     val uiState by viewModel.uiState.collectAsState()
 
     val listDetailNavigator = rememberListDetailPaneScaffoldNavigator<String>()
@@ -46,10 +43,12 @@ fun BookingsScreen(
 
     NavigableListDetailPaneScaffold(
         navigator = listDetailNavigator,
-        listPane = { BookingsList(
-            bookings = uiState.bookings,
-            onBookingClick = { bookingId -> viewModel.selectBooking(bookingId)}
-        ) },
+        listPane = {
+            BookingsList(
+                bookings = uiState.bookings,
+                onBookingClick = { bookingId -> viewModel.selectBooking(bookingId) }
+            )
+        },
         detailPane = { BookingsDetails(booking = uiState.selectedBooking) }
     )
 }

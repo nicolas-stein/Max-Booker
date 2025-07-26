@@ -6,9 +6,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-data class SettingsUiState(
-    val selectedItemName: String? = null
-)
+data class SettingsUiState(val selectedItemName: String? = null)
 
 class SettingsViewModel : ViewModel() {
 

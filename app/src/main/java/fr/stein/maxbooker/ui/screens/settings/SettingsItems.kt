@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import fr.stein.maxbooker.ui.screens.settings.login.SettingsDetailsLogin
 import fr.stein.maxbooker.ui.screens.settings.login.SettingsItemLogin
 
-enum class SettingsItems() {
+enum class SettingsItems {
     LOGIN {
         @Composable
         override fun ListComposable(modifier: Modifier) {
@@ -13,14 +13,12 @@ enum class SettingsItems() {
         }
 
         @Composable
-        override fun DetailsComposable(
-            modifier: Modifier,
-            navigateBack: () -> Unit
-        ) {
+        override fun DetailsComposable(modifier: Modifier, navigateBack: () -> Unit) {
             SettingsDetailsLogin(modifier, navigateBack)
         }
     };
 
     @Composable abstract fun ListComposable(modifier: Modifier)
+
     @Composable abstract fun DetailsComposable(modifier: Modifier, navigateBack: () -> Unit)
 }

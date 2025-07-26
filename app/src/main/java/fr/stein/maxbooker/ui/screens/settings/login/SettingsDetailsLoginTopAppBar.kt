@@ -57,11 +57,17 @@ fun SettingsDetailsLoginTopAppBar(
                 onDismissRequest = { showMenu = false }
             ) {
                 DropdownMenuItem(
-                    text = { Text(stringResource(R.string.screen_settings_login_topbar_clear_cookies)) },
-                    leadingIcon = {Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = stringResource(R.string.screen_settings_login_topbar_clear_cookies)
-                    )},
+                    text = {
+                        Text(stringResource(R.string.screen_settings_login_topbar_clear_cookies))
+                    },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = stringResource(
+                                R.string.screen_settings_login_topbar_clear_cookies
+                            )
+                        )
+                    },
                     onClick = {
                         showMenu = false
                         onClearCookieClick()
@@ -70,10 +76,14 @@ fun SettingsDetailsLoginTopAppBar(
 
                 DropdownMenuItem(
                     text = { Text(stringResource(R.string.screen_settings_login_topbar_restart)) },
-                    leadingIcon = {Icon(
-                        imageVector = Icons.Default.Refresh,
-                        contentDescription = stringResource(R.string.screen_settings_login_topbar_restart)
-                    )},
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Refresh,
+                            contentDescription = stringResource(
+                                R.string.screen_settings_login_topbar_restart
+                            )
+                        )
+                    },
                     onClick = {
                         showMenu = false
                         onRestartClick()

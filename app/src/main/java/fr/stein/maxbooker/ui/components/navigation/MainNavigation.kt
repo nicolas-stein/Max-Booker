@@ -19,7 +19,10 @@ fun MainNavigation(initialDeepLinkUri: Uri? = null) {
     LaunchedEffect(deepLinkUri) {
         deepLinkUri?.let { uri ->
             if (uri.scheme == "maxbooker") {
-                val destination = MainDestinations.entries.firstOrNull { uri.host?.uppercase() == it.route }
+                val destination = MainDestinations.entries.firstOrNull {
+                    uri.host?.uppercase() ==
+                        it.route
+                }
                 destination?.let {
                     val queryParameters = uri.queryParameterNames
                         .mapNotNull { name ->
@@ -48,7 +51,7 @@ fun MainNavigation(initialDeepLinkUri: Uri? = null) {
     MainNavigationSuite(
         navController = navController,
         currentDestination = currentDestination
-        ) {
+    ) {
         MainNavGraph(navController = navController)
     }
 }

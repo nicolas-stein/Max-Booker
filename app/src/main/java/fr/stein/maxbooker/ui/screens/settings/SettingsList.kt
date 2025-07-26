@@ -20,10 +20,7 @@ import fr.stein.maxbooker.ui.theme.MaxBookerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsList(
-    onItemClick: (String) -> Unit,
-    modifier: Modifier = Modifier
-) {
+fun SettingsList(onItemClick: (String) -> Unit, modifier: Modifier = Modifier) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val scrollState = rememberLazyListState()
 
@@ -42,7 +39,7 @@ fun SettingsList(
         ) {
             items(SettingsItems.entries) { settingsItem ->
                 settingsItem.ListComposable(
-                    modifier = modifier.clickable{ onItemClick(settingsItem.name) }
+                    modifier = modifier.clickable { onItemClick(settingsItem.name) }
                 )
             }
         }

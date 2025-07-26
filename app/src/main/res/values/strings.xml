@@ -10,7 +10,7 @@
     <string name="app_destinations_settings">Settings</string>
     <string name="screen_settings_none_selected">Select a setting category.</string>
     <string name="screen_settings_item_login_headline">Log in to TGV Max</string>
-    <string name="screen_settings_login_dialog_in_progress">Retrieving credentials...</string>
+    <string name="screen_settings_login_dialog_in_progress">Retrieving credentials…</string>
     <string name="screen_settings_login_dialog_success">Successfully logged in !</string>
     <string name="screen_settings_login_dialog_failed">Failed to log in !</string>
     <string name="screen_settings_login_topbar_clear_cookies">Clear cookies</string>

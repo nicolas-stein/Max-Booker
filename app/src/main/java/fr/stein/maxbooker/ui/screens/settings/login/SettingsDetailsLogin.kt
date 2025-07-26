@@ -22,12 +22,14 @@ fun SettingsDetailsLogin(
     val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
-        topBar = { SettingsDetailsLoginTopAppBar(
-            onBackClick = navigateBack,
-            onClearCookieClick = viewModel.topAppBarClearCookiesHandler,
-            onRestartClick = viewModel.topAppBarRestartHandler,
-            modifier = modifier
-        ) }
+        topBar = {
+            SettingsDetailsLoginTopAppBar(
+                onBackClick = navigateBack,
+                onClearCookieClick = viewModel.topAppBarClearCookiesHandler,
+                onRestartClick = viewModel.topAppBarRestartHandler,
+                modifier = modifier
+            )
+        }
     ) { innerPadding ->
         AndroidView(
             modifier = modifier
@@ -35,7 +37,8 @@ fun SettingsDetailsLogin(
                 .fillMaxSize(),
             factory = { context ->
                 viewModel.buildWebView(context, navigateBack)
-            }, update = { view ->
+            },
+            update = { view ->
                 viewModel.updateWebView(view)
             }
         )

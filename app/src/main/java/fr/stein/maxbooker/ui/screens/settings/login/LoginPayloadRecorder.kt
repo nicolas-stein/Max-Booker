@@ -10,6 +10,5 @@ class LoginPayloadRecorder {
         payloadMap["$method-$url"] = payload
     }
 
-    fun getPayload(method: String, url: String): String? =
-        payloadMap["$method-$url"]
+    fun getPayload(method: String, url: String): String? = payloadMap["$method-$url"]
 }

@@ -21,10 +21,22 @@ fun MainNavigationSuite(
     NavigationSuiteScaffold(
         navigationSuiteItems = {
             MainDestinations.entries.forEach { item ->
-                val isItemSelected = currentDestination?.hierarchy?.any { destination -> destination.route?.substringBefore("?") == item.route } == true
+                val isItemSelected =
+                    currentDestination?.hierarchy?.any { destination ->
+                        destination.route?.substringBefore("?") ==
+                            item.route
+                    } ==
+                        true
                 item(
                     selected = isItemSelected,
-                    icon = { Icon(ImageVector.vectorResource(if(isItemSelected) item.iconSelected else item.iconUnselected), contentDescription = item.name) },
+                    icon = {
+                        Icon(
+                            ImageVector.vectorResource(
+                                if (isItemSelected) item.iconSelected else item.iconUnselected
+                            ),
+                            contentDescription = item.name
+                        )
+                    },
                     label = { Text(stringResource(item.label)) },
                     onClick = {
                         navController.navigate(item.route) {
@@ -34,7 +46,7 @@ fun MainNavigationSuite(
                             launchSingleTop = true
                             restoreState = true
                         }
-                    },
+                    }
                 )
             }
         },

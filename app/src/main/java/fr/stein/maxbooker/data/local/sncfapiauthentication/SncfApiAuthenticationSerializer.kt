@@ -6,8 +6,9 @@ import com.google.protobuf.InvalidProtocolBufferException
 import java.io.InputStream
 import java.io.OutputStream
 
-object SncfApiAuthenticationSerializer: Serializer<SncfApiAuthenticationProto> {
-    override val defaultValue: SncfApiAuthenticationProto = SncfApiAuthenticationProto.getDefaultInstance()
+object SncfApiAuthenticationSerializer : Serializer<SncfApiAuthenticationProto> {
+    override val defaultValue: SncfApiAuthenticationProto =
+        SncfApiAuthenticationProto.getDefaultInstance()
 
     override suspend fun readFrom(input: InputStream): SncfApiAuthenticationProto {
         try {
@@ -17,5 +18,6 @@ object SncfApiAuthenticationSerializer: Serializer<SncfApiAuthenticationProto> {
         }
     }
 
-    override suspend fun writeTo(t: SncfApiAuthenticationProto, output: OutputStream) = t.writeTo(output)
+    override suspend fun writeTo(t: SncfApiAuthenticationProto, output: OutputStream) =
+        t.writeTo(output)
 }

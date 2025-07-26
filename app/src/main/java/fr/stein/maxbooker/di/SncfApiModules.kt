@@ -13,10 +13,10 @@ import fr.stein.maxbooker.data.local.sncfapiauthentication.SncfApiAuthentication
 import fr.stein.maxbooker.data.remote.SncfApi
 import fr.stein.maxbooker.data.repository.SncfApiRepositoryImpl
 import fr.stein.maxbooker.domain.repository.SncfApiRepository
+import javax.inject.Singleton
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -32,7 +32,10 @@ object SncfApiModules {
                 .addHeader("Accept", "application/json")
                 .addHeader("Accept-Language", "en-US")
                 .addHeader("Content-Type", "application/json")
-                .addHeader("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36")
+                .addHeader(
+                    "User-Agent",
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+                )
                 .addHeader("x-client-app", "MAX_JEUNE")
 
             if (original.header("Cookie") == null) {
@@ -52,11 +55,14 @@ object SncfApiModules {
 
     @Provides
     @Singleton
-    fun provideSncfApiAuthenticationDataStore(@ApplicationContext context: Context): DataStore<SncfApiAuthenticationProto> =
-        createSncfApiAuthenticationDataStore(context)
+    fun provideSncfApiAuthenticationDataStore(
+        @ApplicationContext context: Context
+    ): DataStore<SncfApiAuthenticationProto> = createSncfApiAuthenticationDataStore(context)
 
     @Provides
     @Singleton
-    fun provideSncfApiRepository(sncfApi: SncfApi, sncfApiAuthenticationDataStore: DataStore<SncfApiAuthenticationProto>): SncfApiRepository =
-        SncfApiRepositoryImpl(sncfApi, sncfApiAuthenticationDataStore)
+    fun provideSncfApiRepository(
+        sncfApi: SncfApi,
+        sncfApiAuthenticationDataStore: DataStore<SncfApiAuthenticationProto>
+    ): SncfApiRepository = SncfApiRepositoryImpl(sncfApi, sncfApiAuthenticationDataStore)
 }

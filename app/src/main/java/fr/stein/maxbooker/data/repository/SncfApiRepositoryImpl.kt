@@ -19,21 +19,25 @@ import retrofit2.Response
 class SncfApiRepositoryImpl(
     private val sncfApi: SncfApi,
     private val sncfApiAuthenticationDataStore: DataStore<SncfApiAuthenticationProto>
-): SncfApiRepository {
+) : SncfApiRepository {
 
-    override val sncfApiAuthentication: Flow<SncfApiAuthentication> = sncfApiAuthenticationDataStore.data.map {
-        SncfApiAuthentication(
-            it.sncfApiToken.toDomain(),
-            it.cookies
-        )
-    }
+    override val sncfApiAuthentication: Flow<SncfApiAuthentication> =
+        sncfApiAuthenticationDataStore.data.map {
+            SncfApiAuthentication(
+                it.sncfApiToken.toDomain(),
+                it.cookies
+            )
+        }
 
     override suspend fun storeSncfApiAuthentication(sncfApiAuthentication: SncfApiAuthentication) {
         sncfApiAuthenticationDataStore.updateData { sncfApiAuthentication.toProto() }
     }
 
     @Throws(SncfRepositoryException::class)
-    override suspend fun authenticate(sncfApiTokenRequest: SncfApiTokenRequest, cookies: String): SncfApiAuthentication {
+    override suspend fun authenticate(
+        sncfApiTokenRequest: SncfApiTokenRequest,
+        cookies: String
+    ): SncfApiAuthentication {
         val tokenDto = executeSncfApiCall {
             sncfApi.getSncfApiToken(sncfApiTokenRequest, cookies)
         }

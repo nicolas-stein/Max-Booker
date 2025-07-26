@@ -10,7 +10,10 @@ class SncfApiAuthenticateUseCase @Inject constructor(
     private val sncfApiRepository: SncfApiRepository
 ) {
     @Throws(SncfRepositoryException::class)
-    suspend operator fun invoke(sncfApiTokenRequest: SncfApiTokenRequest, cookies: String): SncfApiAuthentication {
+    suspend operator fun invoke(
+        sncfApiTokenRequest: SncfApiTokenRequest,
+        cookies: String
+    ): SncfApiAuthentication {
         val sncfApiAuthentication = sncfApiRepository.authenticate(sncfApiTokenRequest, cookies)
         sncfApiRepository.storeSncfApiAuthentication(sncfApiAuthentication)
 

@@ -21,12 +21,9 @@ import fr.stein.maxbooker.ui.theme.MaxBookerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BookingsDetails(
-    booking: Booking?,
-    modifier: Modifier = Modifier,
-) {
+fun BookingsDetails(booking: Booking?, modifier: Modifier = Modifier) {
     if (booking != null) {
-        Scaffold (
+        Scaffold(
             topBar = {
                 TopAppBar(
                     colors = TopAppBarDefaults.topAppBarColors(),
@@ -39,8 +36,14 @@ fun BookingsDetails(
                     .fillMaxSize()
                     .padding(innerPadding)
             ) {
-                Text("Booking ${booking.orderId} title", style = MaterialTheme.typography.headlineMedium)
-                Text("Booking ${booking.orderId} details", style = MaterialTheme.typography.bodyLarge)
+                Text(
+                    "Booking ${booking.orderId} title",
+                    style = MaterialTheme.typography.headlineMedium
+                )
+                Text(
+                    "Booking ${booking.orderId} details",
+                    style = MaterialTheme.typography.bodyLarge
+                )
             }
         }
     } else {
@@ -57,8 +60,10 @@ fun BookingsDetails(
 @Composable
 private fun BookingsDetailsPreview() {
     MaxBookerTheme {
-        BookingsDetails(booking = Booking(
-            orderId = "1234"
-        ))
+        BookingsDetails(
+            booking = Booking(
+                orderId = "1234"
+            )
+        )
     }
 }

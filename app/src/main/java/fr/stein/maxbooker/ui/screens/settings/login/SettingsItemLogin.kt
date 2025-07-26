@@ -13,17 +13,17 @@ import fr.stein.maxbooker.R
 import fr.stein.maxbooker.ui.theme.MaxBookerTheme
 
 @Composable
-fun SettingsItemLogin(
-    modifier: Modifier = Modifier
-) {
+fun SettingsItemLogin(modifier: Modifier = Modifier) {
     ListItem(
         modifier = modifier,
         headlineContent = { Text(stringResource(R.string.screen_settings_item_login_headline)) },
-        supportingContent = { Text("Not logged in.")},
-        trailingContent = { Icon(
-            ImageVector.vectorResource(R.drawable.ic_chevron_right),
-            contentDescription = stringResource(R.string.screen_settings_item_login_headline),
-        ) }
+        supportingContent = { Text("Not logged in.") },
+        trailingContent = {
+            Icon(
+                ImageVector.vectorResource(R.drawable.ic_chevron_right),
+                contentDescription = stringResource(R.string.screen_settings_item_login_headline)
+            )
+        }
     )
 }
 

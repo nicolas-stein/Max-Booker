@@ -7,5 +7,8 @@ import kotlinx.coroutines.flow.Flow
 interface SncfApiRepository {
     val sncfApiAuthentication: Flow<SncfApiAuthentication>
     suspend fun storeSncfApiAuthentication(sncfApiAuthentication: SncfApiAuthentication)
-    suspend fun authenticate(sncfApiTokenRequest: SncfApiTokenRequest, cookies: String): SncfApiAuthentication
+    suspend fun authenticate(
+        sncfApiTokenRequest: SncfApiTokenRequest,
+        cookies: String
+    ): SncfApiAuthentication
 }

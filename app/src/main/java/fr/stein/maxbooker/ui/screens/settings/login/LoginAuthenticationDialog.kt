@@ -21,14 +21,16 @@ import fr.stein.maxbooker.ui.components.lottie.LottieAnimationComponent
 import fr.stein.maxbooker.ui.theme.MaxBookerTheme
 
 enum class LoginAuthenticationDialogState {
-    IN_PROGRESS, SUCECSS, FAILED
+    IN_PROGRESS,
+    SUCECSS,
+    FAILED
 }
 
 @Composable
 fun LoginAuthenticationDialog(
     dialogState: LoginAuthenticationDialogState,
     modifier: Modifier = Modifier,
-    error: Throwable? = null,
+    error: Throwable? = null
 ) {
     AlertDialog(
         modifier = modifier,
@@ -44,7 +46,7 @@ fun LoginAuthenticationDialog(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                when(dialogState) {
+                when (dialogState) {
                     LoginAuthenticationDialogState.IN_PROGRESS -> {
                         LottieAnimationComponent(
                             animation = R.raw.lottie_login_loop,
@@ -88,7 +90,7 @@ fun LoginAuthenticationDialog(
             }
         },
         onDismissRequest = {},
-        confirmButton = {},
+        confirmButton = {}
     )
 }
 

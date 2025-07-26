@@ -25,10 +25,9 @@ fun LottieAnimationComponent(
 
     val lottieProgress by animateLottieCompositionAsState(
         lottieComposition,
-        iterations = if(loop) LottieConstants.IterateForever else 1,
+        iterations = if (loop) LottieConstants.IterateForever else 1,
         isPlaying = true
     )
-
 
     LottieAnimation(
         composition = lottieComposition,
@@ -43,7 +42,7 @@ private fun LottieAnimationComponentPreview() {
     MaxBookerTheme {
         LottieAnimationComponent(
             animation = R.raw.lottie_login_loop,
-            loop = true,
+            loop = true
         )
     }
 }

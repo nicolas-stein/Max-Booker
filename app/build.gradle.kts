@@ -1,10 +1,12 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.ktlint)
     alias(libs.plugins.protobuf)
     alias(libs.plugins.hilt)
     alias(libs.plugins.androidx.room)
@@ -46,7 +48,10 @@ android {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
             signingConfig = signingConfigs.getByName("release")
         }
     }
@@ -65,6 +70,11 @@ android {
 
     room {
         schemaDirectory("$projectDir/schemas")
+    }
+
+    lint {
+        htmlReport = true
+        textReport = false
     }
 }
 
@@ -117,6 +127,14 @@ protobuf {
                 }
             }
         }
+    }
+}
+
+ktlint {
+    android = true
+    reporters {
+        reporter(ReporterType.CHECKSTYLE)
+        reporter(ReporterType.HTML)
     }
 }
 

@@ -8,6 +8,8 @@ import retrofit2.http.POST
 
 interface SncfApi {
     @POST("auth/sfc/token")
-    suspend fun getSncfApiToken(@Body sncfApiTokenRequest: SncfApiTokenRequest,
-                                @Header("Cookie") cookie: String): Response<SncfApiTokenDto>
+    suspend fun getSncfApiToken(
+        @Body sncfApiTokenRequest: SncfApiTokenRequest,
+        @Header("Cookie") cookie: String
+    ): Response<SncfApiTokenDto>
 }

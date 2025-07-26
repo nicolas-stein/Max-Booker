@@ -15,10 +15,12 @@ fun MainNavGraph(navController: NavHostController) {
     NavHost(navController, startDestination = MainDestinations.BOOKINGS.route) {
         composable(
             route = "${MainDestinations.BOOKINGS.route}?bookingId={bookingId}",
-            arguments = listOf(navArgument("bookingId") {
-                nullable = true
-                defaultValue = null
-            }),
+            arguments = listOf(
+                navArgument("bookingId") {
+                    nullable = true
+                    defaultValue = null
+                }
+            ),
             deepLinks = listOf(
                 navDeepLink {
                     uriPattern = "maxbooker://bookings?bookingId={bookingId}"
@@ -31,12 +33,14 @@ fun MainNavGraph(navController: NavHostController) {
         composable(MainDestinations.BOOK.route) {
             BookScreen()
         }
-        composable (
+        composable(
             route = "${MainDestinations.SETTINGS.route}?itemName={itemName}",
-            arguments = listOf(navArgument("itemName") {
-                nullable = true
-                defaultValue = null
-            }),
+            arguments = listOf(
+                navArgument("itemName") {
+                    nullable = true
+                    defaultValue = null
+                }
+            ),
             deepLinks = listOf(
                 navDeepLink {
                     uriPattern = "maxbooker://settings?itemName={itemName}"

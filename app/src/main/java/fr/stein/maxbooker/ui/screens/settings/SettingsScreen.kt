@@ -53,11 +53,16 @@ fun SettingsScreen(
 
     NavigableListDetailPaneScaffold(
         navigator = listDetailNavigator,
-        listPane = { SettingsList(
-            onItemClick = { itemName -> viewModel.selectItem(itemName)}
-        ) },
+        listPane = {
+            SettingsList(
+                onItemClick = { itemName -> viewModel.selectItem(itemName) }
+            )
+        },
         detailPane = {
-            val selectedItem = SettingsItems.entries.firstOrNull { it.name == uiState.selectedItemName }
+            val selectedItem = SettingsItems.entries.firstOrNull {
+                it.name ==
+                    uiState.selectedItemName
+            }
             if (selectedItem != null) {
                 selectedItem.DetailsComposable(modifier, {
                     viewModel.selectItem(null)
