@@ -1,6 +1,5 @@
 package fr.stein.maxbooker.data.repository
 
-import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.IOException
 import com.fasterxml.jackson.core.JsonParseException

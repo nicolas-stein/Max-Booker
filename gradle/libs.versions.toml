@@ -23,6 +23,7 @@ androidx-datastore = "1.1.7"
 androidx-room = "2.7.2"
 retrofit = "3.0.0"
 jackson-kotlin = "2.19.2"
+lottie-compose = "6.6.7"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -55,6 +56,7 @@ androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = 
 jackson = { group = "com.fasterxml.jackson.module", name = "jackson-module-kotlin", version.ref = "jackson-kotlin" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-converter-jackson = { group = "com.squareup.retrofit2", name = "converter-jackson", version.ref = "retrofit"}
+lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie-compose"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

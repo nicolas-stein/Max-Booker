@@ -94,6 +94,7 @@ dependencies {
     implementation(libs.jackson)
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.jackson)
+    implementation(libs.lottie.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
