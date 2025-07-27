@@ -1,14 +1,14 @@
 package fr.stein.maxbooker.domain.repository
 
-import fr.stein.maxbooker.domain.model.SncfApiAuthentication
-import fr.stein.maxbooker.domain.model.SncfApiTokenRequest
-import kotlinx.coroutines.flow.Flow
+import fr.stein.maxbooker.domain.model.sncf.SncfApiAuthentication
+import fr.stein.maxbooker.domain.model.sncf.SncfApiTokenRequest
+import fr.stein.maxbooker.domain.model.sncf.SncfCustomer
 
 interface SncfApiRepository {
-    val sncfApiAuthentication: Flow<SncfApiAuthentication>
-    suspend fun storeSncfApiAuthentication(sncfApiAuthentication: SncfApiAuthentication)
     suspend fun authenticate(
         sncfApiTokenRequest: SncfApiTokenRequest,
         cookies: String
     ): SncfApiAuthentication
+
+    suspend fun getCustomer(): SncfCustomer
 }

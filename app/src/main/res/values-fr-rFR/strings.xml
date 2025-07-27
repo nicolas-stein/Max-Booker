@@ -7,9 +7,13 @@
     <string name="app_destinations_settings">Paramètres</string>
     <string name="screen_settings_none_selected">Sélectionnez une catégorie de paramètre.</string>
     <string name="screen_settings_item_login_headline">Connexion à TGV Max</string>
+    <string name="screen_settings_item_login_logged_in_as">Connecté en tant que %1$s.</string>
     <string name="screen_settings_login_dialog_in_progress">Récupération des informations d\'identification…</string>
     <string name="screen_settings_login_dialog_success">Connexion réussie !</string>
     <string name="screen_settings_login_dialog_failed">Echec de la connexion !</string>
     <string name="screen_settings_login_topbar_clear_cookies">Effacer les cookies</string>
     <string name="screen_settings_login_topbar_restart">Redémarrer</string>
+    <string name="screen_settings_item_login_not_logged_in">Non connecté.</string>
+    <string name="screen_settings_item_login_retrieving_user">Récupération de l\'utilisateur…</string>
+    <string name="screen_settings_item_login_retrieving_user_failed">Echec de la récupération de l\'utilisateur !</string>
 </resources>

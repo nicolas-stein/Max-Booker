@@ -1,4 +1,4 @@
-package fr.stein.maxbooker.domain.model
+package fr.stein.maxbooker.domain.model.sncf
 
 data class SncfApiAuthentication(val sncfApiToken: SncfApiToken, val cookies: String)
 

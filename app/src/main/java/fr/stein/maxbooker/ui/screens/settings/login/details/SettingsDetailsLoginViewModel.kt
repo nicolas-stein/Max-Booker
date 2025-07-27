@@ -1,4 +1,4 @@
-package fr.stein.maxbooker.ui.screens.settings.login
+package fr.stein.maxbooker.ui.screens.settings.login.details
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -10,10 +10,12 @@ import android.webkit.WebView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import fr.stein.maxbooker.data.exception.SncfRepositoryException
-import fr.stein.maxbooker.domain.model.SncfApiAuthentication
-import fr.stein.maxbooker.domain.model.SncfApiTokenRequest
+import fr.stein.maxbooker.data.exception.SncfApiRepositoryException
+import fr.stein.maxbooker.domain.model.sncf.SncfApiAuthentication
+import fr.stein.maxbooker.domain.model.sncf.SncfApiTokenRequest
+import fr.stein.maxbooker.domain.model.sncf.SncfCustomer
 import fr.stein.maxbooker.domain.usecase.SncfApiAuthenticateUseCase
+import fr.stein.maxbooker.domain.usecase.SncfApiFetchCustomerUseCase
 import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,7 +36,8 @@ data class SettingsDetailsLoginUiState(
 
 @HiltViewModel
 class SettingsDetailsLoginViewModel @Inject constructor(
-    private val sncfApiAuthenticateUseCase: SncfApiAuthenticateUseCase
+    private val sncfApiAuthenticateUseCase: SncfApiAuthenticateUseCase,
+    private val sncfApiFetchCustomerUseCase: SncfApiFetchCustomerUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(SettingsDetailsLoginUiState())
     val uiState: StateFlow<SettingsDetailsLoginUiState> = _uiState.asStateFlow()
@@ -100,7 +103,7 @@ class SettingsDetailsLoginViewModel @Inject constructor(
             runBlocking {
                 sncfApiAuthentication = sncfApiAuthenticateUseCase(sncfApiTokenRequest, cookies)
             }
-        } catch (exception: SncfRepositoryException) {
+        } catch (exception: SncfApiRepositoryException) {
             Log.e("Max Book", "Failed to authenticate to SNCF API", exception)
             _uiState.update { currentState ->
                 currentState.copy(
@@ -109,6 +112,36 @@ class SettingsDetailsLoginViewModel @Inject constructor(
                 )
             }
             return null
+        }
+
+        viewModelScope.launch {
+            fetchSncfCustomer(navigateBack)
+        }
+        return sncfApiAuthentication
+    }
+
+    fun fetchSncfCustomer(navigateBack: () -> Unit) {
+        val sncfCustomer: SncfCustomer
+
+        try {
+            runBlocking {
+                sncfCustomer = sncfApiFetchCustomerUseCase()
+            }
+        } catch (exception: SncfApiRepositoryException) {
+            Log.e("Max Book", "Failed to fetch customer from SNCF API", exception)
+            if (exception is SncfApiRepositoryException.ApiErrorException
+                && exception.code == 403) {
+                _uiState.update { currentState -> currentState.copy(showLoginAuthenticationDialog = false) }
+                uiState.value.webView?.reload()
+            }
+
+            _uiState.update { currentState ->
+                currentState.copy(
+                    loginAuthenticationDialogState = LoginAuthenticationDialogState.FAILED,
+                    loginAuthenticationDialogError = exception
+                )
+            }
+            return
         }
 
         _uiState.update { currentState ->
@@ -123,6 +156,5 @@ class SettingsDetailsLoginViewModel @Inject constructor(
                 currentState.copy(showLoginAuthenticationDialog = false)
             }
         }
-        return sncfApiAuthentication
     }
 }

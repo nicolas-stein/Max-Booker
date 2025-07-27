@@ -36,7 +36,7 @@ android {
 
     defaultConfig {
         applicationId = "fr.stein.maxbooker"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 36
         versionCode = commitCount
         versionName = latestTag

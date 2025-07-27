@@ -1,4 +1,4 @@
-package fr.stein.maxbooker.ui.screens.settings.login
+package fr.stein.maxbooker.ui.screens.settings.login.details
 
 import android.app.Activity
 import android.graphics.Bitmap
@@ -11,8 +11,8 @@ import android.webkit.WebViewClient
 import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import fr.stein.maxbooker.domain.model.SncfApiAuthentication
-import fr.stein.maxbooker.domain.model.SncfApiTokenRequest
+import fr.stein.maxbooker.domain.model.sncf.SncfApiAuthentication
+import fr.stein.maxbooker.domain.model.sncf.SncfApiTokenRequest
 
 class LoginWebViewClient(
     private val loginPayloadRecorder: LoginPayloadRecorder,

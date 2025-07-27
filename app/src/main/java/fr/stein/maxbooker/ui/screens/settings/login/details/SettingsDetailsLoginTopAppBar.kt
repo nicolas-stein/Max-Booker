@@ -1,4 +1,4 @@
-package fr.stein.maxbooker.ui.screens.settings.login
+package fr.stein.maxbooker.ui.screens.settings.login.details
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack

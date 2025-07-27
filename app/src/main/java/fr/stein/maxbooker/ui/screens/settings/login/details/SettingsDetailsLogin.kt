@@ -1,4 +1,4 @@
-package fr.stein.maxbooker.ui.screens.settings.login
+package fr.stein.maxbooker.ui.screens.settings.login.details
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize

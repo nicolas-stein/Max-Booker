@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+option java_package = "fr.stein.maxbooker.data.local.sncfcustomer";
+option java_multiple_files = true;
+
+// Root message
+message SncfCustomerProto {
+  string iuc = 1;
+  string createdAt = 2;
+  string updatedAt = 3;
+  string civility = 4;
+  string lastName = 5;
+  string firstName = 6;
+  string birthDate = 7;
+  string language = 8;
+  string address = 9;
+  string zipCode = 10;
+  string city = 11;
+  string country = 12;
+  string email = 13;
+  string mobilePhone = 14;
+  string nsdStatus = 15;
+  int32 pictureCounter = 16;
+  string pictureStatus = 17;
+  int32 maxTravelsPerDay = 18;
+  string pictureUpdate = 19;
+  string cniUpdate = 20;
+  string cniType = 21;
+  string cniValue = 22;
+  repeated SncfCustomerCardProto cards = 23;
+}
+
+// Nested message for cards
+message SncfCustomerCardProto {
+  string cardNumber = 1;
+  string marketingCarrierRef = 2;
+  string productType = 3;
+  string contractStatus = 4;
+  string validityStartDate = 5;
+  string validityEndDate = 6;
+  bool ticketlessIndicator = 7;
+}

@@ -9,7 +9,9 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import fr.stein.maxbooker.data.local.createSncfApiAuthenticationDataStore
+import fr.stein.maxbooker.data.local.createSncfCustomerDataStore
 import fr.stein.maxbooker.data.local.sncfapiauthentication.SncfApiAuthenticationProto
+import fr.stein.maxbooker.data.local.sncfcustomer.SncfCustomerProto
 import fr.stein.maxbooker.data.remote.SncfApi
 import fr.stein.maxbooker.data.repository.SncfApiRepositoryImpl
 import fr.stein.maxbooker.domain.repository.SncfApiRepository
@@ -61,8 +63,19 @@ object SncfApiModules {
 
     @Provides
     @Singleton
+    fun provideSncfCustomerDataStore(
+        @ApplicationContext context: Context
+    ): DataStore<SncfCustomerProto> = createSncfCustomerDataStore(context)
+
+    @Provides
+    @Singleton
     fun provideSncfApiRepository(
         sncfApi: SncfApi,
-        sncfApiAuthenticationDataStore: DataStore<SncfApiAuthenticationProto>
-    ): SncfApiRepository = SncfApiRepositoryImpl(sncfApi, sncfApiAuthenticationDataStore)
+        sncfApiAuthenticationDataStore: DataStore<SncfApiAuthenticationProto>,
+        sncfCustomerDataStore: DataStore<SncfCustomerProto>
+    ): SncfApiRepository = SncfApiRepositoryImpl(
+        sncfApi,
+        sncfApiAuthenticationDataStore,
+        sncfCustomerDataStore
+    )
 }
