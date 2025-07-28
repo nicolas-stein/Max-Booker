@@ -1,5 +1,7 @@
-package fr.stein.maxbooker.data.remote
+package fr.stein.maxbooker.data.remote.sncf
 
+import fr.stein.maxbooker.data.remote.sncf.dto.SncfApiTokenDto
+import fr.stein.maxbooker.data.remote.sncf.dto.SncfCustomerDto
 import fr.stein.maxbooker.domain.model.sncf.SncfApiTokenRequest
 import fr.stein.maxbooker.domain.model.sncf.SncfCustomerRequest
 import retrofit2.Response
@@ -16,7 +18,6 @@ interface SncfApi {
 
     @POST("customer/read-customer")
     suspend fun getCustomer(
-        @Body sncfCustomerRequest: SncfCustomerRequest,
-        @Header("Authorization") authorization: String
+        @Body sncfCustomerRequest: SncfCustomerRequest
     ): Response<SncfCustomerDto>
 }

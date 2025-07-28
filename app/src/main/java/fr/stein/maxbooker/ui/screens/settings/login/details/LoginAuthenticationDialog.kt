@@ -22,7 +22,7 @@ import fr.stein.maxbooker.ui.theme.MaxBookerTheme
 
 enum class LoginAuthenticationDialogState {
     IN_PROGRESS,
-    SUCECSS,
+    SUCCESS,
     FAILED
 }
 
@@ -60,7 +60,7 @@ fun LoginAuthenticationDialog(
                         )
                         Text(stringResource(R.string.screen_settings_login_dialog_in_progress))
                     }
-                    LoginAuthenticationDialogState.SUCECSS -> {
+                    LoginAuthenticationDialogState.SUCCESS -> {
                         LottieAnimationComponent(
                             animation = R.raw.lottie_login_success,
                             modifier = modifier.size(64.dp),
@@ -106,7 +106,7 @@ private fun LoginAuthenticationDialogPreview_IN_PROGRESS() {
 @Composable
 private fun LoginAuthenticationDialogPreview_SUCCESS() {
     MaxBookerTheme {
-        LoginAuthenticationDialog(LoginAuthenticationDialogState.SUCECSS)
+        LoginAuthenticationDialog(LoginAuthenticationDialogState.SUCCESS)
     }
 }
 

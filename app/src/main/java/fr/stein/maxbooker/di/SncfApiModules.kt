@@ -12,9 +12,16 @@ import fr.stein.maxbooker.data.local.createSncfApiAuthenticationDataStore
 import fr.stein.maxbooker.data.local.createSncfCustomerDataStore
 import fr.stein.maxbooker.data.local.sncfapiauthentication.SncfApiAuthenticationProto
 import fr.stein.maxbooker.data.local.sncfcustomer.SncfCustomerProto
-import fr.stein.maxbooker.data.remote.SncfApi
-import fr.stein.maxbooker.data.repository.SncfApiRepositoryImpl
-import fr.stein.maxbooker.domain.repository.SncfApiRepository
+import fr.stein.maxbooker.data.remote.sncf.SncfApi
+import fr.stein.maxbooker.data.remote.sncf.SncfApiAuthenticator
+import fr.stein.maxbooker.data.remote.sncf.SncfApiInterceptor
+import fr.stein.maxbooker.data.repository.sncf.SncfApiAuthenticationRepositoryImpl
+import fr.stein.maxbooker.data.repository.sncf.SncfApiExecutorImpl
+import fr.stein.maxbooker.data.repository.sncf.SncfApiRepositoryImpl
+import fr.stein.maxbooker.domain.repository.sncf.SncfApiAuthenticationRepository
+import fr.stein.maxbooker.domain.repository.sncf.SncfApiExecutor
+import fr.stein.maxbooker.domain.repository.sncf.SncfApiRepository
+import javax.inject.Provider
 import javax.inject.Singleton
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -26,26 +33,13 @@ object SncfApiModules {
 
     @Provides
     @Singleton
-    fun provideSncfApi(cookieProvider: SncfApiAuthenticationCookieProvider): SncfApi {
-        val httpClient = OkHttpClient.Builder().addInterceptor { chain ->
-            val original = chain.request()
-
-            val requestBuilder = original.newBuilder()
-                .addHeader("Accept", "application/json")
-                .addHeader("Accept-Language", "en-US")
-                .addHeader("Content-Type", "application/json")
-                .addHeader(
-                    "User-Agent",
-                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
-                )
-                .addHeader("x-client-app", "MAX_JEUNE")
-
-            if (original.header("Cookie") == null) {
-                requestBuilder.addHeader("Cookie", cookieProvider.getCookies())
-            }
-
-            chain.proceed(requestBuilder.build())
-        }.build()
+    fun provideSncfApi(
+        sncfApiAuthenticationRepository: Provider<SncfApiAuthenticationRepository>
+    ): SncfApi {
+        val httpClient = OkHttpClient.Builder()
+            .addInterceptor(SncfApiInterceptor(sncfApiAuthenticationRepository))
+            .authenticator(SncfApiAuthenticator(sncfApiAuthenticationRepository))
+            .build()
 
         return Retrofit.Builder()
             .baseUrl("https://www.maxjeune-tgvinoui.sncf/api/public/")
@@ -71,11 +65,27 @@ object SncfApiModules {
     @Singleton
     fun provideSncfApiRepository(
         sncfApi: SncfApi,
-        sncfApiAuthenticationDataStore: DataStore<SncfApiAuthenticationProto>,
-        sncfCustomerDataStore: DataStore<SncfCustomerProto>
+        sncfApiExecutor: SncfApiExecutor
     ): SncfApiRepository = SncfApiRepositoryImpl(
         sncfApi,
-        sncfApiAuthenticationDataStore,
-        sncfCustomerDataStore
+        sncfApiExecutor
+    )
+
+    @Provides
+    @Singleton
+    fun provideSncfApiExecutor(
+        sncfApiAuthenticationRepository: Provider<SncfApiAuthenticationRepository>
+    ): SncfApiExecutor = SncfApiExecutorImpl(sncfApiAuthenticationRepository)
+
+    @Provides
+    @Singleton
+    fun provideSncfApiAuthenticationRepository(
+        sncfApi: SncfApi,
+        sncfApiExecutor: SncfApiExecutor,
+        sncfApiAuthenticationDataStore: DataStore<SncfApiAuthenticationProto>
+    ): SncfApiAuthenticationRepository = SncfApiAuthenticationRepositoryImpl(
+        sncfApi = sncfApi,
+        sncfApiExecutor = sncfApiExecutor,
+        sncfApiAuthenticationDataStore = sncfApiAuthenticationDataStore
     )
 }

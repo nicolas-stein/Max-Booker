@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import fr.stein.maxbooker.data.exception.SncfApiRepositoryException
+import fr.stein.maxbooker.data.exception.SncfApiException
 import fr.stein.maxbooker.data.local.sncfcustomer.SncfCustomerProto
 import fr.stein.maxbooker.data.mapper.toDomain
 import fr.stein.maxbooker.domain.model.sncf.SncfCustomer
@@ -44,15 +44,25 @@ class SettingsItemLoginViewModel @Inject constructor(
     }
 
     suspend fun loadSncfCustomer() {
-        _uiState.update { current -> current.copy(isSncfCustomerLoading = true, sncfCustomerLoadingError = null) }
+        _uiState.update { current ->
+            current.copy(isSncfCustomerLoading = true, sncfCustomerLoadingError = null)
+        }
         try {
             sncfAPiFetchCustomerUseCase.invoke()
-        } catch (exception: SncfApiRepositoryException) {
+        } catch (exception: SncfApiException) {
             Log.e("Max Book", "loadSncfCustomer: failed to load customer", exception)
-            _uiState.update { current -> current.copy(
-                sncfCustomerLoadingError = if (exception is SncfApiRepositoryException.AuthenticatedRequired
-                    || exception is SncfApiRepositoryException.NetworkException) null
-                else exception) }
+            _uiState.update { current ->
+                current.copy(
+                    sncfCustomerLoadingError =
+                    if (exception is SncfApiException.AuthenticatedRequired ||
+                        exception is SncfApiException.NetworkException
+                    ) {
+                        null
+                    } else {
+                        exception
+                    }
+                )
+            }
         } finally {
             _uiState.update { current -> current.copy(isSncfCustomerLoading = false) }
         }

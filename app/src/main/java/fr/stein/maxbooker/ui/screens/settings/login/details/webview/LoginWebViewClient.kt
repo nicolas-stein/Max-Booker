@@ -1,4 +1,4 @@
-package fr.stein.maxbooker.ui.screens.settings.login.details
+package fr.stein.maxbooker.ui.screens.settings.login.details.webview
 
 import android.app.Activity
 import android.graphics.Bitmap

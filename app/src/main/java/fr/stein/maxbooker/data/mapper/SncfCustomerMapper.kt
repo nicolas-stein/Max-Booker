@@ -2,8 +2,8 @@ package fr.stein.maxbooker.data.mapper
 
 import fr.stein.maxbooker.data.local.sncfcustomer.SncfCustomerCardProto
 import fr.stein.maxbooker.data.local.sncfcustomer.SncfCustomerProto
-import fr.stein.maxbooker.data.remote.SncfCustomerCardDto
-import fr.stein.maxbooker.data.remote.SncfCustomerDto
+import fr.stein.maxbooker.data.remote.sncf.dto.SncfCustomerCardDto
+import fr.stein.maxbooker.data.remote.sncf.dto.SncfCustomerDto
 import fr.stein.maxbooker.domain.model.sncf.SncfCustomer
 import fr.stein.maxbooker.domain.model.sncf.SncfCustomerCard
 import java.time.LocalDate
@@ -78,31 +78,35 @@ fun SncfCustomerCardDto.toDomain(): SncfCustomerCard = SncfCustomerCard(
     ticketlessIndicator = ticketlessIndicator
 )
 
-fun SncfCustomerProto.toDomain(): SncfCustomer? = if(iuc.isEmpty()) null else SncfCustomer(
-    iuc = iuc,
-    createdAt = LocalDateTime.parse(createdAt),
-    updatedAt = LocalDateTime.parse(updatedAt),
-    civility = civility,
-    lastName = lastName,
-    firstName = firstName,
-    birthDate = LocalDate.parse(birthDate),
-    language = language,
-    address = address,
-    zipCode = zipCode,
-    city = city,
-    country = country,
-    email = email,
-    mobilePhone = mobilePhone,
-    nsdStatus = nsdStatus,
-    pictureCounter = pictureCounter,
-    pictureStatus = pictureStatus,
-    maxTravelsPerDay = maxTravelsPerDay,
-    pictureUpdate = LocalDateTime.parse(pictureUpdate),
-    cniUpdate = LocalDateTime.parse(cniUpdate),
-    cniType = cniType,
-    cniValue = cniValue,
-    cards = cardsList.map { it.toDomain() }
-)
+fun SncfCustomerProto.toDomain(): SncfCustomer? = if (iuc.isEmpty()) {
+    null
+} else {
+    SncfCustomer(
+        iuc = iuc,
+        createdAt = LocalDateTime.parse(createdAt),
+        updatedAt = LocalDateTime.parse(updatedAt),
+        civility = civility,
+        lastName = lastName,
+        firstName = firstName,
+        birthDate = LocalDate.parse(birthDate),
+        language = language,
+        address = address,
+        zipCode = zipCode,
+        city = city,
+        country = country,
+        email = email,
+        mobilePhone = mobilePhone,
+        nsdStatus = nsdStatus,
+        pictureCounter = pictureCounter,
+        pictureStatus = pictureStatus,
+        maxTravelsPerDay = maxTravelsPerDay,
+        pictureUpdate = LocalDateTime.parse(pictureUpdate),
+        cniUpdate = LocalDateTime.parse(cniUpdate),
+        cniType = cniType,
+        cniValue = cniValue,
+        cards = cardsList.map { it.toDomain() }
+    )
+}
 
 fun SncfCustomerCardProto.toDomain(): SncfCustomerCard = SncfCustomerCard(
     cardNumber = cardNumber,

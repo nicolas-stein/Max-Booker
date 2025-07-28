@@ -1,23 +1,19 @@
 package fr.stein.maxbooker.ui.screens.settings.login.item
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
@@ -44,7 +40,8 @@ fun SettingsItemLogin(
         modifier,
         uiState.sncfCustomer,
         uiState.isSncfCustomerLoading,
-        uiState.sncfCustomerLoadingError)
+        uiState.sncfCustomerLoadingError
+    )
 }
 
 @Composable
@@ -80,7 +77,12 @@ fun SettingsItemLoginContent(
             } else if (sncfCustomer == null) {
                 Text(stringResource(R.string.screen_settings_item_login_not_logged_in))
             } else {
-                Text(stringResource(R.string.screen_settings_item_login_logged_in_as, "${sncfCustomer.firstName} ${sncfCustomer.lastName}"))
+                Text(
+                    stringResource(
+                        R.string.screen_settings_item_login_logged_in_as,
+                        "${sncfCustomer.firstName} ${sncfCustomer.lastName}"
+                    )
+                )
             }
         },
         trailingContent = {
@@ -138,15 +140,17 @@ private fun SettingsItemLoginPreviewLoggedIn() {
                 cniUpdate = LocalDateTime.now().minusYears(2),
                 cniType = "CNICT",
                 cniValue = "Verified",
-                cards = listOf(SncfCustomerCard(
-                    cardNumber = "0123456789",
-                    marketingCarrierRef = "ABCDEF",
-                    productType = "TGV_MAX_JEUNE",
-                    contractStatus = "VALIDE",
-                    validityStartDate = LocalDate.now().minusYears(2),
-                    validityEndDate = LocalDate.now().plusYears(3),
-                    ticketlessIndicator = true
-                ))
+                cards = listOf(
+                    SncfCustomerCard(
+                        cardNumber = "0123456789",
+                        marketingCarrierRef = "ABCDEF",
+                        productType = "TGV_MAX_JEUNE",
+                        contractStatus = "VALIDE",
+                        validityStartDate = LocalDate.now().minusYears(2),
+                        validityEndDate = LocalDate.now().plusYears(3),
+                        ticketlessIndicator = true
+                    )
+                )
             )
         )
     }

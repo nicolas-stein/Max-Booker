@@ -1,4 +1,4 @@
-package fr.stein.maxbooker.data.remote
+package fr.stein.maxbooker.data.remote.sncf.dto
 
 data class SncfApiTokenDto(
     val expiresIn: Int,
