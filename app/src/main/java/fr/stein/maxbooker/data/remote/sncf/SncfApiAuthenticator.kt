@@ -14,14 +14,30 @@ class SncfApiAuthenticator(
     private val sncfApiAuthenticationRepository: Provider<SncfApiAuthenticationRepository>
 ) : Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
-        Log.d("Max Book", "SncfApiAuthenticator: triggered for route ${response.request.url}")
+        Log.d(
+            "Max Book",
+            "SncfApiAuthenticator: triggered for route ${response.request.url}, refreshing authentication."
+        )
         try {
-            synchronized(this) {
+            val authorizationHeader = synchronized(this) {
                 runBlocking {
                     sncfApiAuthenticationRepository.get().refreshAuthentication()
+                    sncfApiAuthenticationRepository.get().getAuthorizationHeader()
                 }
             }
-            return response.request
+
+            if (authorizationHeader != null) {
+                Log.d(
+                    "Max Book",
+                    "SncfApiAuthenticator: re-running request for ${response.request.url}"
+                )
+                return response.request.newBuilder()
+                    .header("Authorization", authorizationHeader)
+                    .build()
+            } else {
+                Log.e("Max Book", "SncfApiAuthenticator: newSncfApiAuthentication is null !")
+                return null
+            }
         } catch (_: SncfApiException) {
             return null
         }

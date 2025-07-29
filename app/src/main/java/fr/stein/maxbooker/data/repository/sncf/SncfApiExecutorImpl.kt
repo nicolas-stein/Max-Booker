@@ -23,7 +23,7 @@ class SncfApiExecutorImpl(
         } catch (e: JsonMappingException) {
             throw SncfApiException.ParsingException(e)
         } catch (e: Exception) {
-            throw SncfApiException("Unexpected error", e)
+            throw SncfApiException.UnexpectedException(e)
         }
 
         if (!response.isSuccessful) {

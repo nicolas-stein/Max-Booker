@@ -11,9 +11,13 @@ import fr.stein.maxbooker.domain.model.sncf.SncfApiAuthentication
 import fr.stein.maxbooker.domain.model.sncf.SncfApiTokenRequest
 import fr.stein.maxbooker.domain.repository.sncf.SncfApiAuthenticationRepository
 import fr.stein.maxbooker.domain.repository.sncf.SncfApiExecutor
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class SncfApiAuthenticationRepositoryImpl(
     private val sncfApi: SncfApi,
@@ -21,22 +25,39 @@ class SncfApiAuthenticationRepositoryImpl(
     private val sncfApiAuthenticationDataStore: DataStore<SncfApiAuthenticationProto>
 ) : SncfApiAuthenticationRepository {
 
-    private val sncfApiAuthenticationFlow: Flow<SncfApiAuthentication?> =
-        sncfApiAuthenticationDataStore.data.map { it.toDomain() }
+    private val _sncfApiAuthenticationFlow = MutableStateFlow<SncfApiAuthentication?>(null)
+    val sncfApiAuthenticationFlow: StateFlow<SncfApiAuthentication?> = _sncfApiAuthenticationFlow
+
+    init {
+        runBlocking {
+            _sncfApiAuthenticationFlow.value =
+                sncfApiAuthenticationDataStore.data.first().toDomain()
+        }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            sncfApiAuthenticationDataStore.data.collect { sncfApiAuthentication ->
+                _sncfApiAuthenticationFlow.value = sncfApiAuthentication.toDomain()
+            }
+        }
+    }
 
     override suspend fun getSncfApiAuthentication(): SncfApiAuthentication? =
-        sncfApiAuthenticationFlow.first()
+        sncfApiAuthenticationFlow.value
 
     override suspend fun authenticate(
         sncfApiTokenRequest: SncfApiTokenRequest,
         cookies: String
     ): SncfApiAuthentication {
-        Log.d("Max Book", "SncfApiRepositoryImpl: requested authenticate")
+        Log.d("Max Book", "SncfApiAuthenticationRepositoryImpl: requested authenticate")
         val tokenDto = sncfApiExecutor.execute {
             sncfApi.getSncfApiToken(sncfApiTokenRequest, cookies)
         }
         val newSncfApiAuthentication = SncfApiAuthentication(tokenDto.toDomain(), cookies)
         sncfApiAuthenticationDataStore.updateData { newSncfApiAuthentication.toProto() }
+        Log.d(
+            "Max Book",
+            "SncfApiAuthenticationRepositoryImpl: saved new authentication credentials"
+        )
 
         return newSncfApiAuthentication
     }

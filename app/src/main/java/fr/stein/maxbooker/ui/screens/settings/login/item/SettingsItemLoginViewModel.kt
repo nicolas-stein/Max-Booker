@@ -12,6 +12,7 @@ import fr.stein.maxbooker.data.mapper.toDomain
 import fr.stein.maxbooker.domain.model.sncf.SncfCustomer
 import fr.stein.maxbooker.domain.usecase.SncfApiFetchCustomerUseCase
 import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -38,7 +39,7 @@ class SettingsItemLoginViewModel @Inject constructor(
             _uiState.update { current -> current.copy(sncfCustomer = sncfCustomer.toDomain()) }
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             loadSncfCustomer()
         }
     }

@@ -1,5 +1,6 @@
 package fr.stein.maxbooker.domain.usecase
 
+import android.util.Log
 import androidx.datastore.core.DataStore
 import fr.stein.maxbooker.data.exception.SncfApiException
 import fr.stein.maxbooker.data.local.sncfcustomer.SncfCustomerProto
@@ -16,6 +17,7 @@ class SncfApiFetchCustomerUseCase @Inject constructor(
     suspend operator fun invoke(): SncfCustomer {
         val sncfCustomer = sncfApiRepository.getCustomer()
         sncfCustomerDataStore.updateData { sncfCustomer.toProto() }
+        Log.d("Max Book", "SncfApiFetchCustomerUseCase: saved fetched customer")
         return sncfCustomer
     }
 }

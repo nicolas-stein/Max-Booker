@@ -2,7 +2,7 @@ package fr.stein.maxbooker.data.exception
 
 import java.io.IOException
 
-open class SncfApiException(message: String? = null, cause: Throwable? = null) :
+sealed class SncfApiException(message: String? = null, cause: Throwable? = null) :
     IOException(message, cause) {
     constructor(cause: Throwable) : this(null, cause)
 
@@ -17,4 +17,7 @@ open class SncfApiException(message: String? = null, cause: Throwable? = null) :
     class InvalidAuthentication : SncfApiException("Invalid credentials provided to API")
 
     class AuthenticatedRequired : SncfApiException("API requires authentication")
+
+    class UnexpectedException(cause: Throwable) :
+        SncfApiException("Unexpected exception : ${cause.message}", cause)
 }
