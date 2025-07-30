@@ -14,9 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import fr.stein.maxbooker.R
+import fr.stein.maxbooker.data.exception.SncfApiException
 import fr.stein.maxbooker.ui.components.lottie.LottieAnimationComponent
 import fr.stein.maxbooker.ui.theme.MaxBookerTheme
 
@@ -58,7 +60,8 @@ fun LoginAuthenticationDialog(
                                 .height(16.dp)
                                 .fillMaxWidth()
                         )
-                        Text(stringResource(R.string.screen_settings_login_dialog_in_progress))
+                        Text(stringResource(R.string.screen_settings_login_dialog_in_progress),
+                            textAlign = TextAlign.Center)
                     }
                     LoginAuthenticationDialogState.SUCCESS -> {
                         LottieAnimationComponent(
@@ -71,7 +74,8 @@ fun LoginAuthenticationDialog(
                                 .height(16.dp)
                                 .fillMaxWidth()
                         )
-                        Text(stringResource(R.string.screen_settings_login_dialog_success))
+                        Text(stringResource(R.string.screen_settings_login_dialog_success),
+                            textAlign = TextAlign.Center)
                     }
                     LoginAuthenticationDialogState.FAILED -> {
                         LottieAnimationComponent(
@@ -84,7 +88,11 @@ fun LoginAuthenticationDialog(
                                 .height(16.dp)
                                 .fillMaxWidth()
                         )
-                        Text(stringResource(R.string.screen_settings_login_dialog_failed))
+                        Text(stringResource(R.string.screen_settings_login_dialog_failed),
+                            textAlign = TextAlign.Center)
+                        if (error != null && error.message != null) {
+                            Text(error.message!!, textAlign = TextAlign.Center)
+                        }
                     }
                 }
             }
@@ -114,6 +122,8 @@ private fun LoginAuthenticationDialogPreview_SUCCESS() {
 @Composable
 private fun LoginAuthenticationDialogPreview_FAILED() {
     MaxBookerTheme {
-        LoginAuthenticationDialog(LoginAuthenticationDialogState.FAILED)
+        LoginAuthenticationDialog(
+            dialogState = LoginAuthenticationDialogState.FAILED,
+            error = SncfApiException.UnexpectedException(SncfApiException.AuthenticatedRequired()))
     }
 }
