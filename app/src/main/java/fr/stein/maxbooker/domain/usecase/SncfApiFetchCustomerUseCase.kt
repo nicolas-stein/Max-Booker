@@ -5,8 +5,9 @@ import fr.stein.maxbooker.domain.model.sncf.SncfCustomer
 import fr.stein.maxbooker.domain.repository.sncf.SncfApiRepository
 import javax.inject.Inject
 
-class  SncfApiFetchCustomerUseCase @Inject constructor(
-    private val sncfApiRepository: SncfApiRepository) {
+class SncfApiFetchCustomerUseCase @Inject constructor(
+    private val sncfApiRepository: SncfApiRepository
+) {
     @Throws(SncfApiException::class)
     suspend operator fun invoke(cookiesOverride: String?): SncfCustomer {
         val sncfCustomer = sncfApiRepository.getCustomer(cookiesOverride)

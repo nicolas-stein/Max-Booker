@@ -11,6 +11,6 @@ interface SncfApi {
     @POST("customer/read-customer")
     suspend fun getCustomer(
         @Body sncfCustomerRequest: SncfCustomerRequest,
-        @Header ("Cookie") cookiesOverride: String?
+        @Header("Cookie") cookiesOverride: String?
     ): Response<SncfCustomerDto>
 }

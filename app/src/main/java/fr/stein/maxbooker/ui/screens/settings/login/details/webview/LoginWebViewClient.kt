@@ -19,7 +19,10 @@ class LoginWebViewClient(
     ): WebResourceResponse? {
         // Log.d("Max Book", "shouldInterceptRequest: ${request.method} ${request.url}")
 
-        if (request != null && request.url.toString() == "https://www.maxjeune-tgvinoui.sncf/api/public/customer/read-customer") {
+        if (request != null &&
+            request.url.toString() ==
+            "https://www.maxjeune-tgvinoui.sncf/api/public/customer/read-customer"
+        ) {
             onAuthCookiesCaptured(CookieManager.getInstance().getCookie(request.url.toString()))
         }
 

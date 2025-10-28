@@ -53,7 +53,7 @@ fun SettingsItemLoginContent(
         modifier = modifier,
         headlineContent = { Text(stringResource(R.string.screen_settings_item_login_headline)) },
         supportingContent = {
-            when(sncfCustomerData){
+            when (sncfCustomerData) {
                 is DataState.Loading -> {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         // Match the height of the CircularProgressIndicator to the Text font size
@@ -67,7 +67,9 @@ fun SettingsItemLoginContent(
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = stringResource(R.string.screen_settings_item_login_retrieving_user),
+                            text = stringResource(
+                                R.string.screen_settings_item_login_retrieving_user
+                            ),
                             style = textStyle
                         )
                     }
@@ -76,7 +78,11 @@ fun SettingsItemLoginContent(
                     if (sncfCustomerData.exception is SncfApiException.AuthenticatedRequired) {
                         Text(stringResource(R.string.screen_settings_item_login_not_logged_in))
                     } else {
-                        Text(stringResource(R.string.screen_settings_item_login_retrieving_user_failed))
+                        Text(
+                            stringResource(
+                                R.string.screen_settings_item_login_retrieving_user_failed
+                            )
+                        )
                     }
                 }
                 is DataState.Success -> {

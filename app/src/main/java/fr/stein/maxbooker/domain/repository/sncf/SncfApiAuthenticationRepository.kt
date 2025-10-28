@@ -1,6 +1,5 @@
 package fr.stein.maxbooker.domain.repository.sncf
 
-import fr.stein.maxbooker.data.exception.SncfApiException
 import fr.stein.maxbooker.domain.model.sncf.SncfApiAuthentication
 
 interface SncfApiAuthenticationRepository {

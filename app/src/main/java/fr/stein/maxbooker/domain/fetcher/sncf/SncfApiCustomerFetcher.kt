@@ -1,7 +1,6 @@
 package fr.stein.maxbooker.domain.fetcher.sncf
 
 import android.util.Log
-import androidx.compose.runtime.collectAsState
 import androidx.datastore.core.DataStore
 import fr.stein.maxbooker.data.exception.SncfApiException
 import fr.stein.maxbooker.data.local.sncfcustomer.SncfCustomerProto
@@ -9,16 +8,15 @@ import fr.stein.maxbooker.data.mapper.toDomain
 import fr.stein.maxbooker.data.mapper.toProto
 import fr.stein.maxbooker.domain.fetcher.DataState
 import fr.stein.maxbooker.domain.model.sncf.SncfCustomer
-import fr.stein.maxbooker.domain.repository.sncf.SncfApiRepository
 import fr.stein.maxbooker.domain.usecase.SncfApiFetchCustomerUseCase
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import javax.inject.Inject
-import javax.inject.Singleton
 
 @Singleton
 class SncfApiCustomerFetcher @Inject constructor(
@@ -51,7 +49,11 @@ class SncfApiCustomerFetcher @Inject constructor(
                 loadCustomerFromDataStore()
             } else {
                 _customerState.value = DataState.Error(exception)
-                Log.e("Max Book", "SncfApiCustomerFetcher: error while fetching customer", exception)
+                Log.e(
+                    "Max Book",
+                    "SncfApiCustomerFetcher: error while fetching customer",
+                    exception
+                )
             }
         }
     }

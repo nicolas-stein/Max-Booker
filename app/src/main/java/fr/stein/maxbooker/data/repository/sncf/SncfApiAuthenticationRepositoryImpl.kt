@@ -34,10 +34,11 @@ class SncfApiAuthenticationRepositoryImpl(
         }
     }
 
-    override suspend fun getSncfApiAuthentication(): SncfApiAuthentication? = sncfApiAuthenticationFlow.value
+    override suspend fun getSncfApiAuthentication(): SncfApiAuthentication? =
+        sncfApiAuthenticationFlow.value
 
     override suspend fun updateAuthenticationCookie(cookies: String): SncfApiAuthentication {
-       val newSncfApiAuthentication = SncfApiAuthentication(cookies = cookies)
+        val newSncfApiAuthentication = SncfApiAuthentication(cookies = cookies)
 
         sncfApiAuthenticationDataStore.updateData { newSncfApiAuthentication.toProto() }
         return newSncfApiAuthentication

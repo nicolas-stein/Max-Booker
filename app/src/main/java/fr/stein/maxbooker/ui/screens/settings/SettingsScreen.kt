@@ -20,7 +20,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import fr.stein.maxbooker.R
 import fr.stein.maxbooker.ui.theme.MaxBookerTheme
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable

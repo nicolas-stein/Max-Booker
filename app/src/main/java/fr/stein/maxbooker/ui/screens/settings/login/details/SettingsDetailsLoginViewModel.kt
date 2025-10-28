@@ -6,29 +6,23 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.stein.maxbooker.data.exception.SncfApiException
 import fr.stein.maxbooker.domain.fetcher.sncf.SncfApiCustomerFetcher
-import fr.stein.maxbooker.domain.model.sncf.SncfCustomer
 import fr.stein.maxbooker.domain.repository.sncf.SncfApiAuthenticationRepository
 import fr.stein.maxbooker.domain.usecase.SncfApiFetchCustomerUseCase
 import fr.stein.maxbooker.ui.screens.settings.login.details.webview.LoginPayloadRecorder
-import kotlinx.coroutines.delay
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import javax.inject.Inject
 
-data class SettingsDetailsLoginUiState(
-    val recorder: LoginPayloadRecorder = LoginPayloadRecorder(),
-)
+data class SettingsDetailsLoginUiState(val recorder: LoginPayloadRecorder = LoginPayloadRecorder())
 
 sealed class LoginViewEvent {
     object NavigateBack : LoginViewEvent()
-    object ReloadWebView: LoginViewEvent()
+    object ReloadWebView : LoginViewEvent()
 }
 
 @HiltViewModel
@@ -47,7 +41,10 @@ class SettingsDetailsLoginViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val sncfCustomer = sncfApiFetchCustomerUseCase(cookies)
-                Log.d("Max Book", "handleAuthCookiesCaptured: successfully fetched sncfCustomer ${sncfCustomer.firstName} ${sncfCustomer.lastName}")
+                Log.d(
+                    "Max Book",
+                    "handleAuthCookiesCaptured: successfully fetched sncfCustomer ${sncfCustomer.firstName} ${sncfCustomer.lastName}"
+                )
                 sncfApiAuthenticationRepository.updateAuthenticationCookie(cookies)
                 sncfApiCustomerFetcher.fetchCustomer()
                 _eventFlow.emit(LoginViewEvent.NavigateBack)

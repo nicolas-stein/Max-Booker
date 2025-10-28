@@ -32,7 +32,7 @@ fun SettingsDetailsLogin(
 
     LaunchedEffect(Unit) {
         viewModel.eventFlow.collect {
-            when(it) {
+            when (it) {
                 is LoginViewEvent.ReloadWebView -> webView?.reload()
                 is LoginViewEvent.NavigateBack -> navigateBack()
             }

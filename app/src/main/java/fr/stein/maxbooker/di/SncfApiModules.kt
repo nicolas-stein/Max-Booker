@@ -87,5 +87,9 @@ object SncfApiModules {
 
     @Provides
     @Singleton
-    fun provideSncfApiCustomerFetcher(sncfApiFetchCustomerUseCase: SncfApiFetchCustomerUseCase, sncfCustomerDataStore: DataStore<SncfCustomerProto>): SncfApiCustomerFetcher = SncfApiCustomerFetcher(sncfApiFetchCustomerUseCase, sncfCustomerDataStore)
+    fun provideSncfApiCustomerFetcher(
+        sncfApiFetchCustomerUseCase: SncfApiFetchCustomerUseCase,
+        sncfCustomerDataStore: DataStore<SncfCustomerProto>
+    ): SncfApiCustomerFetcher =
+        SncfApiCustomerFetcher(sncfApiFetchCustomerUseCase, sncfCustomerDataStore)
 }
