@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -18,6 +19,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import fr.stein.maxbooker.R
 import fr.stein.maxbooker.ui.theme.MaxBookerTheme
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
@@ -29,6 +32,7 @@ fun SettingsScreen(
     val uiState by viewModel.uiState.collectAsState()
 
     val listDetailNavigator = rememberListDetailPaneScaffoldNavigator<String>()
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(uiState.selectedItemName) {
         val selectedItemName = uiState.selectedItemName
@@ -65,6 +69,9 @@ fun SettingsScreen(
             }
             if (selectedItem != null) {
                 selectedItem.DetailsComposable(modifier, {
+                    scope.launch {
+                        listDetailNavigator.navigateBack()
+                    }
                     viewModel.selectItem(null)
                 })
             } else {

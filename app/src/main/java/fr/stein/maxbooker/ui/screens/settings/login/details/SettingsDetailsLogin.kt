@@ -16,7 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import fr.stein.maxbooker.ui.screens.settings.login.details.webview.LoginWebViewFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,21 +62,13 @@ fun SettingsDetailsLogin(
                     context = context,
                     recorder = uiState.recorder,
                     onAuthCookiesCaptured = { cookies ->
-                        viewModel.handleAuthCookiesCaptured(cookies, navigateBack)
+                        viewModel.handleAuthCookiesCaptured(cookies)
                     }
                 ).also { webView = it }
             },
             update = { webView ->
                 webView.loadUrl("https://www.maxjeune-tgvinoui.sncf/sncf-connect/mes-voyages")
             }
-        )
-    }
-
-    if (uiState.showLoginAuthenticationDialog) {
-        LoginAuthenticationDialog(
-            modifier = modifier,
-            dialogState = uiState.loginAuthenticationDialogState,
-            error = uiState.loginAuthenticationDialogError
         )
     }
 

@@ -24,10 +24,6 @@ import javax.inject.Inject
 
 data class SettingsDetailsLoginUiState(
     val recorder: LoginPayloadRecorder = LoginPayloadRecorder(),
-    var showLoginAuthenticationDialog: Boolean = false,
-    var loginAuthenticationDialogState: LoginAuthenticationDialogState =
-        LoginAuthenticationDialogState.IN_PROGRESS,
-    var loginAuthenticationDialogError: Throwable? = null
 )
 
 sealed class LoginViewEvent {
@@ -47,42 +43,16 @@ class SettingsDetailsLoginViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<LoginViewEvent>()
     val eventFlow: SharedFlow<LoginViewEvent> = _eventFlow.asSharedFlow()
 
-    fun handleAuthCookiesCaptured(
-        cookies: String,
-        navigateBack: () -> Unit
-    ) {
+    fun handleAuthCookiesCaptured(cookies: String) {
         viewModelScope.launch {
-            _uiState.update { currentState ->
-                currentState.copy(
-                    showLoginAuthenticationDialog = true,
-                    loginAuthenticationDialogState = LoginAuthenticationDialogState.IN_PROGRESS,
-                    loginAuthenticationDialogError = null
-                )
-            }
-
             try {
                 val sncfCustomer = sncfApiFetchCustomerUseCase(cookies)
                 Log.d("Max Book", "handleAuthCookiesCaptured: successfully fetched sncfCustomer ${sncfCustomer.firstName} ${sncfCustomer.lastName}")
                 sncfApiAuthenticationRepository.updateAuthenticationCookie(cookies)
                 sncfApiCustomerFetcher.fetchCustomer()
-                _uiState.update { currentState ->
-                    currentState.copy(
-                        loginAuthenticationDialogState = LoginAuthenticationDialogState.SUCCESS
-                    )
-                }
-
-                delay(3000)
-                navigateBack()
-
+                _eventFlow.emit(LoginViewEvent.NavigateBack)
             } catch (exception: SncfApiException) {
                 Log.e("Max Book", "Failed to fetch customer from SNCF API", exception)
-                _uiState.update { currentState ->
-                    currentState.copy(
-                        showLoginAuthenticationDialog = false,
-                        loginAuthenticationDialogState = LoginAuthenticationDialogState.FAILED,
-                        loginAuthenticationDialogError = exception
-                    )
-                }
             }
         }
     }
