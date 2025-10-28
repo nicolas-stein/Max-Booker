@@ -31,8 +31,11 @@ fun SettingsDetailsLogin(
     var webView by remember { mutableStateOf<WebView?>(null) }
 
     LaunchedEffect(Unit) {
-        viewModel.reloadWebView.collect {
-            webView?.reload()
+        viewModel.eventFlow.collect {
+            when(it) {
+                is LoginViewEvent.ReloadWebView -> webView?.reload()
+                is LoginViewEvent.NavigateBack -> navigateBack()
+            }
         }
     }
 
@@ -58,8 +61,8 @@ fun SettingsDetailsLogin(
                 LoginWebViewFactory.create(
                     context = context,
                     recorder = uiState.recorder,
-                    onLoginRequest = { request, cookies ->
-                        viewModel.handleRequestLogin(request, cookies, navigateBack)
+                    onAuthCookiesCaptured = { cookies ->
+                        viewModel.handleAuthCookiesCaptured(cookies, navigateBack)
                     }
                 ).also { webView = it }
             },

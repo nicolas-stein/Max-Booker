@@ -13,14 +13,15 @@ import fr.stein.maxbooker.data.local.createSncfCustomerDataStore
 import fr.stein.maxbooker.data.local.sncfapiauthentication.SncfApiAuthenticationProto
 import fr.stein.maxbooker.data.local.sncfcustomer.SncfCustomerProto
 import fr.stein.maxbooker.data.remote.sncf.SncfApi
-import fr.stein.maxbooker.data.remote.sncf.SncfApiAuthenticator
 import fr.stein.maxbooker.data.remote.sncf.SncfApiInterceptor
 import fr.stein.maxbooker.data.repository.sncf.SncfApiAuthenticationRepositoryImpl
 import fr.stein.maxbooker.data.repository.sncf.SncfApiExecutorImpl
 import fr.stein.maxbooker.data.repository.sncf.SncfApiRepositoryImpl
+import fr.stein.maxbooker.domain.fetcher.sncf.SncfApiCustomerFetcher
 import fr.stein.maxbooker.domain.repository.sncf.SncfApiAuthenticationRepository
 import fr.stein.maxbooker.domain.repository.sncf.SncfApiExecutor
 import fr.stein.maxbooker.domain.repository.sncf.SncfApiRepository
+import fr.stein.maxbooker.domain.usecase.SncfApiFetchCustomerUseCase
 import javax.inject.Provider
 import javax.inject.Singleton
 import okhttp3.OkHttpClient
@@ -38,7 +39,6 @@ object SncfApiModules {
     ): SncfApi {
         val httpClient = OkHttpClient.Builder()
             .addInterceptor(SncfApiInterceptor(sncfApiAuthenticationRepository))
-            .authenticator(SncfApiAuthenticator(sncfApiAuthenticationRepository))
             .build()
 
         return Retrofit.Builder()
@@ -80,12 +80,12 @@ object SncfApiModules {
     @Provides
     @Singleton
     fun provideSncfApiAuthenticationRepository(
-        sncfApi: SncfApi,
-        sncfApiExecutor: SncfApiExecutor,
         sncfApiAuthenticationDataStore: DataStore<SncfApiAuthenticationProto>
     ): SncfApiAuthenticationRepository = SncfApiAuthenticationRepositoryImpl(
-        sncfApi = sncfApi,
-        sncfApiExecutor = sncfApiExecutor,
         sncfApiAuthenticationDataStore = sncfApiAuthenticationDataStore
     )
+
+    @Provides
+    @Singleton
+    fun provideSncfApiCustomerFetcher(sncfApiFetchCustomerUseCase: SncfApiFetchCustomerUseCase, sncfCustomerDataStore: DataStore<SncfCustomerProto>): SncfApiCustomerFetcher = SncfApiCustomerFetcher(sncfApiFetchCustomerUseCase, sncfCustomerDataStore)
 }

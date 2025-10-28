@@ -5,23 +5,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.stein.maxbooker.data.exception.SncfApiException
-import fr.stein.maxbooker.domain.model.sncf.SncfApiAuthentication
-import fr.stein.maxbooker.domain.model.sncf.SncfApiTokenRequest
+import fr.stein.maxbooker.domain.fetcher.sncf.SncfApiCustomerFetcher
 import fr.stein.maxbooker.domain.model.sncf.SncfCustomer
-import fr.stein.maxbooker.domain.usecase.SncfApiAuthenticateUseCase
+import fr.stein.maxbooker.domain.repository.sncf.SncfApiAuthenticationRepository
 import fr.stein.maxbooker.domain.usecase.SncfApiFetchCustomerUseCase
 import fr.stein.maxbooker.ui.screens.settings.login.details.webview.LoginPayloadRecorder
-import javax.inject.Inject
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import javax.inject.Inject
 
 data class SettingsDetailsLoginUiState(
     val recorder: LoginPayloadRecorder = LoginPayloadRecorder(),
@@ -31,100 +30,59 @@ data class SettingsDetailsLoginUiState(
     var loginAuthenticationDialogError: Throwable? = null
 )
 
+sealed class LoginViewEvent {
+    object NavigateBack : LoginViewEvent()
+    object ReloadWebView: LoginViewEvent()
+}
+
 @HiltViewModel
 class SettingsDetailsLoginViewModel @Inject constructor(
-    private val sncfApiAuthenticateUseCase: SncfApiAuthenticateUseCase,
-    private val sncfApiFetchCustomerUseCase: SncfApiFetchCustomerUseCase
+    private val sncfApiAuthenticationRepository: SncfApiAuthenticationRepository,
+    private val sncfApiFetchCustomerUseCase: SncfApiFetchCustomerUseCase,
+    private val sncfApiCustomerFetcher: SncfApiCustomerFetcher
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(SettingsDetailsLoginUiState())
     val uiState: StateFlow<SettingsDetailsLoginUiState> = _uiState.asStateFlow()
 
-    private val _reloadWebView = MutableSharedFlow<Unit>()
-    val reloadWebView: SharedFlow<Unit> = _reloadWebView
+    private val _eventFlow = MutableSharedFlow<LoginViewEvent>()
+    val eventFlow: SharedFlow<LoginViewEvent> = _eventFlow.asSharedFlow()
 
-    private var previousSncfApiTokenRequest: SncfApiTokenRequest? = null
-
-    fun handleRequestLogin(
-        sncfApiTokenRequest: SncfApiTokenRequest,
+    fun handleAuthCookiesCaptured(
         cookies: String,
         navigateBack: () -> Unit
-    ): SncfApiAuthentication? {
-        val sncfApiAuthentication: SncfApiAuthentication
-
-        _uiState.update { currentState ->
-            currentState.copy(
-                showLoginAuthenticationDialog = true,
-                loginAuthenticationDialogState = LoginAuthenticationDialogState.IN_PROGRESS
-            )
-        }
-
-        try {
-            runBlocking {
-                if (sncfApiTokenRequest != previousSncfApiTokenRequest) {
-                    sncfApiAuthentication =
-                        sncfApiAuthenticateUseCase.authenticate(sncfApiTokenRequest, cookies)
-                    previousSncfApiTokenRequest = sncfApiTokenRequest
-                } else {
-                    sncfApiAuthenticateUseCase.updateCookies(cookies)
-                    sncfApiAuthentication = sncfApiAuthenticateUseCase.getSavedAuthentication()!!
-                }
-            }
-        } catch (exception: SncfApiException) {
-            Log.e("Max Book", "Failed to authenticate to SNCF API", exception)
+    ) {
+        viewModelScope.launch {
             _uiState.update { currentState ->
                 currentState.copy(
-                    loginAuthenticationDialogState = LoginAuthenticationDialogState.FAILED,
-                    loginAuthenticationDialogError = exception
+                    showLoginAuthenticationDialog = true,
+                    loginAuthenticationDialogState = LoginAuthenticationDialogState.IN_PROGRESS,
+                    loginAuthenticationDialogError = null
                 )
             }
-            return null
-        }
 
-        viewModelScope.launch(Dispatchers.IO) {
-            fetchSncfCustomer(navigateBack)
-        }
-        return sncfApiAuthentication
-    }
-
-    fun fetchSncfCustomer(navigateBack: () -> Unit) {
-        val sncfCustomer: SncfCustomer
-
-        try {
-            sncfCustomer = runBlocking {
-                sncfApiFetchCustomerUseCase()
-            }
-        } catch (exception: SncfApiException) {
-            Log.e("Max Book", "Failed to fetch customer from SNCF API", exception)
-            if (exception is SncfApiException.ApiErrorException &&
-                exception.code == 403
-            ) {
-                viewModelScope.launch {
-                    _uiState.update { currentState ->
-                        currentState.copy(showLoginAuthenticationDialog = false)
-                    }
-                    _reloadWebView.emit(Unit)
-                }
-            } else {
+            try {
+                val sncfCustomer = sncfApiFetchCustomerUseCase(cookies)
+                Log.d("Max Book", "handleAuthCookiesCaptured: successfully fetched sncfCustomer ${sncfCustomer.firstName} ${sncfCustomer.lastName}")
+                sncfApiAuthenticationRepository.updateAuthenticationCookie(cookies)
+                sncfApiCustomerFetcher.fetchCustomer()
                 _uiState.update { currentState ->
                     currentState.copy(
+                        loginAuthenticationDialogState = LoginAuthenticationDialogState.SUCCESS
+                    )
+                }
+
+                delay(3000)
+                navigateBack()
+
+            } catch (exception: SncfApiException) {
+                Log.e("Max Book", "Failed to fetch customer from SNCF API", exception)
+                _uiState.update { currentState ->
+                    currentState.copy(
+                        showLoginAuthenticationDialog = false,
                         loginAuthenticationDialogState = LoginAuthenticationDialogState.FAILED,
                         loginAuthenticationDialogError = exception
                     )
                 }
-            }
-            return
-        }
-
-        _uiState.update { currentState ->
-            currentState.copy(
-                loginAuthenticationDialogState = LoginAuthenticationDialogState.SUCCESS
-            )
-        }
-        viewModelScope.launch {
-            delay(3000)
-            navigateBack()
-            _uiState.update { currentState ->
-                currentState.copy(showLoginAuthenticationDialog = false)
             }
         }
     }

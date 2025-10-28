@@ -22,6 +22,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import fr.stein.maxbooker.R
+import fr.stein.maxbooker.data.exception.SncfApiException
+import fr.stein.maxbooker.domain.fetcher.DataState
 import fr.stein.maxbooker.domain.model.sncf.SncfCustomer
 import fr.stein.maxbooker.domain.model.sncf.SncfCustomerCard
 import fr.stein.maxbooker.ui.theme.MaxBookerTheme
@@ -38,51 +40,61 @@ fun SettingsItemLogin(
 
     SettingsItemLoginContent(
         modifier,
-        uiState.sncfCustomer,
-        uiState.isSncfCustomerLoading,
-        uiState.sncfCustomerLoadingError
+        uiState.sncfCustomerData
     )
 }
 
 @Composable
 fun SettingsItemLoginContent(
     modifier: Modifier = Modifier,
-    sncfCustomer: SncfCustomer? = null,
-    isSncfCustomerLoading: Boolean = false,
-    sncfCustomerLoadingError: Throwable? = null
+    sncfCustomerData: DataState<SncfCustomer>
 ) {
     ListItem(
         modifier = modifier,
         headlineContent = { Text(stringResource(R.string.screen_settings_item_login_headline)) },
         supportingContent = {
-            if (isSncfCustomerLoading) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    // Match the height of the CircularProgressIndicator to the Text font size
-                    val textStyle = LocalTextStyle.current
-                    val fontSizeInDp = with(LocalDensity.current) { textStyle.fontSize.toDp() }
+            when(sncfCustomerData){
+                is DataState.Loading -> {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        // Match the height of the CircularProgressIndicator to the Text font size
+                        val textStyle = LocalTextStyle.current
+                        val fontSizeInDp = with(LocalDensity.current) { textStyle.fontSize.toDp() }
 
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .size(fontSizeInDp),
-                        strokeWidth = 2.dp
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .size(fontSizeInDp),
+                            strokeWidth = 2.dp
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = stringResource(R.string.screen_settings_item_login_retrieving_user),
+                            style = textStyle
+                        )
+                    }
+                }
+                is DataState.Error -> {
+                    if (sncfCustomerData.exception is SncfApiException.AuthenticatedRequired) {
+                        Text(stringResource(R.string.screen_settings_item_login_not_logged_in))
+                    } else {
+                        Text(stringResource(R.string.screen_settings_item_login_retrieving_user_failed))
+                    }
+                }
+                is DataState.Success -> {
                     Text(
-                        text = stringResource(R.string.screen_settings_item_login_retrieving_user),
-                        style = textStyle
+                        stringResource(
+                            R.string.screen_settings_item_login_logged_in_as,
+                            "${sncfCustomerData.data.firstName} ${sncfCustomerData.data.lastName}"
+                        )
                     )
                 }
-            } else if (sncfCustomerLoadingError != null) {
-                Text(stringResource(R.string.screen_settings_item_login_retrieving_user_failed))
-            } else if (sncfCustomer == null) {
-                Text(stringResource(R.string.screen_settings_item_login_not_logged_in))
-            } else {
-                Text(
-                    stringResource(
-                        R.string.screen_settings_item_login_logged_in_as,
-                        "${sncfCustomer.firstName} ${sncfCustomer.lastName}"
+                is DataState.Offline -> {
+                    Text(
+                        stringResource(
+                            R.string.screen_settings_item_login_logged_in_as,
+                            "${sncfCustomerData.data?.firstName} ${sncfCustomerData.data?.lastName}"
+                        )
                     )
-                )
+                }
             }
         },
         trailingContent = {
@@ -98,7 +110,9 @@ fun SettingsItemLoginContent(
 @Composable
 private fun SettingsItemLoginPreviewNotLoggedIn() {
     MaxBookerTheme {
-        SettingsItemLoginContent()
+        SettingsItemLoginContent(
+            sncfCustomerData = DataState.Error(SncfApiException.AuthenticatedRequired())
+        )
     }
 }
 
@@ -107,7 +121,7 @@ private fun SettingsItemLoginPreviewNotLoggedIn() {
 private fun SettingsItemLoginPreviewConnecting() {
     MaxBookerTheme {
         SettingsItemLoginContent(
-            isSncfCustomerLoading = true
+            sncfCustomerData = DataState.Loading
         )
     }
 }
@@ -115,43 +129,45 @@ private fun SettingsItemLoginPreviewConnecting() {
 @Preview
 @Composable
 private fun SettingsItemLoginPreviewLoggedIn() {
+    val sncfCustomer = SncfCustomer(
+        iuc = UUID.randomUUID().toString(),
+        createdAt = LocalDateTime.now(),
+        updatedAt = LocalDateTime.now(),
+        civility = "M.",
+        lastName = "Dupont",
+        firstName = "Jean",
+        birthDate = LocalDate.now().minusYears(20),
+        language = "FR",
+        address = "5 PLACE JUSSIEU",
+        zipCode = "75005",
+        city = "PARIS",
+        country = "FRANCE",
+        email = "jean.dupont@gmail.com",
+        mobilePhone = "0033612345678",
+        nsdStatus = "subscribed",
+        pictureCounter = 1,
+        pictureStatus = "notvalidated",
+        maxTravelsPerDay = 2,
+        pictureUpdate = LocalDateTime.now().minusYears(2),
+        cniUpdate = LocalDateTime.now().minusYears(2),
+        cniType = "CNICT",
+        cniValue = "Verified",
+        cards = listOf(
+            SncfCustomerCard(
+                cardNumber = "0123456789",
+                marketingCarrierRef = "ABCDEF",
+                productType = "TGV_MAX_JEUNE",
+                contractStatus = "VALIDE",
+                validityStartDate = LocalDate.now().minusYears(2),
+                validityEndDate = LocalDate.now().plusYears(3),
+                ticketlessIndicator = true
+            )
+        )
+    )
+
     MaxBookerTheme {
         SettingsItemLoginContent(
-            sncfCustomer = SncfCustomer(
-                iuc = UUID.randomUUID().toString(),
-                createdAt = LocalDateTime.now(),
-                updatedAt = LocalDateTime.now(),
-                civility = "M.",
-                lastName = "Dupont",
-                firstName = "Jean",
-                birthDate = LocalDate.now().minusYears(20),
-                language = "FR",
-                address = "5 PLACE JUSSIEU",
-                zipCode = "75005",
-                city = "PARIS",
-                country = "FRANCE",
-                email = "jean.dupont@gmail.com",
-                mobilePhone = "0033612345678",
-                nsdStatus = "subscribed",
-                pictureCounter = 1,
-                pictureStatus = "notvalidated",
-                maxTravelsPerDay = 2,
-                pictureUpdate = LocalDateTime.now().minusYears(2),
-                cniUpdate = LocalDateTime.now().minusYears(2),
-                cniType = "CNICT",
-                cniValue = "Verified",
-                cards = listOf(
-                    SncfCustomerCard(
-                        cardNumber = "0123456789",
-                        marketingCarrierRef = "ABCDEF",
-                        productType = "TGV_MAX_JEUNE",
-                        contractStatus = "VALIDE",
-                        validityStartDate = LocalDate.now().minusYears(2),
-                        validityEndDate = LocalDate.now().plusYears(3),
-                        ticketlessIndicator = true
-                    )
-                )
-            )
+            sncfCustomerData = DataState.Success(sncfCustomer)
         )
     }
 }

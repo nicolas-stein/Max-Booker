@@ -1,77 +1,26 @@
 package fr.stein.maxbooker.ui.screens.settings.login.details.webview
 
-import android.app.Activity
 import android.graphics.Bitmap
-import android.util.Log
 import android.webkit.CookieManager
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import com.fasterxml.jackson.core.JsonParseException
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
-import fr.stein.maxbooker.domain.model.sncf.SncfApiAuthentication
-import fr.stein.maxbooker.domain.model.sncf.SncfApiTokenRequest
 
 class LoginWebViewClient(
-    private val loginPayloadRecorder: LoginPayloadRecorder,
-    private val requestLogin: (
-        sncfApiToken: SncfApiTokenRequest,
+    private val onAuthCookiesCaptured: (
         cookies: String
-    ) -> SncfApiAuthentication?
+    ) -> Unit
 ) : WebViewClient() {
 
     override fun shouldInterceptRequest(
         view: WebView?,
         request: WebResourceRequest?
     ): WebResourceResponse? {
-        if (request == null || view == null || view.context !is Activity) {
-            return super.shouldInterceptRequest(view, request)
-        }
         // Log.d("Max Book", "shouldInterceptRequest: ${request.method} ${request.url}")
 
-        // Intercept request to get refresh token
-        if (request.url.toString() ==
-            "https://www.maxjeune-tgvinoui.sncf/api/public/auth/sfc/token"
-        ) {
-            val payload = loginPayloadRecorder.getPayload(request.method, request.url.toString())
-            // Log.d("Max Book", "SNCF API token request payload : $payload")
-
-            if (payload == null) {
-                return null
-            }
-
-            val mapper = jacksonObjectMapper()
-            val sncfApiTokenRequest: SncfApiTokenRequest
-            try {
-                sncfApiTokenRequest = mapper.readValue(payload)
-            } catch (e: JsonParseException) {
-                Log.e("Max Book", "Failed to parse payload as a SncfApiTokenRequest object", e)
-                return null
-            }
-
-            val sncfApiAuthentication =
-                requestLogin(
-                    sncfApiTokenRequest,
-                    CookieManager.getInstance().getCookie(request.url.toString())
-                )
-            if (sncfApiAuthentication == null) {
-                return null
-            }
-
-            val content = jacksonObjectMapper().writeValueAsString(
-                sncfApiAuthentication.sncfApiToken
-            )
-            return WebResourceResponse(
-                "application/json",
-                "UTF-8",
-                content.byteInputStream()
-            )
-        } else if (request.url.toString() ==
-            "https://www.maxjeune-tgvinoui.sncf/api/public/customer/read-customer"
-        ) {
-            // loginSuccess()
+        if (request != null && request.url.toString() == "https://www.maxjeune-tgvinoui.sncf/api/public/customer/read-customer") {
+            onAuthCookiesCaptured(CookieManager.getInstance().getCookie(request.url.toString()))
         }
 
         return super.shouldInterceptRequest(view, request)

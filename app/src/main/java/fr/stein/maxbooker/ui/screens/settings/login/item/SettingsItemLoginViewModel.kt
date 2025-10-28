@@ -1,71 +1,36 @@
 package fr.stein.maxbooker.ui.screens.settings.login.item
 
-import android.util.Log
-import androidx.datastore.core.DataStore
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import fr.stein.maxbooker.data.exception.SncfApiException
-import fr.stein.maxbooker.data.local.sncfcustomer.SncfCustomerProto
-import fr.stein.maxbooker.data.mapper.toDomain
+import fr.stein.maxbooker.domain.fetcher.DataState
+import fr.stein.maxbooker.domain.fetcher.sncf.SncfApiCustomerFetcher
 import fr.stein.maxbooker.domain.model.sncf.SncfCustomer
-import fr.stein.maxbooker.domain.usecase.SncfApiFetchCustomerUseCase
-import javax.inject.Inject
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 data class SettingsItemLoginUiState(
-    var sncfCustomer: SncfCustomer? = null,
-    var isSncfCustomerLoading: Boolean = false,
-    var sncfCustomerLoadingError: Throwable? = null
+    val sncfCustomerData: DataState<SncfCustomer> = DataState.Offline(null)
 )
 
 @HiltViewModel
 class SettingsItemLoginViewModel @Inject constructor(
-    sncfCustomerDataStore: DataStore<SncfCustomerProto>,
-    private val sncfAPiFetchCustomerUseCase: SncfApiFetchCustomerUseCase
+    sncfCustomerFetcher: SncfApiCustomerFetcher
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SettingsItemLoginUiState())
     val uiState: StateFlow<SettingsItemLoginUiState> = _uiState.asStateFlow()
 
     init {
-        sncfCustomerDataStore.data.asLiveData().observeForever { sncfCustomer ->
-            _uiState.update { current -> current.copy(sncfCustomer = sncfCustomer.toDomain()) }
-        }
-
-        viewModelScope.launch(Dispatchers.IO) {
-            loadSncfCustomer()
-        }
-    }
-
-    suspend fun loadSncfCustomer() {
-        _uiState.update { current ->
-            current.copy(isSncfCustomerLoading = true, sncfCustomerLoadingError = null)
-        }
-        try {
-            sncfAPiFetchCustomerUseCase.invoke()
-        } catch (exception: SncfApiException) {
-            Log.e("Max Book", "loadSncfCustomer: failed to load customer", exception)
-            _uiState.update { current ->
-                current.copy(
-                    sncfCustomerLoadingError =
-                    if (exception is SncfApiException.AuthenticatedRequired ||
-                        exception is SncfApiException.NetworkException
-                    ) {
-                        null
-                    } else {
-                        exception
-                    }
-                )
+        sncfCustomerFetcher.customerState.onEach { dataState ->
+            _uiState.update { currentState ->
+                currentState.copy(sncfCustomerData = dataState)
             }
-        } finally {
-            _uiState.update { current -> current.copy(isSncfCustomerLoading = false) }
-        }
+        }.launchIn(viewModelScope)
     }
 }

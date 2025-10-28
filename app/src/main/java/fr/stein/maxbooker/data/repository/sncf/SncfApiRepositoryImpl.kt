@@ -15,13 +15,14 @@ class SncfApiRepositoryImpl(
 ) : SncfApiRepository {
 
     @Throws(SncfApiException::class)
-    override suspend fun getCustomer(): SncfCustomer {
+    override suspend fun getCustomer(cookiesOverride: String?): SncfCustomer {
         Log.d("Max Book", "SncfApiRepositoryImpl: requested getCustomer")
         val sncfCustomerDto = sncfApiExecutor.execute {
             sncfApi.getCustomer(
                 SncfCustomerRequest(
                     productTypes = listOf("TGV_MAX_JEUNE", "FIDEL", "IDTGV_MAX")
-                )
+                ),
+                cookiesOverride = cookiesOverride
             )
         }
         val sncfCustomer = sncfCustomerDto.toDomain()

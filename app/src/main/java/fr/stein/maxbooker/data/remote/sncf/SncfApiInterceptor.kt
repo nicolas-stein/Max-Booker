@@ -28,22 +28,9 @@ class SncfApiInterceptor(
         if (original.header("Cookie") == null) {
             requestBuilder.addHeader(
                 "Cookie",
-                sncfApiAuthenticationRepository.get().getCookies() ?: ""
+                sncfApiAuthenticationRepository.get().getSncfApiAuthentication()?.cookies ?: ""
             )
         }
-
-        if (!original.url.encodedPath.endsWith("auth/sfc/token")) {
-            val authorizationHeader = sncfApiAuthenticationRepository.get().getAuthorizationHeader()
-            if (authorizationHeader != null) {
-                requestBuilder.addHeader("Authorization", authorizationHeader)
-            } else {
-                Log.w(
-                    "Max Book",
-                    "SncfApiInterceptor: could not add Authorization header as it's null !"
-                )
-            }
-        }
-
         chain.proceed(requestBuilder.build())
     }
 }

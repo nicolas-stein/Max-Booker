@@ -6,5 +6,5 @@ import fr.stein.maxbooker.domain.model.sncf.SncfCustomer
 interface SncfApiRepository {
 
     @Throws(SncfApiException::class)
-    suspend fun getCustomer(): SncfCustomer
+    suspend fun getCustomer(cookiesOverride: String?): SncfCustomer
 }

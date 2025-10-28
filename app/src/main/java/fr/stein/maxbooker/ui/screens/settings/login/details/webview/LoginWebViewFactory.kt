@@ -4,22 +4,19 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.webkit.WebChromeClient
 import android.webkit.WebView
-import fr.stein.maxbooker.domain.model.sncf.SncfApiAuthentication
-import fr.stein.maxbooker.domain.model.sncf.SncfApiTokenRequest
 
 object LoginWebViewFactory {
     fun create(
         context: Context,
         recorder: LoginPayloadRecorder,
-        onLoginRequest: (SncfApiTokenRequest, String) -> SncfApiAuthentication?
+        onAuthCookiesCaptured: (String) -> Unit
     ): WebView = WebView(context).apply {
         @SuppressLint("SetJavaScriptEnabled")
         settings.javaScriptEnabled = true
         settings.domStorageEnabled = true
 
         val loginWebViewClient = LoginWebViewClient(
-            loginPayloadRecorder = recorder,
-            requestLogin = onLoginRequest
+            onAuthCookiesCaptured = onAuthCookiesCaptured
         )
 
         webViewClient = loginWebViewClient
