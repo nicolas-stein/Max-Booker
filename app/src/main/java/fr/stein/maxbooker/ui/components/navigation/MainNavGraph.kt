@@ -48,7 +48,7 @@ fun MainNavGraph(navController: NavHostController) {
             )
         ) { backStachEntry ->
             val itemName = backStachEntry.arguments?.getString("itemName")
-            SettingsScreen(initialItemName = itemName)
+            SettingsScreen(initialItemName = itemName?.uppercase())
         }
     }
 }

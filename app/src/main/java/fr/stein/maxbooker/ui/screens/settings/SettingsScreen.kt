@@ -49,7 +49,7 @@ fun SettingsScreen(
     }
 
     LaunchedEffect(initialItemName) {
-        if (initialItemName != null) {
+        if (initialItemName != null && SettingsItems.entries.map { it.name }.contains(initialItemName)) {
             viewModel.selectItem(initialItemName)
         }
     }
