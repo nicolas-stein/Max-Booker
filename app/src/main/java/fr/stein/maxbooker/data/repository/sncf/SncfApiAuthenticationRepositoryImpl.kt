@@ -1,9 +1,11 @@
 package fr.stein.maxbooker.data.repository.sncf
 
+import android.util.Log
 import androidx.datastore.core.DataStore
 import fr.stein.maxbooker.data.local.sncfapiauthentication.SncfApiAuthenticationProto
 import fr.stein.maxbooker.data.mapper.toDomain
 import fr.stein.maxbooker.data.mapper.toProto
+import fr.stein.maxbooker.data.remote.sncf.SncfApi
 import fr.stein.maxbooker.domain.model.sncf.SncfApiAuthentication
 import fr.stein.maxbooker.domain.repository.sncf.SncfApiAuthenticationRepository
 import kotlinx.coroutines.CoroutineScope
@@ -15,6 +17,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class SncfApiAuthenticationRepositoryImpl(
+    private val sncfApi: SncfApi,
     private val sncfApiAuthenticationDataStore: DataStore<SncfApiAuthenticationProto>
 ) : SncfApiAuthenticationRepository {
 
@@ -42,5 +45,29 @@ class SncfApiAuthenticationRepositoryImpl(
 
         sncfApiAuthenticationDataStore.updateData { newSncfApiAuthentication.toProto() }
         return newSncfApiAuthentication
+    }
+
+    override suspend fun refreshAuthenticationCookie(cookies: String): SncfApiAuthentication? {
+        try {
+            val refreshAuthResponse = sncfApi.refreshAuth(cookies)
+
+            if (refreshAuthResponse.isSuccessful) {
+                val newCookies = refreshAuthResponse.headers().values("Set-Cookie")
+                    .joinToString("; ") { it.substringBefore(";").trim() }
+                if (newCookies.isBlank()) {
+                    throw RuntimeException(
+                        "Refresh authentication response does not contain Set-Cookie header !"
+                    )
+                }
+
+                val newSncfApiAuthentication = SncfApiAuthentication(cookies = newCookies)
+                sncfApiAuthenticationDataStore.updateData { newSncfApiAuthentication.toProto() }
+                return newSncfApiAuthentication
+            }
+        } catch (e: Exception) {
+            Log.e("Max Book", "Unable to refresh authentication", e)
+        }
+
+        return null
     }
 }

@@ -4,5 +4,6 @@ import fr.stein.maxbooker.domain.model.sncf.SncfApiAuthentication
 
 interface SncfApiAuthenticationRepository {
     suspend fun getSncfApiAuthentication(): SncfApiAuthentication?
-    suspend fun updateAuthenticationCookie(cookies: String): SncfApiAuthentication
+    suspend fun updateAuthenticationCookie(cookies: String): SncfApiAuthentication?
+    suspend fun refreshAuthenticationCookie(cookies: String): SncfApiAuthentication?
 }

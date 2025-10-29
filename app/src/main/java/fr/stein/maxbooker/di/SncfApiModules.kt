@@ -13,6 +13,7 @@ import fr.stein.maxbooker.data.local.createSncfCustomerDataStore
 import fr.stein.maxbooker.data.local.sncfapiauthentication.SncfApiAuthenticationProto
 import fr.stein.maxbooker.data.local.sncfcustomer.SncfCustomerProto
 import fr.stein.maxbooker.data.remote.sncf.SncfApi
+import fr.stein.maxbooker.data.remote.sncf.SncfApiAuthenticator
 import fr.stein.maxbooker.data.remote.sncf.SncfApiInterceptor
 import fr.stein.maxbooker.data.repository.sncf.SncfApiAuthenticationRepositoryImpl
 import fr.stein.maxbooker.data.repository.sncf.SncfApiExecutorImpl
@@ -39,6 +40,7 @@ object SncfApiModules {
     ): SncfApi {
         val httpClient = OkHttpClient.Builder()
             .addInterceptor(SncfApiInterceptor(sncfApiAuthenticationRepository))
+            .authenticator(SncfApiAuthenticator(sncfApiAuthenticationRepository))
             .build()
 
         return Retrofit.Builder()
@@ -80,8 +82,10 @@ object SncfApiModules {
     @Provides
     @Singleton
     fun provideSncfApiAuthenticationRepository(
+        sncfApi: SncfApi,
         sncfApiAuthenticationDataStore: DataStore<SncfApiAuthenticationProto>
     ): SncfApiAuthenticationRepository = SncfApiAuthenticationRepositoryImpl(
+        sncfApi = sncfApi,
         sncfApiAuthenticationDataStore = sncfApiAuthenticationDataStore
     )
 
