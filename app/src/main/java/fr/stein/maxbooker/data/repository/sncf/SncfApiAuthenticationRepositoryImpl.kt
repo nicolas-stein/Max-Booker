@@ -6,7 +6,7 @@ import fr.stein.maxbooker.data.local.sncfapiauthentication.SncfApiAuthentication
 import fr.stein.maxbooker.data.mapper.toDomain
 import fr.stein.maxbooker.data.mapper.toProto
 import fr.stein.maxbooker.data.remote.sncf.SncfApi
-import fr.stein.maxbooker.domain.model.sncf.SncfApiAuthentication
+import fr.stein.maxbooker.domain.model.sncf.auth.SncfApiAuthentication
 import fr.stein.maxbooker.domain.repository.sncf.SncfApiAuthenticationRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

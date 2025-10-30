@@ -2,7 +2,9 @@ package fr.stein.maxbooker.data.remote.sncf
 
 import com.fasterxml.jackson.databind.JsonNode
 import fr.stein.maxbooker.data.remote.sncf.dto.SncfCustomerDto
-import fr.stein.maxbooker.domain.model.sncf.SncfCustomerRequest
+import fr.stein.maxbooker.data.remote.sncf.dto.SncfTravelConsultationDto
+import fr.stein.maxbooker.domain.model.sncf.customer.SncfCustomerRequest
+import fr.stein.maxbooker.domain.model.sncf.reservation.SncfTravelConsultationRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Header
@@ -17,4 +19,9 @@ interface SncfApi {
         @Body sncfCustomerRequest: SncfCustomerRequest,
         @Header("Cookie") cookiesOverride: String?
     ): Response<SncfCustomerDto>
+
+    @POST("reservation/travel-consultation")
+    suspend fun getTravelConsultation(
+        @Body sncfTravelConsultationRequest: SncfTravelConsultationRequest
+    ): Response<List<SncfTravelConsultationDto>>
 }

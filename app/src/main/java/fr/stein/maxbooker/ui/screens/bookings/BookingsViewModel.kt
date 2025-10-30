@@ -2,43 +2,51 @@ package fr.stein.maxbooker.ui.screens.bookings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import fr.stein.maxbooker.domain.model.Booking
+import dagger.hilt.android.lifecycle.HiltViewModel
+import fr.stein.maxbooker.data.local.database.SncfReservationDao
+import fr.stein.maxbooker.data.mapper.toDomain
+import fr.stein.maxbooker.domain.fetcher.DataState
+import fr.stein.maxbooker.domain.fetcher.sncf.SncfApiReservationsFetcher
+import fr.stein.maxbooker.domain.model.sncf.reservation.SncfReservation
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 data class BookingsUiState(
-    val bookings: List<Booking> = emptyList(),
-    val selectedBookingId: String? = null
+    val sncfReservationsFetcherState: DataState<List<SncfReservation>> = DataState.Offline(null),
+    val sncfReservations: List<SncfReservation> = emptyList(),
+    val selectedOrderId: String? = null
 ) {
-    val selectedBooking: Booking?
-        get() = bookings.find { it.orderId == selectedBookingId }
+    val selectedSncfReservation: SncfReservation?
+        get() = sncfReservations.find { it.orderId == selectedOrderId }
 }
 
-class BookingsViewModel : ViewModel() {
+@HiltViewModel
+class BookingsViewModel @Inject constructor(
+    sncfApiReservationsFetcher: SncfApiReservationsFetcher,
+    sncfReservationDao: SncfReservationDao
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(BookingsUiState())
     val uiState: StateFlow<BookingsUiState> = _uiState.asStateFlow()
 
     init {
-        fetchBookings()
-    }
-
-    private fun fetchBookings() {
-        // TODO : In a real app, you'd fetch this from a repository or API
-        viewModelScope.launch {
-            val bookingsData = List(20) {
-                Booking(
-                    orderId = "booking_$it"
-                )
+        sncfApiReservationsFetcher.reservationsState.onEach { dataState ->
+            _uiState.update { currentState ->
+                currentState.copy(sncfReservationsFetcherState = dataState)
             }
-            _uiState.update { it.copy(bookings = bookingsData) }
-        }
+        }.launchIn(viewModelScope)
+
+        sncfReservationDao.observeAllReservations().onEach { sncfReservations ->
+            _uiState.update { it.copy(sncfReservations = sncfReservations.map { it.toDomain() }) }
+        }.launchIn(viewModelScope)
     }
 
-    fun selectBooking(bookingId: String?) {
-        _uiState.update { it.copy(selectedBookingId = bookingId) }
+    fun selectReservation(orderId: String?) {
+        _uiState.update { it.copy(selectedOrderId = orderId) }
     }
 }

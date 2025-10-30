@@ -9,19 +9,22 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import fr.stein.maxbooker.ui.screens.bookings.details.BookingsDetails
 import fr.stein.maxbooker.ui.theme.MaxBookerTheme
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
-fun BookingsScreen(initialBookingId: String? = null, viewModel: BookingsViewModel = viewModel()) {
+fun BookingsScreen(
+    initialOrderId: String? = null,
+    viewModel: BookingsViewModel = hiltViewModel<BookingsViewModel>()
+) {
     val uiState by viewModel.uiState.collectAsState()
 
     val listDetailNavigator = rememberListDetailPaneScaffoldNavigator<String>()
 
-    LaunchedEffect(uiState.selectedBookingId) {
-        val selectedId = uiState.selectedBookingId
+    LaunchedEffect(uiState.selectedOrderId) {
+        val selectedId = uiState.selectedOrderId
         if (selectedId != null) {
             listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail, selectedId)
         } else {
@@ -31,13 +34,13 @@ fun BookingsScreen(initialBookingId: String? = null, viewModel: BookingsViewMode
 
     LaunchedEffect(listDetailNavigator.currentDestination) {
         if (listDetailNavigator.currentDestination?.pane == ListDetailPaneScaffoldRole.List) {
-            viewModel.selectBooking(null)
+            viewModel.selectReservation(null)
         }
     }
 
-    LaunchedEffect(initialBookingId) {
-        if (initialBookingId != null) {
-            viewModel.selectBooking(initialBookingId)
+    LaunchedEffect(initialOrderId) {
+        if (initialOrderId != null) {
+            viewModel.selectReservation(initialOrderId)
         }
     }
 
@@ -45,11 +48,11 @@ fun BookingsScreen(initialBookingId: String? = null, viewModel: BookingsViewMode
         navigator = listDetailNavigator,
         listPane = {
             BookingsList(
-                bookings = uiState.bookings,
-                onBookingClick = { bookingId -> viewModel.selectBooking(bookingId) }
+                sncfReservations = uiState.sncfReservations,
+                onReservationClick = { orderId -> viewModel.selectReservation(orderId) }
             )
         },
-        detailPane = { BookingsDetails(booking = uiState.selectedBooking) }
+        detailPane = { BookingsDetails(sncfReservation = uiState.selectedSncfReservation) }
     )
 }
 

@@ -24,14 +24,14 @@ data class SncfCustomerDto(
     val cniType: String,
     val cniValue: String,
     val cards: List<SncfCustomerCardDto>
-)
-
-data class SncfCustomerCardDto(
-    val cardNumber: String,
-    val marketingCarrierRef: String,
-    val productType: String,
-    val contractStatus: String,
-    val validityStartDate: String,
-    val validityEndDate: String,
-    val ticketlessIndicator: Boolean
-)
+) {
+    data class SncfCustomerCardDto(
+        val cardNumber: String,
+        val marketingCarrierRef: String,
+        val productType: String,
+        val contractStatus: String,
+        val validityStartDate: String,
+        val validityEndDate: String,
+        val ticketlessIndicator: Boolean
+    )
+}

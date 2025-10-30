@@ -3,6 +3,8 @@
     <string name="app_name">Max Booker</string>
     <string name="app_destinations_book">Réserver</string>
     <string name="screen_book_none_selected">Sélectionnez une réservation pour afficher ses détails.</string>
+    <string name="screen_book_list_item_trip_to">Voyage à %1$s</string>
+    <string name="screen_book_list_item_outward_on">Aller le %1$s</string>
     <string name="app_destinations_bookings">Réservations</string>
     <string name="app_destinations_settings">Paramètres</string>
     <string name="screen_settings_none_selected">Sélectionnez une catégorie de paramètre.</string>

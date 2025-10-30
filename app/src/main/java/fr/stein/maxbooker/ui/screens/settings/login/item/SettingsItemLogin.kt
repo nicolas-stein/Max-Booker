@@ -24,11 +24,11 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import fr.stein.maxbooker.R
 import fr.stein.maxbooker.data.exception.SncfApiException
 import fr.stein.maxbooker.domain.fetcher.DataState
-import fr.stein.maxbooker.domain.model.sncf.SncfCustomer
-import fr.stein.maxbooker.domain.model.sncf.SncfCustomerCard
+import fr.stein.maxbooker.domain.model.sncf.customer.SncfCustomer
+import fr.stein.maxbooker.domain.model.sncf.customer.SncfCustomerCard
 import fr.stein.maxbooker.ui.theme.MaxBookerTheme
 import java.time.LocalDate
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import java.util.UUID
 
 @Composable
@@ -137,8 +137,8 @@ private fun SettingsItemLoginPreviewConnecting() {
 private fun SettingsItemLoginPreviewLoggedIn() {
     val sncfCustomer = SncfCustomer(
         iuc = UUID.randomUUID().toString(),
-        createdAt = LocalDateTime.now(),
-        updatedAt = LocalDateTime.now(),
+        createdAt = ZonedDateTime.now(),
+        updatedAt = ZonedDateTime.now(),
         civility = "M.",
         lastName = "Dupont",
         firstName = "Jean",
@@ -154,8 +154,8 @@ private fun SettingsItemLoginPreviewLoggedIn() {
         pictureCounter = 1,
         pictureStatus = "notvalidated",
         maxTravelsPerDay = 2,
-        pictureUpdate = LocalDateTime.now().minusYears(2),
-        cniUpdate = LocalDateTime.now().minusYears(2),
+        pictureUpdate = ZonedDateTime.now().minusYears(2),
+        cniUpdate = ZonedDateTime.now().minusYears(2),
         cniType = "CNICT",
         cniValue = "Verified",
         cards = listOf(

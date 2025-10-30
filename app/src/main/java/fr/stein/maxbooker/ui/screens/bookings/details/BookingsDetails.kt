@@ -16,13 +16,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import fr.stein.maxbooker.R
-import fr.stein.maxbooker.domain.model.Booking
+import fr.stein.maxbooker.domain.model.sncf.reservation.SncfReservation
+import fr.stein.maxbooker.domain.model.sncf.reservation.SncfStation
 import fr.stein.maxbooker.ui.theme.MaxBookerTheme
+import java.time.ZonedDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BookingsDetails(booking: Booking?, modifier: Modifier = Modifier) {
-    if (booking != null) {
+fun BookingsDetails(sncfReservation: SncfReservation?, modifier: Modifier = Modifier) {
+    if (sncfReservation != null) {
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -37,11 +39,11 @@ fun BookingsDetails(booking: Booking?, modifier: Modifier = Modifier) {
                     .padding(innerPadding)
             ) {
                 Text(
-                    "Booking ${booking.orderId} title",
+                    "Booking ${sncfReservation.orderId} title",
                     style = MaterialTheme.typography.headlineMedium
                 )
                 Text(
-                    "Booking ${booking.orderId} details",
+                    "Booking ${sncfReservation.orderId} details",
                     style = MaterialTheme.typography.bodyLarge
                 )
             }
@@ -61,8 +63,39 @@ fun BookingsDetails(booking: Booking?, modifier: Modifier = Modifier) {
 private fun BookingsDetailsPreview() {
     MaxBookerTheme {
         BookingsDetails(
-            booking = Booking(
-                orderId = "1234"
+            sncfReservation = SncfReservation(
+                arrivalDateTime = ZonedDateTime.now().plusDays(1),
+                avantage = false,
+                coachNumber = "11",
+                departureDateTime = ZonedDateTime.now().plusDays(1).minusHours(3),
+                destination = SncfStation(
+                    label = "PARIS EST",
+                    rrCode = "FRPST"
+                ),
+                dvNumber = "ABC123",
+                orderId = "DEF456",
+                origin = SncfStation(
+                    label = "THIONVILLE",
+                    rrCode = "FRXTH"
+                ),
+                reservationDate = ZonedDateTime.now().minusHours(1),
+                seatNumber = "86",
+                serviceItemId = "abcdef-12345-ghijkl-6789",
+                trainNumber = "1234",
+                travelClass = "2",
+                travelConfirmed = "TOO_LATE_TO_CONFIRM",
+                travelStatus = "VALIDE",
+                amount = "0 EUR",
+                exchangeable = false,
+                refundable = true,
+                seat = SncfReservation.Seat(
+                    facingForward = false,
+                    seatPosition = "AFEN",
+                    spaceType = "ADOC",
+                    tgvDeck = "ANVH"
+                ),
+                tcn = "0123456789",
+                transportationServiceOffer = "TGV INOUI"
             )
         )
     }

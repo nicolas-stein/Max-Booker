@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.stein.maxbooker.domain.fetcher.DataState
 import fr.stein.maxbooker.domain.fetcher.sncf.SncfApiCustomerFetcher
-import fr.stein.maxbooker.domain.model.sncf.SncfCustomer
+import fr.stein.maxbooker.domain.model.sncf.customer.SncfCustomer
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

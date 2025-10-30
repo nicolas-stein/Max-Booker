@@ -7,7 +7,7 @@ import fr.stein.maxbooker.data.local.sncfcustomer.SncfCustomerProto
 import fr.stein.maxbooker.data.mapper.toDomain
 import fr.stein.maxbooker.data.mapper.toProto
 import fr.stein.maxbooker.domain.fetcher.DataState
-import fr.stein.maxbooker.domain.model.sncf.SncfCustomer
+import fr.stein.maxbooker.domain.model.sncf.customer.SncfCustomer
 import fr.stein.maxbooker.domain.usecase.SncfApiFetchCustomerUseCase
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -33,9 +33,7 @@ class SncfApiCustomerFetcher @Inject constructor(
     }
 
     suspend fun fetchCustomer() {
-        if (_customerState.value == DataState.Loading) {
-            return
-        }
+        if (_customerState.value is DataState.Loading) return
 
         _customerState.value = DataState.Loading
         Log.d("Max Book", "SncfApiCustomerFetcher: fetching customer...")

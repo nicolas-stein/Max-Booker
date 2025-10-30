@@ -1,12 +1,12 @@
-package fr.stein.maxbooker.domain.model.sncf
+package fr.stein.maxbooker.domain.model.sncf.customer
 
 import java.time.LocalDate
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 data class SncfCustomer(
     val iuc: String,
-    val createdAt: LocalDateTime,
-    val updatedAt: LocalDateTime,
+    val createdAt: ZonedDateTime,
+    val updatedAt: ZonedDateTime,
     val civility: String,
     val lastName: String,
     val firstName: String,
@@ -22,8 +22,8 @@ data class SncfCustomer(
     val pictureCounter: Int,
     val pictureStatus: String,
     val maxTravelsPerDay: Int,
-    val pictureUpdate: LocalDateTime,
-    val cniUpdate: LocalDateTime,
+    val pictureUpdate: ZonedDateTime,
+    val cniUpdate: ZonedDateTime,
     val cniType: String,
     val cniValue: String,
     val cards: List<SncfCustomerCard>

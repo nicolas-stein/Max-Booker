@@ -1,8 +1,9 @@
-package fr.stein.maxbooker.data.local.sncfapiauthentication
+package fr.stein.maxbooker.data.local.datastore
 
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer
 import com.google.protobuf.InvalidProtocolBufferException
+import fr.stein.maxbooker.data.local.sncfapiauthentication.SncfApiAuthenticationProto
 import java.io.InputStream
 import java.io.OutputStream
 

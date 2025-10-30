@@ -14,21 +14,21 @@ import fr.stein.maxbooker.ui.screens.settings.SettingsScreen
 fun MainNavGraph(navController: NavHostController) {
     NavHost(navController, startDestination = MainDestinations.BOOKINGS.route) {
         composable(
-            route = "${MainDestinations.BOOKINGS.route}?bookingId={bookingId}",
+            route = "${MainDestinations.BOOKINGS.route}?orderId={orderId}",
             arguments = listOf(
-                navArgument("bookingId") {
+                navArgument("orderId") {
                     nullable = true
                     defaultValue = null
                 }
             ),
             deepLinks = listOf(
                 navDeepLink {
-                    uriPattern = "maxbooker://bookings?bookingId={bookingId}"
+                    uriPattern = "maxbooker://bookings?orderId={orderId}"
                 }
             )
         ) { backStachEntry ->
-            val bookingId = backStachEntry.arguments?.getString("bookingId")
-            BookingsScreen(initialBookingId = bookingId)
+            val orderId = backStachEntry.arguments?.getString("orderId")
+            BookingsScreen(initialOrderId = orderId)
         }
         composable(MainDestinations.BOOK.route) {
             BookScreen()

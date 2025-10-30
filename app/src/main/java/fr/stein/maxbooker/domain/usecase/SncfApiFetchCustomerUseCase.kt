@@ -1,7 +1,7 @@
 package fr.stein.maxbooker.domain.usecase
 
 import fr.stein.maxbooker.data.exception.SncfApiException
-import fr.stein.maxbooker.domain.model.sncf.SncfCustomer
+import fr.stein.maxbooker.domain.model.sncf.customer.SncfCustomer
 import fr.stein.maxbooker.domain.repository.sncf.SncfApiRepository
 import javax.inject.Inject
 

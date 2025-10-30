@@ -1,6 +1,6 @@
 package fr.stein.maxbooker.domain.repository.sncf
 
-import fr.stein.maxbooker.domain.model.sncf.SncfApiAuthentication
+import fr.stein.maxbooker.domain.model.sncf.auth.SncfApiAuthentication
 
 interface SncfApiAuthenticationRepository {
     suspend fun getSncfApiAuthentication(): SncfApiAuthentication?
