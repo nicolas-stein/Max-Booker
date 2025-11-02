@@ -10,8 +10,6 @@ import fr.stein.maxbooker.domain.fetcher.DataState
 import fr.stein.maxbooker.domain.model.sncf.customer.SncfCustomer
 import fr.stein.maxbooker.domain.model.sncf.reservation.SncfReservation
 import fr.stein.maxbooker.domain.repository.sncf.SncfApiRepository
-import javax.inject.Inject
-import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,6 +17,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import okhttp3.internal.toImmutableList
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class SncfApiReservationsFetcher @Inject constructor(
@@ -56,43 +57,48 @@ class SncfApiReservationsFetcher @Inject constructor(
                 "SncfApiReservationsFetcher: received ${sncfReservations.size} reservations from API"
             )
 
-            if (sncfReservations.isEmpty()) {
-                _reservationsState.value = DataState.Success(emptyList())
-                return
-            }
-
-            val orderIds = sncfReservations.map { it.orderId }
-            val savedSncfReservations = sncfReservationDao.getReservationsByIds(orderIds)
-                .map { it.toDomain() }
-                .associateBy { it.orderId }
-
-            val sncfReservationsToUpsert = mutableListOf<SncfReservation>()
-
-            for (reservation in sncfReservations) {
-                val savedReservation = savedSncfReservations[reservation.orderId]
-
-                if (savedReservation != null) {
-                    reservation.updateDetails(
-                        amount = savedReservation.amount,
-                        exchangeable = savedReservation.exchangeable,
-                        refundable = savedReservation.refundable,
-                        seat = savedReservation.seat,
-                        tcn = savedReservation.tcn,
-                        transportationServiceOffer = savedReservation.transportationServiceOffer
-                    )
-                } else {
-                    sncfReservationDao.insertStationIfNotExists(reservation.origin.toEntity())
-                    sncfReservationDao.insertStationIfNotExists(reservation.destination.toEntity())
+            return@runCatching sncfReservations
+        }.onSuccess { sncfReservations ->
+            runCatching {
+                if (sncfReservations.isEmpty()) {
+                    _reservationsState.value = DataState.Success(emptyList())
+                    return
                 }
 
-                sncfReservationsToUpsert.add(reservation)
+                val orderIds = sncfReservations.map { it.orderId }
+                val savedSncfReservations = sncfReservationDao.getReservationsByIds(orderIds)
+                    .map { it.toDomain() }
+                    .associateBy { it.orderId }
+
+                val sncfReservationsToUpsert = mutableListOf<SncfReservation>()
+
+                for (reservation in sncfReservations) {
+                    val savedReservation = savedSncfReservations[reservation.orderId]
+
+                    if (savedReservation != null) {
+                        reservation.updateDetails(
+                            amount = savedReservation.amount,
+                            exchangeable = savedReservation.exchangeable,
+                            refundable = savedReservation.refundable,
+                            seat = savedReservation.seat,
+                            tcn = savedReservation.tcn,
+                            transportationServiceOffer = savedReservation.transportationServiceOffer
+                        )
+                    } else {
+                        sncfReservationDao.insertStationIfNotExists(reservation.origin.toEntity())
+                        sncfReservationDao.insertStationIfNotExists(reservation.destination.toEntity())
+                    }
+
+                    sncfReservationsToUpsert.add(reservation)
+                }
+
+                sncfReservationDao.upsertReservations(sncfReservationsToUpsert.map { it.toEntity() })
+                return@runCatching sncfReservationsToUpsert.toImmutableList()
+            }.onSuccess { result ->
+                _reservationsState.value = DataState.Success(result)
+            }.onFailure { throwable ->
+                Log.e("Max Book", "SncfApiReservationsFetcher: error saving reservations in app database", throwable)
             }
-
-            sncfReservationDao.upsertReservations(sncfReservationsToUpsert.map { it.toEntity() })
-
-            return@runCatching sncfReservationsToUpsert
-        }.onSuccess { result ->
-            _reservationsState.value = DataState.Success(result)
         }.onFailure { throwable ->
             when (throwable) {
                 is SncfApiException.NetworkException ->

@@ -6,14 +6,23 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Error
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,7 +41,7 @@ fun BookingsListItem(sncfReservation: SncfReservation, onReservationClick: () ->
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp, horizontal = 16.dp) // Space between cards
+            .padding(vertical = 8.dp, horizontal = 16.dp) // Space between cards
             .clickable { onReservationClick() },
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
@@ -48,17 +57,29 @@ fun BookingsListItem(sncfReservation: SncfReservation, onReservationClick: () ->
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
-                Text(
-                    text = stringResource(
-                        R.string.screen_book_list_item_outward_on,
-                        sncfReservation.departureDateTime.format(
-                            DateTimeFormatter.ofLocalizedDate(
-                                FormatStyle.MEDIUM
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    val textStyle = MaterialTheme.typography.bodyMedium
+                    val iconSize = with(LocalDensity.current) { textStyle.fontSize.toDp() }
+
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                        contentDescription = "Travel confirmed icon",
+                        tint = Color(0xFF245221),
+                        modifier = Modifier.size(iconSize),
+                    )
+                    Text(
+                        modifier = Modifier.padding(start = 4.dp),
+                        text = stringResource(
+                            R.string.screen_book_list_item_outward_on,
+                            sncfReservation.departureDateTime.format(
+                                DateTimeFormatter.ofLocalizedDate(
+                                    FormatStyle.MEDIUM
+                                )
                             )
-                        )
-                    ),
-                    style = MaterialTheme.typography.bodyMedium
-                )
+                        ),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
             }
             HorizontalDivider(
                 modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
@@ -92,11 +113,75 @@ fun BookingsListItem(sncfReservation: SncfReservation, onReservationClick: () ->
                     )
                 }
             }
-            Text(
-                modifier = Modifier.background(Color(100, 180, 255, 128)).fillMaxWidth().padding(horizontal = 8.dp),
-                style = MaterialTheme.typography.bodyMedium,
-                text = "TODO : status")
+            BookingsListItemStatusText(sncfReservation.travelConfirmed, sncfReservation.travelStatus)
         }
+    }
+}
+
+@Composable
+fun BookingsListItemStatusText(reservationTravelConfirm: String, reservationTravelStatus: String) {
+    val textStyle = MaterialTheme.typography.bodyMedium
+    val iconSize = with(LocalDensity.current) { textStyle.fontSize.toDp() }
+
+    if (reservationTravelConfirm in arrayListOf("CONFIRMED", "TOO_LATE_TO_CONFIRM") && reservationTravelStatus == "VALIDE") {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.background(Color(0xFFCAECAF)).fillMaxWidth().padding(horizontal = 8.dp),
+        ) {
+            Icon(
+                imageVector = Icons.Default.CheckCircle,
+                contentDescription = "Travel confirmed icon",
+                tint = Color(0xFF245221),
+                modifier = Modifier.size(iconSize),
+                )
+            Text(
+                modifier = Modifier.padding(start = 4.dp),
+                color = Color(0xFF245221),
+                style = MaterialTheme.typography.bodyMedium,
+                text = stringResource(R.string.screen_book_list_item_booking_status_confirmed))
+        }
+    } else if(reservationTravelConfirm == "TO_BE_CONFIRMED" && reservationTravelStatus == "VALIDE") {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.background(Color(0xFFECCAAF)).fillMaxWidth().padding(horizontal = 8.dp),
+        ) {
+            Icon(
+                imageVector = Icons.Default.Warning,
+                contentDescription = "Travel to be confirmed icon",
+                tint = Color(0xFF883F03),
+                modifier = Modifier.size(iconSize),
+            )
+            Text(
+                modifier = Modifier.padding(start = 4.dp),
+                color = Color(0xFF883F03),
+                style = MaterialTheme.typography.bodyMedium,
+                text = stringResource(R.string.screen_book_list_item_booking_status_to_be_confirmed)
+            )
+        }
+    } else if (reservationTravelConfirm == "" && reservationTravelStatus == "") { // TODO : update condition with correct values
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.background(Color(0xFFECAFAF)).fillMaxWidth().padding(horizontal = 8.dp),
+        ) {
+            Icon(
+                imageVector = Icons.Default.Error,
+                contentDescription = "Travel status error icon",
+                tint = Color(0xFF880303),
+                modifier = Modifier.size(iconSize),
+            )
+            Text(
+                modifier = Modifier.padding(start = 4.dp),
+                color = Color(0xFF880303),
+                style = MaterialTheme.typography.bodyMedium,
+                text = "Error"
+            )
+        }
+    } else {
+        Text(
+            modifier = Modifier.background(Color(0xFFABCAF0)).fillMaxWidth().padding(horizontal = 8.dp),
+            color = Color(0xFF234673),
+            style = MaterialTheme.typography.bodyMedium,
+            text = stringResource(R.string.screen_book_list_item_booking_status_unknown, reservationTravelConfirm, reservationTravelStatus))
     }
 }
 

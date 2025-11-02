@@ -5,6 +5,9 @@
     <string name="screen_book_none_selected">Select a booking to see its details.</string>
     <string name="screen_book_list_item_trip_to">Trip to %1$s</string>
     <string name="screen_book_list_item_outward_on">Outward on %1$s</string>
+    <string name="screen_book_list_item_booking_status_confirmed">Booking confirmed</string>
+    <string name="screen_book_list_item_booking_status_to_be_confirmed">Booking to be confirmed</string>
+    <string name="screen_book_list_item_booking_status_unknown">Unknown status : %1$s - %2$s</string>
 
     <string name="app_destinations_bookings">Bookings</string>
 

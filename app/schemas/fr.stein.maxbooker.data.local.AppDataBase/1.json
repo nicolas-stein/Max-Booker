@@ -1,0 +1,167 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "a96811aa5fb4e15e689a0361216c3bc9",
+    "entities": [
+      {
+        "tableName": "SncfReservationEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`arrival_datetime` TEXT NOT NULL, `avantage` INTEGER NOT NULL, `coach_number` TEXT NOT NULL, `departure_datetime` TEXT NOT NULL, `destination_rrcode` TEXT NOT NULL, `dv_number` TEXT NOT NULL, `order_id` TEXT NOT NULL, `origin_rrcode` TEXT NOT NULL, `reservation_date` TEXT NOT NULL, `seat_number` TEXT NOT NULL, `service_item_id` TEXT NOT NULL, `train_number` TEXT NOT NULL, `travel_class` TEXT NOT NULL, `travel_confirmed` TEXT NOT NULL, `travel_status` TEXT NOT NULL, `amount` TEXT, `exchangeable` INTEGER, `refundable` INTEGER, `seat` TEXT, `tcn` TEXT, `transportation_service_offer` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "arrivalDateTime",
+            "columnName": "arrival_datetime",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "avantage",
+            "columnName": "avantage",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "coachNumber",
+            "columnName": "coach_number",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "departureDateTime",
+            "columnName": "departure_datetime",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "destination",
+            "columnName": "destination_rrcode",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dvNumber",
+            "columnName": "dv_number",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "orderId",
+            "columnName": "order_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "origin",
+            "columnName": "origin_rrcode",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reservationDate",
+            "columnName": "reservation_date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "seatNumber",
+            "columnName": "seat_number",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "serviceItemId",
+            "columnName": "service_item_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "trainNumber",
+            "columnName": "train_number",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "travelClass",
+            "columnName": "travel_class",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "travelConfirmed",
+            "columnName": "travel_confirmed",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "travelStatus",
+            "columnName": "travel_status",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "exchangeable",
+            "columnName": "exchangeable",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "refundable",
+            "columnName": "refundable",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "seat",
+            "columnName": "seat",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "tcn",
+            "columnName": "tcn",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "transportationServiceOffer",
+            "columnName": "transportation_service_offer",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": []
+        }
+      },
+      {
+        "tableName": "SncfStationEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rrCode` TEXT NOT NULL, `label` TEXT NOT NULL, PRIMARY KEY(`rrCode`))",
+        "fields": [
+          {
+            "fieldPath": "rrCode",
+            "columnName": "rrCode",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "label",
+            "columnName": "label",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "rrCode"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a96811aa5fb4e15e689a0361216c3bc9')"
+    ]
+  }
+}
