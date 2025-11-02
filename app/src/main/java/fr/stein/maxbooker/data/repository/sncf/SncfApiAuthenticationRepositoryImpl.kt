@@ -2,6 +2,7 @@ package fr.stein.maxbooker.data.repository.sncf
 
 import android.util.Log
 import androidx.datastore.core.DataStore
+import fr.stein.maxbooker.data.exception.SncfApiException
 import fr.stein.maxbooker.data.local.sncfapiauthentication.SncfApiAuthenticationProto
 import fr.stein.maxbooker.data.mapper.toDomain
 import fr.stein.maxbooker.data.mapper.toProto
@@ -48,6 +49,10 @@ class SncfApiAuthenticationRepositoryImpl(
     }
 
     override suspend fun refreshAuthenticationCookie(cookies: String): SncfApiAuthentication? {
+        Log.d(
+            "Max Book",
+            "SncfApiAuthenticationRepositoryImpl: refreshAuthenticationCookie triggered"
+        )
         try {
             val refreshAuthResponse = sncfApi.refreshAuth(cookies)
 
@@ -63,6 +68,12 @@ class SncfApiAuthenticationRepositoryImpl(
                 val newSncfApiAuthentication = SncfApiAuthentication(cookies = newCookies)
                 sncfApiAuthenticationDataStore.updateData { newSncfApiAuthentication.toProto() }
                 return newSncfApiAuthentication
+            } else {
+                val errorBody = refreshAuthResponse.errorBody()?.string()
+                throw SncfApiException.ApiErrorException(
+                    refreshAuthResponse.code(),
+                    errorBody
+                )
             }
         } catch (e: Exception) {
             Log.e("Max Book", "Unable to refresh authentication", e)

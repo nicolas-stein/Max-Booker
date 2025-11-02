@@ -6,6 +6,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import fr.stein.maxbooker.data.local.database.SncfReservationDao
 import fr.stein.maxbooker.data.local.sncfapiauthentication.SncfApiAuthenticationProto
 import fr.stein.maxbooker.data.local.sncfcustomer.SncfCustomerProto
 import fr.stein.maxbooker.data.remote.sncf.SncfApi
@@ -15,15 +16,18 @@ import fr.stein.maxbooker.data.repository.sncf.SncfApiAuthenticationRepositoryIm
 import fr.stein.maxbooker.data.repository.sncf.SncfApiExecutorImpl
 import fr.stein.maxbooker.data.repository.sncf.SncfApiRepositoryImpl
 import fr.stein.maxbooker.domain.fetcher.sncf.SncfApiCustomerFetcher
+import fr.stein.maxbooker.domain.fetcher.sncf.SncfApiReservationsDetailFetcher
+import fr.stein.maxbooker.domain.fetcher.sncf.SncfApiReservationsFetcher
 import fr.stein.maxbooker.domain.repository.sncf.SncfApiAuthenticationRepository
 import fr.stein.maxbooker.domain.repository.sncf.SncfApiExecutor
 import fr.stein.maxbooker.domain.repository.sncf.SncfApiRepository
 import fr.stein.maxbooker.domain.usecase.SncfApiFetchCustomerUseCase
-import javax.inject.Provider
-import javax.inject.Singleton
+import kotlinx.coroutines.CoroutineScope
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
+import javax.inject.Provider
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -80,4 +84,30 @@ object SncfApiModules {
         sncfCustomerDataStore: DataStore<SncfCustomerProto>
     ): SncfApiCustomerFetcher =
         SncfApiCustomerFetcher(sncfApiFetchCustomerUseCase, sncfCustomerDataStore)
+
+    @Provides
+    @Singleton
+    fun provideSncfApiReservationsFetcher(
+        sncfApiRepository: SncfApiRepository,
+        sncfApiCustomerFetcher: SncfApiCustomerFetcher,
+        sncfApiReservationsDetailFetcher: SncfApiReservationsDetailFetcher,
+        sncfReservationDao: SncfReservationDao,
+        @AppModules.ApplicationScope applicationScope: CoroutineScope
+    ): SncfApiReservationsFetcher = SncfApiReservationsFetcher(
+        sncfApiRepository = sncfApiRepository,
+        sncfApiCustomerFetcher = sncfApiCustomerFetcher,
+        sncfApiReservationsDetailFetcher = sncfApiReservationsDetailFetcher,
+        sncfReservationDao = sncfReservationDao,
+        applicationScope = applicationScope
+    )
+
+    @Provides
+    @Singleton
+    fun provideSncfApiReservationsDetailFetcher(
+        sncfApiRepository: SncfApiRepository,
+        sncfReservationDao: SncfReservationDao
+    ): SncfApiReservationsDetailFetcher = SncfApiReservationsDetailFetcher(
+        sncfApiRepository = sncfApiRepository,
+        sncfReservationDao = sncfReservationDao
+    )
 }

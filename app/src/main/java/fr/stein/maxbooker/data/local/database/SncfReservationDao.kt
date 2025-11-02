@@ -26,5 +26,8 @@ interface SncfReservationDao {
     suspend fun insertStationIfNotExists(sncfStationEntity: SncfStationEntity)
 
     @Upsert
+    suspend fun upsertReservation(sncfReservation: SncfReservationEntity)
+
+    @Upsert
     suspend fun upsertReservations(sncfReservationEntities: List<SncfReservationEntity>)
 }

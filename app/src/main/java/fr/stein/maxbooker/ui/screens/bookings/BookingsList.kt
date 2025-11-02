@@ -37,7 +37,10 @@ fun BookingsList(
         }
     ) { innerPadding ->
         LazyColumn(
-            modifier = modifier.padding(top = innerPadding.calculateTopPadding(), bottom = innerPadding.calculateBottomPadding()).fillMaxWidth().fillMaxHeight()
+            modifier = modifier.padding(
+                top = innerPadding.calculateTopPadding(),
+                bottom = innerPadding.calculateBottomPadding()
+            ).fillMaxWidth().fillMaxHeight()
         ) {
             items(sncfReservations, key = {
                 it.orderId

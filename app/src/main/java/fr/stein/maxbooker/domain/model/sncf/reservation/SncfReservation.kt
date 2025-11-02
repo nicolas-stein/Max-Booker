@@ -40,12 +40,14 @@ data class SncfReservation(
         seat: Seat?,
         tcn: String?,
         transportationServiceOffer: String?
-    ) {
+    ): SncfReservation {
         this.amount = amount
         this.exchangeable = exchangeable
         this.refundable = refundable
         this.seat = seat
         this.tcn = tcn
         this.transportationServiceOffer = transportationServiceOffer
+
+        return this
     }
 }

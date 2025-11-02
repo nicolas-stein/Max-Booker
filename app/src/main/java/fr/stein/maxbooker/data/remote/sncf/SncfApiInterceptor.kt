@@ -2,10 +2,10 @@ package fr.stein.maxbooker.data.remote.sncf
 
 import android.util.Log
 import fr.stein.maxbooker.domain.repository.sncf.SncfApiAuthenticationRepository
-import javax.inject.Provider
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
+import javax.inject.Provider
 
 class SncfApiInterceptor(
     private val sncfApiAuthenticationRepository: Provider<SncfApiAuthenticationRepository>
