@@ -14,11 +14,7 @@ import fr.stein.maxbooker.R
 import fr.stein.maxbooker.ui.theme.MaxBookerTheme
 
 @Composable
-fun LottieAnimationComponent(
-    @RawRes animation: Int,
-    modifier: Modifier = Modifier,
-    loop: Boolean = false
-) {
+fun LottieAnimationComponent(@RawRes animation: Int, modifier: Modifier = Modifier, loop: Boolean = false) {
     val lottieComposition by rememberLottieComposition(
         LottieCompositionSpec.RawRes(animation)
     )

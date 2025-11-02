@@ -122,15 +122,14 @@ fun SncfStation.toEntity(): SncfStationEntity = SncfStationEntity(
     label = label
 )
 
-fun SncfGetTravelDto.toDomain(sncfReservation: SncfReservation): SncfReservation =
-    sncfReservation.updateDetails(
-        amount = amount,
-        exchangeable = exchangeable,
-        refundable = refundable,
-        seat = seat.toDomain(),
-        tcn = tcn,
-        transportationServiceOffer = transportationServiceOffer
-    )
+fun SncfGetTravelDto.toDomain(sncfReservation: SncfReservation): SncfReservation = sncfReservation.updateDetails(
+    amount = amount,
+    exchangeable = exchangeable,
+    refundable = refundable,
+    seat = seat.toDomain(),
+    tcn = tcn,
+    transportationServiceOffer = transportationServiceOffer
+)
 
 fun SncfGetTravelDto.Seat.toDomain(): SncfReservation.Seat = SncfReservation.Seat(
     facingForward = facingForward,

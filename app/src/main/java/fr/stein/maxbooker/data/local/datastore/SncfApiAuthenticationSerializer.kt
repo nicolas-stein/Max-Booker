@@ -19,6 +19,5 @@ object SncfApiAuthenticationSerializer : Serializer<SncfApiAuthenticationProto> 
         }
     }
 
-    override suspend fun writeTo(t: SncfApiAuthenticationProto, output: OutputStream) =
-        t.writeTo(output)
+    override suspend fun writeTo(t: SncfApiAuthenticationProto, output: OutputStream) = t.writeTo(output)
 }

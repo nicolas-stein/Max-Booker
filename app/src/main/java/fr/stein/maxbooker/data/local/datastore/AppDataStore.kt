@@ -13,8 +13,7 @@ fun createSncfApiAuthenticationDataStore(context: Context): DataStore<SncfApiAut
         produceFile = { context.dataStoreFile("sncf_api_authentication.pb") }
     )
 
-fun createSncfCustomerDataStore(context: Context): DataStore<SncfCustomerProto> =
-    DataStoreFactory.create(
-        serializer = SncfCustomerSerializer,
-        produceFile = { context.dataStoreFile("sncf_customer.pb") }
-    )
+fun createSncfCustomerDataStore(context: Context): DataStore<SncfCustomerProto> = DataStoreFactory.create(
+    serializer = SncfCustomerSerializer,
+    produceFile = { context.dataStoreFile("sncf_customer.pb") }
+)

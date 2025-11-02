@@ -27,21 +27,18 @@ object AppDataModules {
 
     @Provides
     @Singleton
-    fun provideSncfCustomerDataStore(
-        @ApplicationContext context: Context
-    ): DataStore<SncfCustomerProto> = createSncfCustomerDataStore(context)
+    fun provideSncfCustomerDataStore(@ApplicationContext context: Context): DataStore<SncfCustomerProto> =
+        createSncfCustomerDataStore(context)
 
     @Provides
     @Singleton
-    fun provideAppDataBase(@ApplicationContext context: Context): AppDataBase =
-        Room.databaseBuilder(
-            context,
-            AppDataBase::class.java,
-            "maxbook-db"
-        ).build()
+    fun provideAppDataBase(@ApplicationContext context: Context): AppDataBase = Room.databaseBuilder(
+        context,
+        AppDataBase::class.java,
+        "maxbook-db"
+    ).build()
 
     @Provides
     @Singleton
-    fun provideSncfReservationDao(appDataBase: AppDataBase): SncfReservationDao =
-        appDataBase.sncfReservationDao()
+    fun provideSncfReservationDao(appDataBase: AppDataBase): SncfReservationDao = appDataBase.sncfReservationDao()
 }

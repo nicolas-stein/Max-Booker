@@ -45,10 +45,7 @@ fun SettingsItemLogin(
 }
 
 @Composable
-fun SettingsItemLoginContent(
-    modifier: Modifier = Modifier,
-    sncfCustomerData: DataState<SncfCustomer>
-) {
+fun SettingsItemLoginContent(modifier: Modifier = Modifier, sncfCustomerData: DataState<SncfCustomer>) {
     ListItem(
         modifier = modifier,
         headlineContent = { Text(stringResource(R.string.screen_settings_item_login_headline)) },

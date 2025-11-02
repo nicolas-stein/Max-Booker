@@ -16,10 +16,8 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-class SncfApiRepositoryImpl(
-    private val sncfApi: SncfApi,
-    private val sncfApiExecutor: SncfApiExecutor
-) : SncfApiRepository {
+class SncfApiRepositoryImpl(private val sncfApi: SncfApi, private val sncfApiExecutor: SncfApiExecutor) :
+    SncfApiRepository {
 
     @Throws(SncfApiException::class)
     override suspend fun getCustomer(cookiesOverride: String?): SncfCustomer {
@@ -54,10 +52,7 @@ class SncfApiRepositoryImpl(
     }
 
     @Throws(SncfApiException::class)
-    override suspend fun getTravel(
-        sncfCustomer: SncfCustomer,
-        sncfReservation: SncfReservation
-    ): SncfReservation {
+    override suspend fun getTravel(sncfCustomer: SncfCustomer, sncfReservation: SncfReservation): SncfReservation {
         Log.d("Max Book", "SncfApiRepositoryImpl: requested getTravel")
         val sncfGetTravelDto = sncfApiExecutor.execute {
             sncfApi.getTravel(

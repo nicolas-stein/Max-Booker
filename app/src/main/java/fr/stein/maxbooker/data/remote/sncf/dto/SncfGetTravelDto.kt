@@ -19,10 +19,5 @@ data class SncfGetTravelDto(
     val transportationServiceOffer: String,
     val travelClass: String
 ) {
-    data class Seat(
-        val facingForward: Boolean,
-        val seatPosition: String,
-        val spaceType: String,
-        val tgvDeck: String
-    )
+    data class Seat(val facingForward: Boolean, val seatPosition: String, val spaceType: String, val tgvDeck: String)
 }

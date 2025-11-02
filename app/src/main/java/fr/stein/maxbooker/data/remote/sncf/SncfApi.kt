@@ -28,7 +28,5 @@ interface SncfApi {
     ): Response<List<SncfTravelConsultationDto>>
 
     @POST("reservation/get-travel")
-    suspend fun getTravel(
-        @Body sncfGetTravelRequest: SncfGetTravelRequest
-    ): Response<SncfGetTravelDto>
+    suspend fun getTravel(@Body sncfGetTravelRequest: SncfGetTravelRequest): Response<SncfGetTravelDto>
 }

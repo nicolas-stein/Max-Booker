@@ -2,8 +2,7 @@ package fr.stein.maxbooker.data.exception
 
 import java.io.IOException
 
-sealed class SncfApiException(message: String? = null, cause: Throwable? = null) :
-    IOException(message, cause) {
+sealed class SncfApiException(message: String? = null, cause: Throwable? = null) : IOException(message, cause) {
     constructor(cause: Throwable) : this(null, cause)
 
     class NetworkException(cause: Throwable) :

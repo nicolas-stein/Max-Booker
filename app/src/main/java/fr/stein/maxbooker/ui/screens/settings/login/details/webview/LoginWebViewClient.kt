@@ -13,10 +13,7 @@ class LoginWebViewClient(
     ) -> Unit
 ) : WebViewClient() {
 
-    override fun shouldInterceptRequest(
-        view: WebView?,
-        request: WebResourceRequest?
-    ): WebResourceResponse? {
+    override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
         // Log.d("Max Book", "shouldInterceptRequest: ${request.method} ${request.url}")
 
         if (request != null &&

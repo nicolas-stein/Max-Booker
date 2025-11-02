@@ -22,12 +22,12 @@ import fr.stein.maxbooker.domain.repository.sncf.SncfApiAuthenticationRepository
 import fr.stein.maxbooker.domain.repository.sncf.SncfApiExecutor
 import fr.stein.maxbooker.domain.repository.sncf.SncfApiRepository
 import fr.stein.maxbooker.domain.usecase.SncfApiFetchCustomerUseCase
+import javax.inject.Provider
+import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
-import javax.inject.Provider
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -35,9 +35,7 @@ object SncfApiModules {
 
     @Provides
     @Singleton
-    fun provideSncfApi(
-        sncfApiAuthenticationRepository: Provider<SncfApiAuthenticationRepository>
-    ): SncfApi {
+    fun provideSncfApi(sncfApiAuthenticationRepository: Provider<SncfApiAuthenticationRepository>): SncfApi {
         val httpClient = OkHttpClient.Builder()
             .addInterceptor(SncfApiInterceptor(sncfApiAuthenticationRepository))
             .authenticator(SncfApiAuthenticator(sncfApiAuthenticationRepository))
@@ -53,13 +51,11 @@ object SncfApiModules {
 
     @Provides
     @Singleton
-    fun provideSncfApiRepository(
-        sncfApi: SncfApi,
-        sncfApiExecutor: SncfApiExecutor
-    ): SncfApiRepository = SncfApiRepositoryImpl(
-        sncfApi,
-        sncfApiExecutor
-    )
+    fun provideSncfApiRepository(sncfApi: SncfApi, sncfApiExecutor: SncfApiExecutor): SncfApiRepository =
+        SncfApiRepositoryImpl(
+            sncfApi,
+            sncfApiExecutor
+        )
 
     @Provides
     @Singleton
@@ -82,8 +78,7 @@ object SncfApiModules {
     fun provideSncfApiCustomerFetcher(
         sncfApiFetchCustomerUseCase: SncfApiFetchCustomerUseCase,
         sncfCustomerDataStore: DataStore<SncfCustomerProto>
-    ): SncfApiCustomerFetcher =
-        SncfApiCustomerFetcher(sncfApiFetchCustomerUseCase, sncfCustomerDataStore)
+    ): SncfApiCustomerFetcher = SncfApiCustomerFetcher(sncfApiFetchCustomerUseCase, sncfCustomerDataStore)
 
     @Provides
     @Singleton

@@ -6,21 +6,18 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.stein.maxbooker.domain.fetcher.DataState
 import fr.stein.maxbooker.domain.fetcher.sncf.SncfApiCustomerFetcher
 import fr.stein.maxbooker.domain.model.sncf.customer.SncfCustomer
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import javax.inject.Inject
 
-data class SettingsItemLoginUiState(
-    val sncfCustomerData: DataState<SncfCustomer> = DataState.Offline(null)
-)
+data class SettingsItemLoginUiState(val sncfCustomerData: DataState<SncfCustomer> = DataState.Offline(null))
 
 @HiltViewModel
-class SettingsItemLoginViewModel @Inject constructor(sncfCustomerFetcher: SncfApiCustomerFetcher) :
-    ViewModel() {
+class SettingsItemLoginViewModel @Inject constructor(sncfCustomerFetcher: SncfApiCustomerFetcher) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SettingsItemLoginUiState())
     val uiState: StateFlow<SettingsItemLoginUiState> = _uiState.asStateFlow()

@@ -6,12 +6,11 @@ import com.fasterxml.jackson.databind.JsonMappingException
 import fr.stein.maxbooker.data.exception.SncfApiException
 import fr.stein.maxbooker.domain.repository.sncf.SncfApiAuthenticationRepository
 import fr.stein.maxbooker.domain.repository.sncf.SncfApiExecutor
-import retrofit2.Response
 import javax.inject.Provider
+import retrofit2.Response
 
-class SncfApiExecutorImpl(
-    private val sncfApiAuthenticationRepository: Provider<SncfApiAuthenticationRepository>
-) : SncfApiExecutor {
+class SncfApiExecutorImpl(private val sncfApiAuthenticationRepository: Provider<SncfApiAuthenticationRepository>) :
+    SncfApiExecutor {
     @Throws(SncfApiException::class)
     override suspend fun <T : Any> execute(call: suspend () -> Response<T>): T {
         val response = try {
