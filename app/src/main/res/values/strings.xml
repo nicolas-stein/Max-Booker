@@ -9,6 +9,74 @@
     <string name="screen_book_list_item_booking_status_to_be_confirmed">Booking to be confirmed</string>
     <string name="screen_book_list_item_booking_status_unknown">Unknown status : %1$s - %2$s</string>
 
+    <string name="screen_book_detail_travel_class">%1$s class</string>
+    <string name="screen_book_detail_coach_number">Coach %1$s</string>
+    <string name="screen_book_detail_seat_number">Seat %1$s</string>
+
+    <string name="screen_book_detail_seat_AACC">Disabled person accompanying space</string>
+    <string name="screen_book_detail_seat_ACAL">Calm</string>
+    <string name="screen_book_detail_seat_ACAR">Square</string>
+    <string name="screen_book_detail_seat_ACDO">Club duo face-to-face</string>
+    <string name="screen_book_detail_seat_ACEN">Children area</string>
+    <string name="screen_book_detail_seat_ACMP">Compartment</string>
+    <string name="screen_book_detail_seat_ACOU">Aisle</string>
+    <string name="screen_book_detail_seat_ACQT">Club four</string>
+    <string name="screen_book_detail_seat_ADOC">Duo side-by-side</string>
+    <string name="screen_book_detail_seat_AEEC">Children’s space</string>
+    <string name="screen_book_detail_seat_AEQT">Club six</string>
+    <string name="screen_book_detail_seat_AFEN">Window</string>
+    <string name="screen_book_detail_seat_AFIS">Isolated</string>
+    <string name="screen_book_detail_seat_AHAN">Disabled space</string>
+    <string name="screen_book_detail_seat_AHDC">Disabled seat</string>
+    <string name="screen_book_detail_seat_AINC">Seat - Reclining</string>
+    <string name="screen_book_detail_seat_AKID">KID area</string>
+    <string name="screen_book_detail_seat_AKSK">Kiosk</string>
+    <string name="screen_book_detail_seat_AMIL">Seat - Middle</string>
+    <string name="screen_book_detail_seat_AMOM">Family area</string>
+    <string name="screen_book_detail_seat_ANBI">Lower deck required - Duplex</string>
+    <string name="screen_book_detail_seat_ANHI">Upper deck required - Duplex</string>
+    <string name="screen_book_detail_seat_ANUR">Family Eurostar Nursery</string>
+    <string name="screen_book_detail_seat_ANVB">Lower deck</string>
+    <string name="screen_book_detail_seat_ANVH">Upper deck</string>
+    <string name="screen_book_detail_seat_APAN">Panorama</string>
+    <string name="screen_book_detail_seat_ASDM">Direction of travel</string>
+    <string name="screen_book_detail_seat_ASII">Silence required</string>
+    <string name="screen_book_detail_seat_ASIL">Silence</string>
+    <string name="screen_book_detail_seat_ASLL">Deck</string>
+    <string name="screen_book_detail_seat_ASLO">Solo</string>
+    <string name="screen_book_detail_seat_ATAB">Seat with table</string>
+    <string name="screen_book_detail_seat_ATEL">Telephone</string>
+    <string name="screen_book_detail_seat_CBAS">Lower</string>
+    <string name="screen_book_detail_seat_CDAS">Single lady</string>
+    <string name="screen_book_detail_seat_CHAU">Upper</string>
+    <string name="screen_book_detail_seat_CIRE">Bunk - Lower required</string>
+    <string name="screen_book_detail_seat_CMIL">Middle</string>
+    <string name="screen_book_detail_seat_LBAS">Bed - Lower</string>
+    <string name="screen_book_detail_seat_LHAU">Bed - Upper</string>
+    <string name="screen_book_detail_seat_LMIL">Bed - Middle</string>
+    <string name="screen_book_detail_seat_VCFA">Family compartment</string>
+    <string name="screen_book_detail_seat_VCFE">Women compartment</string>
+    <string name="screen_book_detail_seat_VCHO">Men compartment</string>
+    <string name="screen_book_detail_seat_CPRI">Private berth</string>
+    <string name="screen_book_detail_seat_CFAM">Private family berth</string>
+    <string name="screen_book_detail_seat_AVEP">Seat with bike paid</string>
+    <string name="screen_book_detail_seat_CVEP">Berth with bike paid</string>
+    <string name="screen_book_detail_seat_LVEP">Bed with bike paid</string>
+    <string name="screen_book_detail_seat_AVGL">Seat with guide dog</string>
+    <string name="screen_book_detail_seat_APAF">Easy access seat</string>
+    <string name="screen_book_detail_seat_ATEI">Telephone required</string>
+    <string name="screen_book_detail_seat_AVEG">Seat with bike free</string>
+    <string name="screen_book_detail_seat_AFAM">Family</string>
+    <string name="screen_book_detail_seat_unknown">Unknown</string>
+
+    <string name="screen_book_detail_seat_facing_forward">Travel direction</string>
+    <string name="screen_book_detail_seat_not_facing_forward">Opposite of travel direction</string>
+
+    <string name="screen_book_detail_reference">Reference</string>
+    <string name="screen_book_detail_associated_name">Associated name</string>
+    <string name="screen_book_detail_price">Price</string>
+    <string name="screen_book_detail_open_in_sncf_connect">Open in SNCF Connect</string>
+
     <string name="app_destinations_bookings">Bookings</string>
 
 

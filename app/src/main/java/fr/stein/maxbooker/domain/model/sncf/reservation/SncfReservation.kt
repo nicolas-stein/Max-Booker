@@ -18,6 +18,7 @@ data class SncfReservation(
     val travelClass: String,
     val travelConfirmed: String,
     val travelStatus: String,
+    val customerLastName: String,
 
     var amount: String? = null,
     var exchangeable: Boolean? = null,

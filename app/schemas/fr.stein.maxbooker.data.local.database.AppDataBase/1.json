@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "6b5a21daaf9ec3632a3c812ae139adeb",
+    "identityHash": "b1947ea8b9776195deefeebd48da857d",
     "entities": [
       {
         "tableName": "SncfReservationEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`arrival_datetime` TEXT NOT NULL, `avantage` INTEGER NOT NULL, `coach_number` TEXT NOT NULL, `departure_datetime` TEXT NOT NULL, `destination_rrcode` TEXT NOT NULL, `dv_number` TEXT NOT NULL, `order_id` TEXT NOT NULL, `origin_rrcode` TEXT NOT NULL, `reservation_date` TEXT NOT NULL, `seat_number` TEXT NOT NULL, `service_item_id` TEXT NOT NULL, `train_number` TEXT NOT NULL, `travel_class` TEXT NOT NULL, `travel_confirmed` TEXT NOT NULL, `travel_status` TEXT NOT NULL, `amount` TEXT, `exchangeable` INTEGER, `refundable` INTEGER, `seat` TEXT, `tcn` TEXT, `transportation_service_offer` TEXT, PRIMARY KEY(`departure_datetime`, `dv_number`, `train_number`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`arrival_datetime` TEXT NOT NULL, `avantage` INTEGER NOT NULL, `coach_number` TEXT NOT NULL, `departure_datetime` TEXT NOT NULL, `destination_rrcode` TEXT NOT NULL, `dv_number` TEXT NOT NULL, `order_id` TEXT NOT NULL, `origin_rrcode` TEXT NOT NULL, `reservation_date` TEXT NOT NULL, `seat_number` TEXT NOT NULL, `service_item_id` TEXT NOT NULL, `train_number` TEXT NOT NULL, `travel_class` TEXT NOT NULL, `travel_confirmed` TEXT NOT NULL, `travel_status` TEXT NOT NULL, `customer_last_name` TEXT NOT NULL, `amount` TEXT, `exchangeable` INTEGER, `refundable` INTEGER, `seat` TEXT, `tcn` TEXT, `transportation_service_offer` TEXT, PRIMARY KEY(`departure_datetime`, `dv_number`, `train_number`))",
         "fields": [
           {
             "fieldPath": "arrivalDateTime",
@@ -99,6 +99,12 @@
             "notNull": true
           },
           {
+            "fieldPath": "customerLastName",
+            "columnName": "customer_last_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
             "fieldPath": "amount",
             "columnName": "amount",
             "affinity": "TEXT"
@@ -165,7 +171,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6b5a21daaf9ec3632a3c812ae139adeb')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b1947ea8b9776195deefeebd48da857d')"
     ]
   }
 }

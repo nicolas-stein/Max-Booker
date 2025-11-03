@@ -47,7 +47,7 @@ class SncfApiRepositoryImpl(private val sncfApi: SncfApi, private val sncfApiExe
                 )
             )
         }
-        val sncfReservations = sncfTravelConsultationDto.map { it.toDomain() }
+        val sncfReservations = sncfTravelConsultationDto.map { it.toDomain(sncfCustomer) }
         return sncfReservations
     }
 

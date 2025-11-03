@@ -21,6 +21,7 @@ data class SncfReservationEntity(
     @ColumnInfo(name = "travel_class") val travelClass: String,
     @ColumnInfo(name = "travel_confirmed") val travelConfirmed: String,
     @ColumnInfo(name = "travel_status") val travelStatus: String,
+    @ColumnInfo(name = "customer_last_name") val customerLastName: String,
 
     @ColumnInfo(name = "amount") val amount: String?,
     @ColumnInfo(name = "exchangeable") val exchangeable: Boolean?,

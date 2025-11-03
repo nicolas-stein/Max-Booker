@@ -63,7 +63,7 @@ fun BookingsListItem(sncfReservation: SncfReservation, onReservationClick: () ->
 
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                        contentDescription = "Travel confirmed icon",
+                        contentDescription = "Outward icon",
                         tint = Color(0xFF245221),
                         modifier = Modifier.size(iconSize)
                     )
@@ -77,7 +77,7 @@ fun BookingsListItem(sncfReservation: SncfReservation, onReservationClick: () ->
                                 )
                             )
                         ),
-                        style = MaterialTheme.typography.bodyMedium
+                        style = textStyle
                     )
                 }
             }
@@ -144,7 +144,7 @@ fun BookingsListItemStatusText(reservationTravelConfirm: String, reservationTrav
             Text(
                 modifier = Modifier.padding(start = 4.dp),
                 color = Color(0xFF245221),
-                style = MaterialTheme.typography.bodyMedium,
+                style = textStyle,
                 text = stringResource(R.string.screen_book_list_item_booking_status_confirmed)
             )
         }
@@ -166,7 +166,7 @@ fun BookingsListItemStatusText(reservationTravelConfirm: String, reservationTrav
             Text(
                 modifier = Modifier.padding(start = 4.dp),
                 color = Color(0xFF883F03),
-                style = MaterialTheme.typography.bodyMedium,
+                style = textStyle,
                 text = stringResource(R.string.screen_book_list_item_booking_status_to_be_confirmed)
             )
         }
@@ -187,7 +187,7 @@ fun BookingsListItemStatusText(reservationTravelConfirm: String, reservationTrav
             Text(
                 modifier = Modifier.padding(start = 4.dp),
                 color = Color(0xFF880303),
-                style = MaterialTheme.typography.bodyMedium,
+                style = textStyle,
                 text = "Error"
             )
         }
@@ -197,7 +197,7 @@ fun BookingsListItemStatusText(reservationTravelConfirm: String, reservationTrav
                 Color(0xFFABCAF0)
             ).fillMaxWidth().padding(horizontal = 8.dp),
             color = Color(0xFF234673),
-            style = MaterialTheme.typography.bodyMedium,
+            style = textStyle,
             text = stringResource(
                 R.string.screen_book_list_item_booking_status_unknown,
                 reservationTravelConfirm,
@@ -234,6 +234,7 @@ fun BookingsListItemPreview() {
                 travelClass = "2",
                 travelConfirmed = "TOO_LATE_TO_CONFIRM",
                 travelStatus = "VALIDE",
+                customerLastName = "Dupont",
                 amount = "0 EUR",
                 exchangeable = false,
                 refundable = true,

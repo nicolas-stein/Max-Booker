@@ -6,13 +6,14 @@ import fr.stein.maxbooker.data.local.database.SncfStationEntity
 import fr.stein.maxbooker.data.remote.sncf.dto.SncfGetTravelDto
 import fr.stein.maxbooker.data.remote.sncf.dto.SncfStationDto
 import fr.stein.maxbooker.data.remote.sncf.dto.SncfTravelConsultationDto
+import fr.stein.maxbooker.domain.model.sncf.customer.SncfCustomer
 import fr.stein.maxbooker.domain.model.sncf.reservation.SncfReservation
 import fr.stein.maxbooker.domain.model.sncf.reservation.SncfStation
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-fun SncfTravelConsultationDto.toDomain(): SncfReservation = SncfReservation(
+fun SncfTravelConsultationDto.toDomain(sncfCustomer: SncfCustomer): SncfReservation = SncfReservation(
     arrivalDateTime = LocalDateTime.parse(
         arrivalDateTime,
         DateTimeFormatter.ISO_LOCAL_DATE_TIME
@@ -42,7 +43,8 @@ fun SncfTravelConsultationDto.toDomain(): SncfReservation = SncfReservation(
     trainNumber = trainNumber,
     travelClass = travelClass,
     travelConfirmed = travelConfirmed,
-    travelStatus = travelStatus
+    travelStatus = travelStatus,
+    customerLastName = sncfCustomer.lastName
 )
 
 fun SncfStationDto.toDomain(): SncfStation = SncfStation(
@@ -66,6 +68,7 @@ fun SncfReservationWithStations.toDomain(): SncfReservation = SncfReservation(
     travelClass = reservation.travelClass,
     travelConfirmed = reservation.travelConfirmed,
     travelStatus = reservation.travelStatus,
+    customerLastName = reservation.customerLastName,
     amount = reservation.amount,
     exchangeable = reservation.exchangeable,
     refundable = reservation.refundable,
@@ -107,7 +110,8 @@ fun SncfReservation.toEntity(): SncfReservationEntity = SncfReservationEntity(
     refundable = refundable,
     seat = seat?.toEntity(),
     tcn = tcn,
-    transportationServiceOffer = transportationServiceOffer
+    transportationServiceOffer = transportationServiceOffer,
+    customerLastName = customerLastName
 )
 
 fun SncfReservation.Seat.toEntity(): SncfReservationEntity.Seat = SncfReservationEntity.Seat(

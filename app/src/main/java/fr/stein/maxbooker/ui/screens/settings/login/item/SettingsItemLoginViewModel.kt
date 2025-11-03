@@ -6,13 +6,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.stein.maxbooker.domain.fetcher.DataState
 import fr.stein.maxbooker.domain.fetcher.sncf.SncfApiCustomerFetcher
 import fr.stein.maxbooker.domain.model.sncf.customer.SncfCustomer
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import javax.inject.Inject
 
 data class SettingsItemLoginUiState(val sncfCustomerData: DataState<SncfCustomer> = DataState.Offline(null))
 
