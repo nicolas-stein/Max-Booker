@@ -45,7 +45,7 @@ class SncfApiReservationsDetailFetcher @Inject constructor(
             }.onFailure { throwable ->
                 Log.e(
                     "Max Book",
-                    "SncfApiReservationsFetcher: error saving reservations in app database",
+                    "SncfApiReservationsDetailFetcher: error saving reservations detail in app database",
                     throwable
                 )
             }
@@ -58,7 +58,7 @@ class SncfApiReservationsDetailFetcher @Inject constructor(
                     _reservationsState.value[sncfReservation.orderId] =
                         DataState.Error(SncfApiException.UnexpectedException(throwable))
             }
-            Log.e("Max Book", "SncfApiReservationsFetcher: error fetching reservations", throwable)
+            Log.e("Max Book", "SncfApiReservationsDetailFetcher: error fetching reservations detail", throwable)
         }
     }
 }

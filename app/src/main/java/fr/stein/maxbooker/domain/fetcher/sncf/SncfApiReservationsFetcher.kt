@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import okhttp3.internal.toImmutableList
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -99,7 +98,7 @@ class SncfApiReservationsFetcher @Inject constructor(
                         it.toEntity()
                     }
                 )
-                return@runCatching sncfReservationsToUpsert.toImmutableList()
+                return@runCatching sncfReservationsToUpsert.toList()
             }.onSuccess { result ->
                 _reservationsState.value = DataState.Success(result)
                 result.forEach { sncfReservation ->

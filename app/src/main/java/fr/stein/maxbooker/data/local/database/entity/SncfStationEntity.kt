@@ -1,4 +1,4 @@
-package fr.stein.maxbooker.data.local.database
+package fr.stein.maxbooker.data.local.database.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

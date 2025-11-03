@@ -6,6 +6,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
+import fr.stein.maxbooker.data.local.database.entity.SncfReservationEntity
+import fr.stein.maxbooker.data.local.database.entity.SncfStationEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

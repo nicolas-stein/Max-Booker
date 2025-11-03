@@ -1,8 +1,8 @@
 package fr.stein.maxbooker.data.mapper
 
-import fr.stein.maxbooker.data.local.database.SncfReservationEntity
 import fr.stein.maxbooker.data.local.database.SncfReservationWithStations
-import fr.stein.maxbooker.data.local.database.SncfStationEntity
+import fr.stein.maxbooker.data.local.database.entity.SncfReservationEntity
+import fr.stein.maxbooker.data.local.database.entity.SncfStationEntity
 import fr.stein.maxbooker.data.remote.sncf.dto.SncfGetTravelDto
 import fr.stein.maxbooker.data.remote.sncf.dto.SncfStationDto
 import fr.stein.maxbooker.data.remote.sncf.dto.SncfTravelConsultationDto
