@@ -14,6 +14,8 @@ lifecycleRuntimeKtx = "2.9.4"
 activityCompose = "1.11.0"
 composeBom = "2025.10.01"
 androidx-hilt-navigation-compose = "1.3.0"
+androidx-hilt-compiler = "1.3.0"
+androidx-hilt-work = "1.3.0"
 androidx-compose-material-icons = "1.7.8"
 androidx-compose-material-extended = "1.7.8"
 androidx-material3 = "1.4.0"
@@ -24,6 +26,7 @@ androidx-material3-adaptive-navigation = "1.2.0"
 androidx-material3-adaptive-navigation-suite = "1.4.0"
 androidx-datastore = "1.1.7"
 androidx-room = "2.8.3"
+androidx-work = "2.11.0"
 retrofit = "3.0.0"
 jackson-kotlin = "2.20.0"
 jackson-datatype-jsr310 = "2.20.0"
@@ -50,6 +53,8 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidx-navigation-compose" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidx-hilt-navigation-compose" }
+androidx-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "androidx-hilt-compiler" }
+androidx-hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "androidx-hilt-work" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "androidx-material3" }
 androidx-material3-adaptive = { group = "androidx.compose.material3.adaptive", name = "adaptive", version.ref = "androidx-material3-adaptive" }
 androidx-material3-adaptive-layout = { group = "androidx.compose.material3.adaptive", name = "adaptive-layout", version.ref = "androidx-material3-adaptive-layout" }
@@ -59,6 +64,7 @@ androidx-datastore = { group = "androidx.datastore", name = "datastore", version
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "androidx-room" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidx-room" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "androidx-room" }
+androidx-work = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "androidx-work" }
 jackson = { group = "com.fasterxml.jackson.module", name = "jackson-module-kotlin", version.ref = "jackson-kotlin" }
 jackson-datatype-jsr310 = { group = "com.fasterxml.jackson.datatype", name = "jackson-datatype-jsr310", version.ref = "jackson-datatype-jsr310" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }

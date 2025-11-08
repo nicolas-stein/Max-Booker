@@ -2,13 +2,10 @@ package fr.stein.maxbooker.domain.fetcher.sncf
 
 import android.util.Log
 import fr.stein.maxbooker.data.exception.SncfApiException
-import fr.stein.maxbooker.data.local.database.SncfReservationDao
-import fr.stein.maxbooker.data.mapper.toDomain
-import fr.stein.maxbooker.data.mapper.toEntity
 import fr.stein.maxbooker.domain.fetcher.DataState
 import fr.stein.maxbooker.domain.model.sncf.customer.SncfCustomer
 import fr.stein.maxbooker.domain.model.sncf.reservation.SncfReservation
-import fr.stein.maxbooker.domain.repository.sncf.SncfApiRepository
+import fr.stein.maxbooker.domain.usecase.SncfApiFetchReservationsUseCase
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
@@ -21,10 +18,9 @@ import kotlinx.coroutines.launch
 
 @Singleton
 class SncfApiReservationsFetcher @Inject constructor(
-    private val sncfApiRepository: SncfApiRepository,
+    private val sncfApiFetchReservationsUseCase: SncfApiFetchReservationsUseCase,
     sncfApiCustomerFetcher: SncfApiCustomerFetcher,
     private val sncfApiReservationsDetailFetcher: SncfApiReservationsDetailFetcher,
-    private val sncfReservationDao: SncfReservationDao,
     private val applicationScope: CoroutineScope
 ) {
     private val _reservationsState =
@@ -50,68 +46,14 @@ class SncfApiReservationsFetcher @Inject constructor(
         Log.d("Max Book", "SncfApiReservationsFetcher: fetching reservations...")
 
         runCatching {
-            val sncfReservations = sncfApiRepository.getTravelConsultations(customer)
-            Log.d(
-                "Max Book",
-                "SncfApiReservationsFetcher: received ${sncfReservations.size} reservations from API"
-            )
-
-            return@runCatching sncfReservations
-        }.onSuccess { sncfReservations ->
-            runCatching {
-                if (sncfReservations.isEmpty()) {
-                    _reservationsState.value = DataState.Success(emptyList())
-                    return
-                }
-
-                val orderIds = sncfReservations.map { it.orderId }
-                val savedSncfReservations = sncfReservationDao.getReservationsByIds(orderIds)
-                    .map { it.toDomain() }
-                    .associateBy { it.orderId }
-
-                val sncfReservationsToUpsert = mutableListOf<SncfReservation>()
-
-                for (reservation in sncfReservations) {
-                    val savedReservation = savedSncfReservations[reservation.orderId]
-
-                    if (savedReservation != null) {
-                        reservation.updateDetails(
-                            amount = savedReservation.amount,
-                            exchangeable = savedReservation.exchangeable,
-                            refundable = savedReservation.refundable,
-                            seat = savedReservation.seat,
-                            tcn = savedReservation.tcn,
-                            transportationServiceOffer = savedReservation.transportationServiceOffer
-                        )
-                    } else {
-                        sncfReservationDao.insertStationIfNotExists(reservation.origin.toEntity())
-                        sncfReservationDao.insertStationIfNotExists(
-                            reservation.destination.toEntity()
-                        )
-                    }
-
-                    sncfReservationsToUpsert.add(reservation)
-                }
-
-                sncfReservationDao.upsertReservations(
-                    sncfReservationsToUpsert.map {
-                        it.toEntity()
-                    }
-                )
-                return@runCatching sncfReservationsToUpsert.toList()
-            }.onSuccess { result ->
-                _reservationsState.value = DataState.Success(result)
-                result.forEach { sncfReservation ->
-                    sncfApiReservationsDetailFetcher.fetchReservationDetail(
-                        customer,
-                        sncfReservation
-                    )
-                }
-            }.onFailure { throwable ->
-                Log.e(
-                    "Max Book",
-                    "SncfApiReservationsFetcher: error saving reservations in app database",
-                    throwable
+            return@runCatching sncfApiFetchReservationsUseCase(customer)
+        }.onSuccess { output ->
+            val sncfReservations = output.sncfReservations
+            _reservationsState.value = DataState.Success(sncfReservations)
+            sncfReservations.forEach { sncfReservation ->
+                sncfApiReservationsDetailFetcher.fetchReservationDetail(
+                    customer,
+                    sncfReservation
                 )
             }
         }.onFailure { throwable ->

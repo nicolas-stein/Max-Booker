@@ -1,4 +1,4 @@
-package fr.stein.maxbooker.ui.utils
+package fr.stein.maxbooker.domain.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource

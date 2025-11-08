@@ -88,4 +88,12 @@
     <string name="screen_settings_item_notifications_headline">Notifications</string>
     <string name="screen_settings_item_notifications_enabled">Notifications activés</string>
     <string name="screen_settings_item_notifications_disabled">Notifications désactivés</string>
+    <string name="app_notification_new_booking_channel_name">Nouvelle réservation</string>
+    <string name="app_notification_new_booking_channel_description">Information sur les nouvelles réservations ajoutés à Max Booker</string>
+    <plurals name="app_notification_new_booking_notification_title">
+        <item quantity="one">%d nouvelle réservation</item>
+        <item quantity="other">%d nouvelles réservations</item>
+    </plurals>
+    <string name="app_notification_new_booking_notification_content_text">De nouvelles réservations ont été ajoutés dans Max Booker</string>
+    <string name="app_notification_new_booking_notification_line_text">Voyage à %1$s le %2$s</string>
 </resources>

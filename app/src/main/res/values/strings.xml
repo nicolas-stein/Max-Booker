@@ -100,4 +100,14 @@
     <string name="screen_settings_item_notifications_enabled">Notifications enabled</string>
     <string name="screen_settings_item_notifications_disabled">Notifications disabled</string>
 
+
+    <string name="app_notification_new_booking_channel_name">New booking</string>
+    <string name="app_notification_new_booking_channel_description">Information about new bookings added in Max Booker</string>
+
+    <plurals name="app_notification_new_booking_notification_title">
+        <item quantity="one">%d new booking</item>
+        <item quantity="other">%d new bookings</item>
+    </plurals>
+    <string name="app_notification_new_booking_notification_content_text">New bookings have been added in Max Booker.</string>
+    <string name="app_notification_new_booking_notification_line_text">Trip to %1$s on %2$s</string>
 </resources>

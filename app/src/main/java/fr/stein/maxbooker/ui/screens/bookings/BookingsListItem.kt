@@ -30,8 +30,8 @@ import androidx.compose.ui.unit.dp
 import fr.stein.maxbooker.R
 import fr.stein.maxbooker.domain.model.sncf.reservation.SncfReservation
 import fr.stein.maxbooker.domain.model.sncf.reservation.SncfStation
+import fr.stein.maxbooker.domain.utils.UiUtils
 import fr.stein.maxbooker.ui.theme.MaxBookerTheme
-import fr.stein.maxbooker.ui.utils.UiUtils
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle

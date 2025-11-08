@@ -1,4 +1,4 @@
-package fr.stein.maxbooker.ui.utils
+package fr.stein.maxbooker.domain.utils
 
 import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter

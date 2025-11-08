@@ -1,5 +1,6 @@
 package fr.stein.maxbooker.ui.screens.settings.login.details
 
+import android.webkit.CookieManager
 import android.webkit.WebStorage
 import android.webkit.WebView
 import androidx.activity.compose.BackHandler
@@ -45,6 +46,9 @@ fun SettingsDetailsLogin(
                 onBackClick = navigateBack,
                 onClearCookieClick = {
                     WebStorage.getInstance().deleteAllData()
+                    CookieManager.getInstance().removeAllCookies {
+                        webView?.loadUrl("https://www.maxjeune-tgvinoui.sncf/sncf-connect/mes-voyages")
+                    }
                 },
                 onRestartClick = {
                     webView?.loadUrl("https://www.maxjeune-tgvinoui.sncf/sncf-connect/mes-voyages")
