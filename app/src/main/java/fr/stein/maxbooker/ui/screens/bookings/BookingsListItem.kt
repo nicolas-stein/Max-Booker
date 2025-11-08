@@ -126,69 +126,80 @@ fun BookingsListItemStatusText(reservationTravelConfirm: String, reservationTrav
     val textStyle = MaterialTheme.typography.bodyMedium
     val iconSize = with(LocalDensity.current) { textStyle.fontSize.toDp() }
 
-    if (reservationTravelConfirm in arrayListOf("CONFIRMED", "TOO_LATE_TO_CONFIRM") &&
-        reservationTravelStatus == "VALIDE"
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.background(
-                Color(0xFFCAECAF)
-            ).fillMaxWidth().padding(horizontal = 8.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.CheckCircle,
-                contentDescription = "Travel confirmed icon",
-                tint = Color(0xFF245221),
-                modifier = Modifier.size(iconSize)
-            )
+    if (reservationTravelStatus == "VALIDE") {
+        if (reservationTravelConfirm in arrayListOf("CONFIRMED", "TOO_LATE_TO_CONFIRM")) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.background(
+                    Color(0xFFCAECAF)
+                ).fillMaxWidth().padding(horizontal = 8.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.CheckCircle,
+                    contentDescription = "Travel confirmed icon",
+                    tint = Color(0xFF245221),
+                    modifier = Modifier.size(iconSize)
+                )
+                Text(
+                    modifier = Modifier.padding(start = 4.dp),
+                    color = Color(0xFF245221),
+                    style = textStyle,
+                    text = stringResource(R.string.screen_book_list_item_booking_status_confirmed)
+                )
+            }
+        } else if (reservationTravelConfirm in arrayListOf("TO_BE_CONFIRMED", "TOO_EARLY_TO_CONFIRM")) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.background(
+                    Color(0xFFECCAAF)
+                ).fillMaxWidth().padding(horizontal = 8.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Warning,
+                    contentDescription = "Travel to be confirmed icon",
+                    tint = Color(0xFF883F03),
+                    modifier = Modifier.size(iconSize)
+                )
+                Text(
+                    modifier = Modifier.padding(start = 4.dp),
+                    color = Color(0xFF883F03),
+                    style = textStyle,
+                    text = stringResource(R.string.screen_book_list_item_booking_status_to_be_confirmed)
+                )
+            }
+        } else if (reservationTravelConfirm == "") {
+            // TODO : update conditions above with correct values
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.background(
+                    Color(0xFFECAFAF)
+                ).fillMaxWidth().padding(horizontal = 8.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Error,
+                    contentDescription = "Travel status error icon",
+                    tint = Color(0xFF880303),
+                    modifier = Modifier.size(iconSize)
+                )
+                Text(
+                    modifier = Modifier.padding(start = 4.dp),
+                    color = Color(0xFF880303),
+                    style = textStyle,
+                    text = "Error"
+                )
+            }
+        } else {
             Text(
-                modifier = Modifier.padding(start = 4.dp),
-                color = Color(0xFF245221),
+                modifier = Modifier.background(
+                    Color(0xFFABCAF0)
+                ).fillMaxWidth().padding(horizontal = 8.dp),
+                color = Color(0xFF234673),
                 style = textStyle,
-                text = stringResource(R.string.screen_book_list_item_booking_status_confirmed)
-            )
-        }
-    } else if (reservationTravelConfirm == "TO_BE_CONFIRMED" &&
-        reservationTravelStatus == "VALIDE"
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.background(
-                Color(0xFFECCAAF)
-            ).fillMaxWidth().padding(horizontal = 8.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Warning,
-                contentDescription = "Travel to be confirmed icon",
-                tint = Color(0xFF883F03),
-                modifier = Modifier.size(iconSize)
-            )
-            Text(
-                modifier = Modifier.padding(start = 4.dp),
-                color = Color(0xFF883F03),
-                style = textStyle,
-                text = stringResource(R.string.screen_book_list_item_booking_status_to_be_confirmed)
-            )
-        }
-    } else if (reservationTravelConfirm == "" && reservationTravelStatus == "") {
-        // TODO : update conditions above with correct values
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.background(
-                Color(0xFFECAFAF)
-            ).fillMaxWidth().padding(horizontal = 8.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Error,
-                contentDescription = "Travel status error icon",
-                tint = Color(0xFF880303),
-                modifier = Modifier.size(iconSize)
-            )
-            Text(
-                modifier = Modifier.padding(start = 4.dp),
-                color = Color(0xFF880303),
-                style = textStyle,
-                text = "Error"
+                text = stringResource(
+                    R.string.screen_book_list_item_booking_status_unknown,
+                    reservationTravelConfirm,
+                    reservationTravelStatus
+                )
             )
         }
     } else {

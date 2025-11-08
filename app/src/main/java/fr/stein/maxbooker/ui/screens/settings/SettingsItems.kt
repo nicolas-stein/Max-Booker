@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import fr.stein.maxbooker.ui.screens.settings.login.details.SettingsDetailsLogin
 import fr.stein.maxbooker.ui.screens.settings.login.item.SettingsItemLogin
+import fr.stein.maxbooker.ui.screens.settings.notifications.SettingsDetailsNotifications
+import fr.stein.maxbooker.ui.screens.settings.notifications.SettingsItemNotifications
 
 enum class SettingsItems {
     LOGIN {
@@ -15,6 +17,17 @@ enum class SettingsItems {
         @Composable
         override fun DetailsComposable(modifier: Modifier, navigateBack: () -> Unit) {
             SettingsDetailsLogin(modifier, navigateBack)
+        }
+    },
+    NOTIFICATIONS {
+        @Composable
+        override fun ListComposable(modifier: Modifier) {
+            SettingsItemNotifications(modifier)
+        }
+
+        @Composable
+        override fun DetailsComposable(modifier: Modifier, navigateBack: () -> Unit) {
+            SettingsDetailsNotifications(modifier, navigateBack)
         }
     };
 

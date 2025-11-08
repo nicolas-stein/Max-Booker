@@ -9,6 +9,8 @@ import fr.stein.maxbooker.domain.fetcher.DataState
 import fr.stein.maxbooker.domain.model.sncf.customer.SncfCustomer
 import fr.stein.maxbooker.domain.model.sncf.reservation.SncfReservation
 import fr.stein.maxbooker.domain.repository.sncf.SncfApiRepository
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,8 +18,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import javax.inject.Inject
-import javax.inject.Singleton
 
 @Singleton
 class SncfApiReservationsFetcher @Inject constructor(

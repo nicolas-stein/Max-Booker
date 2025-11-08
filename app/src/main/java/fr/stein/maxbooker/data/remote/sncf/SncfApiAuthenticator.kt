@@ -4,12 +4,12 @@ import android.util.Log
 import android.webkit.CookieManager
 import fr.stein.maxbooker.data.exception.SncfApiException
 import fr.stein.maxbooker.domain.repository.sncf.SncfApiAuthenticationRepository
+import javax.inject.Provider
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
-import javax.inject.Provider
 
 class SncfApiAuthenticator(private val sncfApiAuthenticationRepository: Provider<SncfApiAuthenticationRepository>) :
     Authenticator {

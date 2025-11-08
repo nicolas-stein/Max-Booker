@@ -8,13 +8,13 @@ import fr.stein.maxbooker.data.mapper.toDomain
 import fr.stein.maxbooker.domain.fetcher.DataState
 import fr.stein.maxbooker.domain.fetcher.sncf.SncfApiReservationsFetcher
 import fr.stein.maxbooker.domain.model.sncf.reservation.SncfReservation
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import javax.inject.Inject
 
 data class BookingsUiState(
     val sncfReservationsFetcherState: DataState<List<SncfReservation>> = DataState.Offline(null),

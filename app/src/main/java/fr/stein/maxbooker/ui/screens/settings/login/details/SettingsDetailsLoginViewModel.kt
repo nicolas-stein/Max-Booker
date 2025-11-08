@@ -9,6 +9,7 @@ import fr.stein.maxbooker.domain.fetcher.sncf.SncfApiCustomerFetcher
 import fr.stein.maxbooker.domain.repository.sncf.SncfApiAuthenticationRepository
 import fr.stein.maxbooker.domain.usecase.SncfApiFetchCustomerUseCase
 import fr.stein.maxbooker.ui.screens.settings.login.details.webview.LoginPayloadRecorder
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -16,7 +17,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 data class SettingsDetailsLoginUiState(val recorder: LoginPayloadRecorder = LoginPayloadRecorder())
 

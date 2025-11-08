@@ -98,8 +98,7 @@ fun SettingsItemLoginContent(modifier: Modifier = Modifier, sncfCustomerData: Da
                                 "${sncfCustomerData.data?.firstName} ${sncfCustomerData.data?.lastName}"
                             )
                         )
-                    }
-                    else {
+                    } else {
                         Text(stringResource(R.string.screen_settings_item_login_not_logged_in))
                     }
                 }

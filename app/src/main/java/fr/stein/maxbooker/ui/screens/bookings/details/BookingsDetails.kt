@@ -276,11 +276,14 @@ fun BookingsDetails(sncfReservation: SncfReservation?, modifier: Modifier = Modi
                     )
                 }
             ) {
-                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)){
-                    Text(modifier = Modifier.align(Alignment.CenterVertically), text = stringResource(R.string.screen_book_detail_open_in_sncf_connect))
+                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(
+                        modifier = Modifier.align(Alignment.CenterVertically),
+                        text = stringResource(R.string.screen_book_detail_open_in_sncf_connect)
+                    )
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ExitToApp,
-                        contentDescription = "Open in SNCF Connect icon",
+                        contentDescription = "Open in SNCF Connect icon"
                     )
                 }
             }

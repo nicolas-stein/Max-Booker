@@ -85,4 +85,7 @@
     <string name="screen_book_detail_seat_facing_forward">Sens de la marche</string>
     <string name="screen_book_detail_reference">Référence</string>
     <string name="screen_book_detail_associated_name">Nom associé</string>
+    <string name="screen_settings_item_notifications_headline">Notifications</string>
+    <string name="screen_settings_item_notifications_enabled">Notifications activés</string>
+    <string name="screen_settings_item_notifications_disabled">Notifications désactivés</string>
 </resources>
