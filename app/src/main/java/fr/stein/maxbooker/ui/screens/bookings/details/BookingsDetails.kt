@@ -140,13 +140,7 @@ fun BookingsDetails(sncfReservation: SncfReservation?, modifier: Modifier = Modi
                 Text(
                     modifier = Modifier.padding(start = 4.dp),
                     style = textStyle,
-                    text =
-                    (if (duration.toHours() > 0) "${duration.toHours()}h" else "") +
-                        "${
-                            duration.minusHours(
-                                duration.toHours()
-                            ).toMinutes()
-                        } - ${sncfReservation.transportationServiceOffer}"
+                    text = "${UiUtils.formatDuration(duration)} - ${sncfReservation.transportationServiceOffer}"
                 )
             }
             Card(

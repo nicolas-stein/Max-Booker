@@ -100,6 +100,13 @@
     <string name="screen_settings_item_notifications_enabled">Notifications enabled</string>
     <string name="screen_settings_item_notifications_disabled">Notifications disabled</string>
 
+    <string name="screen_settings_item_automations_headline">Automations</string>
+    <string name="screen_settings_item_automations_description">View automations settings</string>
+
+    <string name="screen_settings_details_automations_refresh_bookings_headline">Refresh bookings</string>
+    <string name="screen_settings_details_automations_refresh_bookings_description">Periodically fetches bookings</string>
+    <string name="screen_settings_details_automations_refresh_bookings_enqueue">Next refresh in %1$s</string>
+    <string name="screen_settings_details_automations_refresh_bookings_running">Refreshing bookings</string>
 
     <string name="app_notification_new_booking_channel_name">New booking</string>
     <string name="app_notification_new_booking_channel_description">Information about new bookings added in Max Booker</string>

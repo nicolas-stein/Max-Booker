@@ -1,6 +1,7 @@
 package fr.stein.maxbooker.domain.utils
 
 import java.text.SimpleDateFormat
+import java.time.Duration
 import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAccessor
 
@@ -18,5 +19,15 @@ object UiUtils {
 
         val formatter = DateTimeFormatter.ofPattern(formatterPattern)
         return formatter.format(dateTime)
+    }
+
+    fun formatDuration(duration: Duration): String {
+        var result = ""
+        if (duration.toHours() > 0) {
+            result += "${duration.toHours()}h"
+        }
+        result += "${duration.minusHours(duration.toHours()).toMinutes()}min"
+
+        return result
     }
 }
