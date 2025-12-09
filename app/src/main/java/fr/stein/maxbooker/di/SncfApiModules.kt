@@ -11,6 +11,7 @@ import dagger.hilt.components.SingletonComponent
 import fr.stein.maxbooker.data.local.database.SncfReservationDao
 import fr.stein.maxbooker.data.local.sncfapiauthentication.SncfApiAuthenticationProto
 import fr.stein.maxbooker.data.local.sncfcustomer.SncfCustomerProto
+import fr.stein.maxbooker.data.remote.sncf.FirebasePerformanceInterceptor
 import fr.stein.maxbooker.data.remote.sncf.SncfApi
 import fr.stein.maxbooker.data.remote.sncf.SncfApiAuthenticator
 import fr.stein.maxbooker.data.remote.sncf.SncfApiInterceptor
@@ -44,6 +45,7 @@ object SncfApiModules {
         @ApplicationContext context: Context
     ): SncfApi {
         val httpClient = OkHttpClient.Builder()
+            .addInterceptor(FirebasePerformanceInterceptor())
             .addInterceptor(SncfApiInterceptor(sncfApiAuthenticationRepository, context))
             .authenticator(SncfApiAuthenticator(sncfApiAuthenticationRepository))
             .build()

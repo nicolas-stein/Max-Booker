@@ -7,6 +7,7 @@ import androidx.work.WorkManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import fr.stein.maxbooker.domain.work.SncfReservationsUpdateWorker
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,14 +15,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 data class SettingsDetailsAutomationsUiState(val sncfReservationsUpdateWorkInfo: WorkInfo? = null)
 
 @HiltViewModel
-class SettingsDetailsAutomationsViewModel @Inject constructor(
-    @param:ApplicationContext private val context: Context
-): ViewModel() {
+class SettingsDetailsAutomationsViewModel @Inject constructor(@param:ApplicationContext private val context: Context) :
+    ViewModel() {
     private val _uiState = MutableStateFlow(SettingsDetailsAutomationsUiState())
     val uiState: StateFlow<SettingsDetailsAutomationsUiState> = _uiState.asStateFlow()
 
