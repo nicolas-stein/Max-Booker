@@ -202,7 +202,13 @@ fun BookingsDetails(sncfReservation: SncfReservation?, modifier: Modifier = Modi
                                 StringUtils.getScreenBookDetailSeatString(
                                     sncfReservation.seat!!.spaceType
                                 )
-                            } - ${StringUtils.getScreenBookDetailSeatString(sncfReservation.seat!!.tgvDeck)}",
+                            }${if (!sncfReservation.seat!!.tgvDeck.isNullOrBlank()) {
+                                " - ${StringUtils.getScreenBookDetailSeatString(
+                                    sncfReservation.seat!!.tgvDeck!!
+                                )}"
+                            } else {
+                                ""
+                            }}",
                             style = MaterialTheme.typography.bodySmall
                         )
                         Text(

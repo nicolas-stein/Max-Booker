@@ -27,7 +27,7 @@ data class SncfReservation(
     var tcn: String? = null,
     var transportationServiceOffer: String? = null
 ) {
-    data class Seat(val facingForward: Boolean, val seatPosition: String, val spaceType: String, val tgvDeck: String)
+    data class Seat(val facingForward: Boolean, val seatPosition: String, val spaceType: String, val tgvDeck: String?)
 
     fun updateDetails(
         amount: String?,
