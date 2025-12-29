@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option java_package = "fr.stein.maxbooker.data.local.maxbookersettings";
+option java_multiple_files = true;
+
+message MaxBookerSettingsAutomationsProto {
+  bool disableRefreshBookings = 1;
+}
+
+message MaxBookerSettingsProto {
+  MaxBookerSettingsAutomationsProto automations = 1;
+}

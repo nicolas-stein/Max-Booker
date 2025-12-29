@@ -21,7 +21,7 @@ fun SettingsItemAutomations(modifier: Modifier) {
         trailingContent = {
             Icon(
                 ImageVector.vectorResource(R.drawable.ic_chevron_right),
-                contentDescription = stringResource(R.string.screen_settings_item_login_headline)
+                contentDescription = stringResource(R.string.screen_settings_item_automations_headline)
             )
         }
     )

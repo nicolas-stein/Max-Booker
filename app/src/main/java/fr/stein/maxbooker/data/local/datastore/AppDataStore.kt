@@ -4,8 +4,14 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
+import fr.stein.maxbooker.data.local.maxbookersettings.MaxBookerSettingsProto
 import fr.stein.maxbooker.data.local.sncfapiauthentication.SncfApiAuthenticationProto
 import fr.stein.maxbooker.data.local.sncfcustomer.SncfCustomerProto
+
+fun createMaxBookerSettingsDataStore(context: Context): DataStore<MaxBookerSettingsProto> = DataStoreFactory.create(
+    serializer = MaxBookerSettingsSerializer,
+    produceFile = { context.dataStoreFile("maxbooker_settings.pb") }
+)
 
 fun createSncfApiAuthenticationDataStore(context: Context): DataStore<SncfApiAuthenticationProto> =
     DataStoreFactory.create(

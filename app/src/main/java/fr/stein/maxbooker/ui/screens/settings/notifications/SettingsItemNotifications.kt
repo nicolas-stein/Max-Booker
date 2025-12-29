@@ -59,7 +59,7 @@ fun SettingsItemNotifications(modifier: Modifier, viewModel: SettingsItemNotific
         trailingContent = {
             Icon(
                 ImageVector.vectorResource(R.drawable.ic_chevron_right),
-                contentDescription = stringResource(R.string.screen_settings_item_login_headline)
+                contentDescription = stringResource(R.string.screen_settings_item_notifications_headline)
             )
         }
     )
