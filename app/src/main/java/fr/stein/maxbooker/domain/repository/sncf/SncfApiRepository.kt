@@ -14,4 +14,7 @@ interface SncfApiRepository {
 
     @Throws(SncfApiException::class)
     suspend fun getTravel(sncfCustomer: SncfCustomer, sncfReservation: SncfReservation): SncfReservation
+
+    @Throws(SncfApiException::class)
+    suspend fun confirmTravel(sncfReservation: SncfReservation)
 }

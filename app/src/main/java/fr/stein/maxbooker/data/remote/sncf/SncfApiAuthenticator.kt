@@ -13,8 +13,20 @@ import okhttp3.Route
 class SncfApiAuthenticator(private val sncfApiAuthenticationRepository: Provider<SncfApiAuthenticationRepository>) :
     Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
+        val failedCookie = response.request.header("Cookie")
         synchronized(this) {
             return runBlocking {
+                val latestCookie = sncfApiAuthenticationRepository.get().getSncfApiAuthentication()?.cookies
+                if (latestCookie != null && failedCookie != latestCookie) {
+                    Log.d(
+                        "Max Book",
+                        "SncfApiAuthenticator: triggered for route ${response.request.url}, already re-authenticated. Re-running request for ${response.request.url}"
+                    )
+                    return@runBlocking response.request.newBuilder()
+                        .header("Cookie", latestCookie)
+                        .build()
+                }
+
                 Log.d(
                     "Max Book",
                     "SncfApiAuthenticator: triggered for route ${response.request.url}, refreshing authentication."

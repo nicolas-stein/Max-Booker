@@ -5,6 +5,7 @@ import fr.stein.maxbooker.data.remote.sncf.dto.SncfCustomerDto
 import fr.stein.maxbooker.data.remote.sncf.dto.SncfGetTravelDto
 import fr.stein.maxbooker.data.remote.sncf.dto.SncfTravelConsultationDto
 import fr.stein.maxbooker.domain.model.sncf.customer.SncfCustomerRequest
+import fr.stein.maxbooker.domain.model.sncf.reservation.SncfConfirmTravelRequest
 import fr.stein.maxbooker.domain.model.sncf.reservation.SncfGetTravelRequest
 import fr.stein.maxbooker.domain.model.sncf.reservation.SncfTravelConsultationRequest
 import retrofit2.Response
@@ -29,4 +30,7 @@ interface SncfApi {
 
     @POST("reservation/get-travel")
     suspend fun getTravel(@Body sncfGetTravelRequest: SncfGetTravelRequest): Response<SncfGetTravelDto>
+
+    @POST("reservation/travel-confirm")
+    suspend fun confirmTravel(@Body sncfConfirmTravelRequest: SncfConfirmTravelRequest): Response<JsonNode>
 }

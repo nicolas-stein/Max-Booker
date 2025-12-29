@@ -5,6 +5,7 @@ import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import dagger.hilt.android.HiltAndroidApp
 import fr.stein.maxbooker.di.AppModules
+import fr.stein.maxbooker.domain.utils.NotificationUtils
 import fr.stein.maxbooker.domain.utils.WorkerScheduler
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
@@ -27,6 +28,7 @@ class MainApplication :
     override fun onCreate() {
         super.onCreate()
 
+        NotificationUtils.createNotificationChannels(applicationContext)
         applicationScope.launch {
             workerScheduler.scheduleWorkers()
         }

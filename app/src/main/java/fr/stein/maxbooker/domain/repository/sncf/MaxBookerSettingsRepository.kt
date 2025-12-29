@@ -8,6 +8,9 @@ interface MaxBookerSettingsRepository {
         fun flow(): Flow<MaxBookerSettingsAutomations>
         fun isRefreshBookingsDisabledFlow(): Flow<Boolean>
         suspend fun setRefreshBookingsDisabled(disabled: Boolean)
+
+        fun isAutoConfirmBookingsDisabledFlow(): Flow<Boolean>
+        suspend fun setAutoConfirmBookingsDisabled(disabled: Boolean)
     }
 
     fun automations(): AutomationsRepository

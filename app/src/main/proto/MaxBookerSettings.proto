@@ -5,6 +5,7 @@ option java_multiple_files = true;
 
 message MaxBookerSettingsAutomationsProto {
   bool disableRefreshBookings = 1;
+  bool disableAutoConfirmBookings = 2;
 }
 
 message MaxBookerSettingsProto {

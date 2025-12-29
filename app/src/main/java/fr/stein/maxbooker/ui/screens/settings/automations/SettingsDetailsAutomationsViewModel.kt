@@ -10,6 +10,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import fr.stein.maxbooker.domain.model.maxbooker.MaxBookerSettingsAutomations
 import fr.stein.maxbooker.domain.repository.sncf.MaxBookerSettingsRepository
 import fr.stein.maxbooker.domain.utils.WorkerScheduler
+import fr.stein.maxbooker.domain.work.SncfReservationConfirmWorker
 import fr.stein.maxbooker.domain.work.SncfReservationsUpdateWorker
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
@@ -33,10 +34,9 @@ class SettingsDetailsAutomationsViewModel @Inject constructor(
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(SettingsDetailsAutomationsUiState())
     val uiState: StateFlow<SettingsDetailsAutomationsUiState> = _uiState.asStateFlow()
+    private val workManager = WorkManager.getInstance(context)
 
     init {
-        val workManager = WorkManager.getInstance(context)
-
         viewModelScope.launch {
             workManager
                 .getWorkInfosForUniqueWorkFlow(SncfReservationsUpdateWorker.WORKER_NAME)
@@ -62,9 +62,20 @@ class SettingsDetailsAutomationsViewModel @Inject constructor(
         CoroutineScope(Dispatchers.IO).launch {
             maxBookerSettingsRepository.automations().setRefreshBookingsDisabled(!enabled)
             if (enabled) {
-                workerScheduler.scheduleSncfReservationsUpdateWorker(WorkManager.getInstance(context))
+                workerScheduler.scheduleSncfReservationsUpdateWorker(workManager)
             } else {
-                WorkManager.getInstance(context).cancelUniqueWork(SncfReservationsUpdateWorker.WORKER_NAME)
+                workManager.cancelUniqueWork(SncfReservationsUpdateWorker.WORKER_NAME)
+            }
+        }
+    }
+
+    fun handleAutoConfirmBookingsSwitch(enabled: Boolean) {
+        CoroutineScope(Dispatchers.IO).launch {
+            maxBookerSettingsRepository.automations().setAutoConfirmBookingsDisabled(!enabled)
+            if (enabled) {
+                workerScheduler.scheduleSncfReservationConfirmWorker(workManager)
+            } else {
+                workManager.cancelAllWorkByTag(SncfReservationConfirmWorker.WORKER_TAG)
             }
         }
     }

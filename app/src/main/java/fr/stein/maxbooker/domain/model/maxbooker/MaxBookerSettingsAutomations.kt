@@ -1,3 +1,3 @@
 package fr.stein.maxbooker.domain.model.maxbooker
 
-data class MaxBookerSettingsAutomations(val disableRefreshBookings: Boolean)
+data class MaxBookerSettingsAutomations(val disableRefreshBookings: Boolean, val disableAutoConfirmBookings: Boolean)

@@ -6,6 +6,7 @@ import fr.stein.maxbooker.data.mapper.toDomain
 import fr.stein.maxbooker.data.remote.sncf.SncfApi
 import fr.stein.maxbooker.domain.model.sncf.customer.SncfCustomer
 import fr.stein.maxbooker.domain.model.sncf.customer.SncfCustomerRequest
+import fr.stein.maxbooker.domain.model.sncf.reservation.SncfConfirmTravelRequest
 import fr.stein.maxbooker.domain.model.sncf.reservation.SncfGetTravelRequest
 import fr.stein.maxbooker.domain.model.sncf.reservation.SncfReservation
 import fr.stein.maxbooker.domain.model.sncf.reservation.SncfTravelConsultationRequest
@@ -22,7 +23,7 @@ class SncfApiRepositoryImpl(private val sncfApi: SncfApi, private val sncfApiExe
     @Throws(SncfApiException::class)
     override suspend fun getCustomer(cookiesOverride: String?): SncfCustomer {
         Log.d("Max Book", "SncfApiRepositoryImpl: requested getCustomer")
-        val sncfCustomerDto = sncfApiExecutor.execute {
+        val sncfCustomerDto = sncfApiExecutor.executeNonNullBody {
             sncfApi.getCustomer(
                 SncfCustomerRequest(
                     productTypes = listOf("TGV_MAX_JEUNE", "FIDEL", "IDTGV_MAX")
@@ -37,7 +38,7 @@ class SncfApiRepositoryImpl(private val sncfApi: SncfApi, private val sncfApiExe
     @Throws(SncfApiException::class)
     override suspend fun getTravelConsultations(sncfCustomer: SncfCustomer): List<SncfReservation> {
         Log.d("Max Book", "SncfApiRepositoryImpl: requested getTravelConsultations")
-        val sncfTravelConsultationDto = sncfApiExecutor.execute {
+        val sncfTravelConsultationDto = sncfApiExecutor.executeNonNullBody {
             sncfApi.getTravelConsultation(
                 SncfTravelConsultationRequest(
                     cardNumber = sncfCustomer.cards[0].cardNumber,
@@ -54,7 +55,7 @@ class SncfApiRepositoryImpl(private val sncfApi: SncfApi, private val sncfApiExe
     @Throws(SncfApiException::class)
     override suspend fun getTravel(sncfCustomer: SncfCustomer, sncfReservation: SncfReservation): SncfReservation {
         Log.d("Max Book", "SncfApiRepositoryImpl: requested getTravel")
-        val sncfGetTravelDto = sncfApiExecutor.execute {
+        val sncfGetTravelDto = sncfApiExecutor.executeNonNullBody {
             sncfApi.getTravel(
                 SncfGetTravelRequest(
                     customerName = sncfCustomer.lastName,
@@ -68,5 +69,21 @@ class SncfApiRepositoryImpl(private val sncfApi: SncfApi, private val sncfApiExe
         }
         val sncfReservationDetailed = sncfGetTravelDto.toDomain(sncfReservation)
         return sncfReservationDetailed
+    }
+
+    @Throws(SncfApiException::class)
+    override suspend fun confirmTravel(sncfReservation: SncfReservation) {
+        Log.d("Max Book", "SncfApiRepositoryImpl: requested confirmTravel")
+        sncfApiExecutor.execute {
+            sncfApi.confirmTravel(
+                SncfConfirmTravelRequest(
+                    marketingCarrierRef = sncfReservation.dvNumber,
+                    trainNumber = sncfReservation.trainNumber,
+                    departureDateTime = sncfReservation.departureDateTime.withZoneSameInstant(
+                        ZoneId.of("Europe/Paris")
+                    ).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS"))
+                )
+            )
+        }
     }
 }

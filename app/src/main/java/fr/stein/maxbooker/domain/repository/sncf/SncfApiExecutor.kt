@@ -5,5 +5,6 @@ import retrofit2.Response
 
 interface SncfApiExecutor {
     @Throws(SncfApiException::class)
-    suspend fun <T : Any> execute(call: suspend () -> Response<T>): T
+    suspend fun <T : Any> execute(call: suspend () -> Response<T>): T?
+    suspend fun <T : Any> executeNonNullBody(call: suspend () -> Response<T>): T
 }

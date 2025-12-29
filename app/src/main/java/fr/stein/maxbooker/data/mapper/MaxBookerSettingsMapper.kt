@@ -10,5 +10,6 @@ fun MaxBookerSettingsProto.toDomain(): MaxBookerSettings = MaxBookerSettings(
 )
 
 fun MaxBookerSettingsAutomationsProto.toDomain(): MaxBookerSettingsAutomations = MaxBookerSettingsAutomations(
-    disableRefreshBookings = disableRefreshBookings
+    disableRefreshBookings = disableRefreshBookings,
+    disableAutoConfirmBookings = disableAutoConfirmBookings
 )

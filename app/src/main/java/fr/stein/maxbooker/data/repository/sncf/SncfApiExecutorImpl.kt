@@ -12,7 +12,7 @@ import retrofit2.Response
 class SncfApiExecutorImpl(private val sncfApiAuthenticationRepository: Provider<SncfApiAuthenticationRepository>) :
     SncfApiExecutor {
     @Throws(SncfApiException::class)
-    override suspend fun <T : Any> execute(call: suspend () -> Response<T>): T {
+    override suspend fun <T : Any> execute(call: suspend () -> Response<T>): T? {
         val response = try {
             call()
         } catch (e: IOException) {
@@ -40,11 +40,11 @@ class SncfApiExecutorImpl(private val sncfApiAuthenticationRepository: Provider<
             )
         }
 
-        val body = response.body()
-        if (body == null) {
-            throw SncfApiException.EmptyBodyException()
-        }
+        return response.body()
+    }
 
+    override suspend fun <T : Any> executeNonNullBody(call: suspend () -> Response<T>): T {
+        val body = execute(call) ?: throw SncfApiException.EmptyBodyException()
         return body
     }
 }

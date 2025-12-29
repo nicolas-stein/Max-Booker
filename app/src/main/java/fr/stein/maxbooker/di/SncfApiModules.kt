@@ -8,7 +8,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import fr.stein.maxbooker.data.local.database.SncfReservationDao
 import fr.stein.maxbooker.data.local.sncfapiauthentication.SncfApiAuthenticationProto
 import fr.stein.maxbooker.data.local.sncfcustomer.SncfCustomerProto
 import fr.stein.maxbooker.data.remote.sncf.FirebasePerformanceInterceptor
@@ -25,6 +24,7 @@ import fr.stein.maxbooker.domain.repository.sncf.SncfApiAuthenticationRepository
 import fr.stein.maxbooker.domain.repository.sncf.SncfApiExecutor
 import fr.stein.maxbooker.domain.repository.sncf.SncfApiRepository
 import fr.stein.maxbooker.domain.usecase.SncfApiFetchCustomerUseCase
+import fr.stein.maxbooker.domain.usecase.SncfApiFetchReservationDetailUseCase
 import fr.stein.maxbooker.domain.usecase.SncfApiFetchReservationsUseCase
 import javax.inject.Provider
 import javax.inject.Singleton
@@ -106,10 +106,8 @@ object SncfApiModules {
     @Provides
     @Singleton
     fun provideSncfApiReservationsDetailFetcher(
-        sncfApiRepository: SncfApiRepository,
-        sncfReservationDao: SncfReservationDao
+        sncfApiFetchReservationDetailUseCase: SncfApiFetchReservationDetailUseCase
     ): SncfApiReservationsDetailFetcher = SncfApiReservationsDetailFetcher(
-        sncfApiRepository = sncfApiRepository,
-        sncfReservationDao = sncfReservationDao
+        sncfApiFetchReservationDetailUseCase = sncfApiFetchReservationDetailUseCase
     )
 }

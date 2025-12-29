@@ -70,6 +70,10 @@ fun SettingsDetailsAutomations(
                 !(uiState.maxBookerSettingsAutomations?.disableRefreshBookings ?: false),
                 { viewModel.handleRefreshBookingSwitch(it) }
             )
+            AutoConfirmBookingsListItem(
+                !(uiState.maxBookerSettingsAutomations?.disableAutoConfirmBookings ?: false),
+                { viewModel.handleAutoConfirmBookingsSwitch(it) }
+            )
         }
     }
 }
@@ -146,12 +150,7 @@ private fun RefreshBookingsListItem(
 @Composable
 private fun RefreshBookingsListItemPreview() {
     MaxBookerTheme {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .verticalScroll(rememberScrollState())
-        ) {
+        Column {
             RefreshBookingsListItem(
                 WorkInfo(
                     id = UUID.randomUUID(),
@@ -171,5 +170,37 @@ private fun RefreshBookingsListItemPreview() {
                 onSwitchChanged = {}
             )
         }
+    }
+}
+
+@Composable
+private fun AutoConfirmBookingsListItem(switchChecked: Boolean, onSwitchChanged: ((Boolean) -> Unit)) {
+    ListItem(
+        modifier = Modifier.clickable {
+            onSwitchChanged(!switchChecked)
+        },
+        headlineContent = {
+            Text(stringResource(R.string.screen_settings_details_automations_auto_confirm_bookings_headline))
+        },
+        supportingContent = {
+            Text(stringResource(R.string.screen_settings_details_automations_auto_confirm_bookings_description))
+        },
+        trailingContent = {
+            Switch(
+                checked = switchChecked,
+                onCheckedChange = onSwitchChanged
+            )
+        }
+    )
+}
+
+@Preview
+@Composable
+private fun AutoConfirmBookingsListItemPreview() {
+    MaxBookerTheme {
+        AutoConfirmBookingsListItem(
+            switchChecked = true,
+            onSwitchChanged = {}
+        )
     }
 }

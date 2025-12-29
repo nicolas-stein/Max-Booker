@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.tooling.preview.Preview
 import dagger.hilt.android.AndroidEntryPoint
-import fr.stein.maxbooker.domain.utils.NotificationUtils
 import fr.stein.maxbooker.ui.components.navigation.MainNavigation
 import fr.stein.maxbooker.ui.theme.MaxBookerTheme
 
@@ -24,7 +23,6 @@ class MainActivity : ComponentActivity() {
                 MainNavigation(initialDeepLinkUri = currentIntent.value?.data)
             }
         }
-        NotificationUtils.createNotificationChannels(applicationContext)
     }
 
     override fun onNewIntent(intent: Intent) {

@@ -20,6 +20,10 @@ interface SncfReservationDao {
     @Transaction
     fun observeAllReservations(): Flow<List<SncfReservationWithStations>>
 
+    @Query("SELECT * FROM SncfReservationEntity WHERE order_id=:orderId")
+    @Transaction
+    suspend fun getReservationById(orderId: String): SncfReservationWithStations?
+
     @Query("SELECT * FROM SncfReservationEntity WHERE order_id IN (:orderIds)")
     @Transaction
     suspend fun getReservationsByIds(orderIds: List<String>): List<SncfReservationWithStations>

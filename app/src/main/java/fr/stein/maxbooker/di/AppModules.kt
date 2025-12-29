@@ -10,6 +10,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import fr.stein.maxbooker.data.local.database.SncfReservationDao
 import fr.stein.maxbooker.data.local.maxbookersettings.MaxBookerSettingsProto
 import fr.stein.maxbooker.data.repository.maxbooker.MaxBookerSettingsRepositoryImpl
 import fr.stein.maxbooker.domain.repository.sncf.MaxBookerSettingsRepository
@@ -46,6 +47,7 @@ object AppModules {
     @Singleton
     fun provideWorkScheduler(
         @ApplicationContext context: Context,
-        maxBookerSettingsRepository: MaxBookerSettingsRepository
-    ): WorkerScheduler = WorkerScheduler(context, maxBookerSettingsRepository)
+        maxBookerSettingsRepository: MaxBookerSettingsRepository,
+        sncfReservationDao: SncfReservationDao
+    ): WorkerScheduler = WorkerScheduler(context, maxBookerSettingsRepository, sncfReservationDao)
 }
