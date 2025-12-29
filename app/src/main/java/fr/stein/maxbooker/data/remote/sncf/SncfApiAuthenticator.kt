@@ -1,7 +1,6 @@
 package fr.stein.maxbooker.data.remote.sncf
 
 import android.util.Log
-import android.webkit.CookieManager
 import fr.stein.maxbooker.data.exception.SncfApiException
 import fr.stein.maxbooker.domain.repository.sncf.SncfApiAuthenticationRepository
 import javax.inject.Provider
@@ -14,40 +13,41 @@ import okhttp3.Route
 class SncfApiAuthenticator(private val sncfApiAuthenticationRepository: Provider<SncfApiAuthenticationRepository>) :
     Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
-        Log.d(
-            "Max Book",
-            "SncfApiAuthenticator: triggered for route ${response.request.url}, refreshing authentication."
-        )
-
-        val cookies = CookieManager.getInstance().getCookie("https://www.maxjeune-tgvinoui.sncf/")
-        if (cookies == null) {
-            Log.d("Max Book", "SncfApiAuthenticator: no cookies, cannot refresh authentication!")
-            return null
-        }
-
-        try {
-            val newCookies = synchronized(this) {
-                runBlocking {
-                    sncfApiAuthenticationRepository.get().refreshAuthenticationCookie(
-                        cookies
-                    )?.cookies
-                }
-            }
-
-            if (newCookies != null) {
+        synchronized(this) {
+            return runBlocking {
                 Log.d(
                     "Max Book",
-                    "SncfApiAuthenticator: re-running request for ${response.request.url}"
+                    "SncfApiAuthenticator: triggered for route ${response.request.url}, refreshing authentication."
                 )
-                return response.request.newBuilder()
-                    .header("Cookie", newCookies)
-                    .build()
-            } else {
-                Log.e("Max Book", "SncfApiAuthenticator: newCookies is null !")
-                return null
+
+                val cookies = sncfApiAuthenticationRepository.get().getSncfApiAuthentication()?.cookies
+                if (cookies == null) {
+                    Log.d("Max Book", "SncfApiAuthenticator: no cookies, cannot refresh authentication!")
+                    return@runBlocking null
+                }
+
+                try {
+                    val newCookies =
+                        sncfApiAuthenticationRepository.get().refreshAuthenticationCookie(
+                            cookies
+                        )?.cookies
+
+                    if (newCookies != null) {
+                        Log.d(
+                            "Max Book",
+                            "SncfApiAuthenticator: re-running request for ${response.request.url}"
+                        )
+                        return@runBlocking response.request.newBuilder()
+                            .header("Cookie", newCookies)
+                            .build()
+                    } else {
+                        Log.e("Max Book", "SncfApiAuthenticator: newCookies is null !")
+                        return@runBlocking null
+                    }
+                } catch (_: SncfApiException) {
+                    return@runBlocking null
+                }
             }
-        } catch (_: SncfApiException) {
-            return null
         }
     }
 }

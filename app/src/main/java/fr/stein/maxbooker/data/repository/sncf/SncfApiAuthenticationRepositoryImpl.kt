@@ -1,6 +1,7 @@
 package fr.stein.maxbooker.data.repository.sncf
 
 import android.util.Log
+import android.webkit.CookieManager
 import androidx.datastore.core.DataStore
 import fr.stein.maxbooker.data.exception.SncfApiException
 import fr.stein.maxbooker.data.local.sncfapiauthentication.SncfApiAuthenticationProto
@@ -66,6 +67,13 @@ class SncfApiAuthenticationRepositoryImpl(
 
                 val newSncfApiAuthentication = SncfApiAuthentication(cookies = newCookies)
                 sncfApiAuthenticationDataStore.updateData { newSncfApiAuthentication.toProto() }
+
+                val cookieManager = CookieManager.getInstance()
+                cookieManager.setAcceptCookie(true)
+                refreshAuthResponse.headers().values("Set-Cookie").forEach { cookie ->
+                    cookieManager.setCookie("https://www.maxjeune-tgvinoui.sncf", cookie)
+                }
+
                 return newSncfApiAuthentication
             } else {
                 val errorBody = refreshAuthResponse.errorBody()?.string()
