@@ -1,8 +1,8 @@
 [versions]
-agp = "8.13.2"
+agp = "9.0.1"
 kotlin = "2.2.21"
 coreKtx = "1.17.0"
-ksp = "2.3.0"
+ksp = "2.3.2"
 ktlint = "13.1.0"
 google-services = "4.4.4"
 firebase-bom = "34.6.0"
