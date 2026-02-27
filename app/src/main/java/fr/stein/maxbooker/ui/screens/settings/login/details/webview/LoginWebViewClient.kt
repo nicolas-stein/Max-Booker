@@ -1,6 +1,7 @@
 package fr.stein.maxbooker.ui.screens.settings.login.details.webview
 
 import android.graphics.Bitmap
+import android.util.Log
 import android.webkit.CookieManager
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -14,7 +15,7 @@ class LoginWebViewClient(
 ) : WebViewClient() {
 
     override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
-        // Log.d("Max Book", "shouldInterceptRequest: ${request.method} ${request.url}")
+        // Log.d("Max Book", "shouldInterceptRequest: ${request?.method} ${request?.url}")
 
         if (request != null &&
             request.url.toString() ==

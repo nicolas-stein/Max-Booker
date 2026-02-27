@@ -7,7 +7,6 @@ data class SncfCustomer(
     val iuc: String,
     val createdAt: ZonedDateTime,
     val updatedAt: ZonedDateTime,
-    val civility: String,
     val lastName: String,
     val firstName: String,
     val birthDate: LocalDate,

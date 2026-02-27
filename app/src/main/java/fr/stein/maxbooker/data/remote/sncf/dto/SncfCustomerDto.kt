@@ -4,7 +4,6 @@ data class SncfCustomerDto(
     val iuc: String,
     val createdAt: String,
     val updatedAt: String,
-    val civility: String,
     val lastName: String,
     val firstName: String,
     val birthDate: String,

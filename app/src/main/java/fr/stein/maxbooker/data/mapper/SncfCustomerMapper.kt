@@ -14,7 +14,6 @@ fun SncfCustomer.toProto(): SncfCustomerProto = SncfCustomerProto.newBuilder()
     .setIuc(iuc)
     .setCreatedAt(createdAt.toString())
     .setUpdatedAt(updatedAt.toString())
-    .setCivility(civility)
     .setLastName(lastName)
     .setFirstName(firstName)
     .setBirthDate(birthDate.toString())
@@ -47,7 +46,6 @@ fun SncfCustomerDto.toDomain(): SncfCustomer = SncfCustomer(
     iuc = iuc,
     createdAt = LocalDateTime.parse(createdAt).atZone(ZoneId.of("Europe/Paris")),
     updatedAt = LocalDateTime.parse(updatedAt).atZone(ZoneId.of("Europe/Paris")),
-    civility = civility,
     lastName = lastName,
     firstName = firstName,
     birthDate = LocalDate.parse(birthDate),
@@ -86,7 +84,6 @@ fun SncfCustomerProto.toDomain(): SncfCustomer? = if (iuc.isEmpty()) {
         iuc = iuc,
         createdAt = ZonedDateTime.parse(createdAt),
         updatedAt = ZonedDateTime.parse(updatedAt),
-        civility = civility,
         lastName = lastName,
         firstName = firstName,
         birthDate = LocalDate.parse(birthDate),

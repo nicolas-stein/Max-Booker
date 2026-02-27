@@ -140,7 +140,6 @@ private fun SettingsItemLoginPreviewLoggedIn() {
         iuc = UUID.randomUUID().toString(),
         createdAt = ZonedDateTime.now(),
         updatedAt = ZonedDateTime.now(),
-        civility = "M.",
         lastName = "Dupont",
         firstName = "Jean",
         birthDate = LocalDate.now().minusYears(20),

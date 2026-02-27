@@ -8,7 +8,7 @@ message SncfCustomerProto {
   string iuc = 1;
   string createdAt = 2;
   string updatedAt = 3;
-  string civility = 4;
+  // Legacy - string civility = 4;
   string lastName = 5;
   string firstName = 6;
   string birthDate = 7;
