@@ -131,4 +131,6 @@
     <string name="app_notification_booking_confirmed_failed_notification_title">Failed to confirm booking</string>
     <string name="app_notification_booking_confirmed_failed_notification_content_text">Trip to %1$s on %2$s</string>
     <string name="app_notification_booking_confirmed_failed_notification_big_text">Unable to automatically confirm your booking to %1$s on %2$s, please try again manually.</string>
+
+    <string name="delete">Delete</string>
 </resources>

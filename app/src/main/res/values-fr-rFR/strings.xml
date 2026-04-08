@@ -112,4 +112,5 @@
     <string name="app_notification_booking_confirmed_failed_notification_title">Echec de la confirmation de la réservation</string>
     <string name="app_notification_booking_confirmed_failed_notification_content_text">Voyage à %1$s le %2$s</string>
     <string name="app_notification_booking_confirmed_failed_notification_big_text">Impossible de confirmer automatiquement la réservation pour %1$s le %2$s, merci de réessayer manuellement.</string>
+    <string name="delete">Supprimer</string>
 </resources>

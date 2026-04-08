@@ -8,15 +8,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import fr.stein.maxbooker.ui.screens.bookings.details.BookingsDetails
 import fr.stein.maxbooker.ui.theme.MaxBookerTheme
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun BookingsScreen(initialOrderId: String? = null, viewModel: BookingsViewModel = hiltViewModel<BookingsViewModel>()) {
     val uiState by viewModel.uiState.collectAsState()
+    val scope = rememberCoroutineScope()
 
     val listDetailNavigator = rememberListDetailPaneScaffoldNavigator<String>()
 
@@ -49,7 +52,19 @@ fun BookingsScreen(initialOrderId: String? = null, viewModel: BookingsViewModel 
                 onReservationClick = { orderId -> viewModel.selectReservation(orderId) }
             )
         },
-        detailPane = { BookingsDetails(sncfReservation = uiState.selectedSncfReservation) }
+        detailPane = {
+            BookingsDetails(
+                sncfReservation = uiState.selectedSncfReservation,
+                onDelete = { sncfReservation ->
+                    scope.launch {
+                        sncfReservation?.let { viewModel.deleteReservation(sncfReservation) }
+                        if (listDetailNavigator.canNavigateBack()) {
+                            listDetailNavigator.navigateBack()
+                        }
+                    }
+                }
+            )
+        }
     )
 }
 

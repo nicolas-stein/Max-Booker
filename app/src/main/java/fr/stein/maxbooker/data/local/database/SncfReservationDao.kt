@@ -1,6 +1,7 @@
 package fr.stein.maxbooker.data.local.database
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -36,4 +37,7 @@ interface SncfReservationDao {
 
     @Upsert
     suspend fun upsertReservations(sncfReservationEntities: List<SncfReservationEntity>)
+
+    @Delete
+    suspend fun deleteReservation(sncfReservation: SncfReservationEntity)
 }

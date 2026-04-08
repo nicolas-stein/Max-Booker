@@ -14,6 +14,7 @@ import androidx.work.WorkManager
 import dagger.hilt.android.qualifiers.ApplicationContext
 import fr.stein.maxbooker.data.local.database.SncfReservationDao
 import fr.stein.maxbooker.data.mapper.toDomain
+import fr.stein.maxbooker.domain.model.sncf.reservation.SncfReservation
 import fr.stein.maxbooker.domain.repository.sncf.MaxBookerSettingsRepository
 import fr.stein.maxbooker.domain.work.SncfReservationConfirmWorker
 import fr.stein.maxbooker.domain.work.SncfReservationsUpdateWorker
@@ -99,5 +100,10 @@ class WorkerScheduler @Inject constructor(
                 sncfReservationConfirmWorkerRequestBuilder.build()
             )
         }
+    }
+
+    fun cancelSncfReservationConfirmWorker(workManager: WorkManager, sncfReservation: SncfReservation) {
+        Log.i("Max Book", "WorkerScheduler: stopping SncfReservationConfirmWorker for ${sncfReservation.orderId}")
+        workManager.cancelUniqueWork(SncfReservationConfirmWorker.getWorkerName(sncfReservation))
     }
 }
