@@ -17,14 +17,14 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
-fun BookingsScreen(initialOrderId: String? = null, viewModel: BookingsViewModel = hiltViewModel<BookingsViewModel>()) {
+fun BookingsScreen(initialDvNumber: String? = null, viewModel: BookingsViewModel = hiltViewModel<BookingsViewModel>()) {
     val uiState by viewModel.uiState.collectAsState()
     val scope = rememberCoroutineScope()
 
     val listDetailNavigator = rememberListDetailPaneScaffoldNavigator<String>()
 
-    LaunchedEffect(uiState.selectedOrderId) {
-        val selectedId = uiState.selectedOrderId
+    LaunchedEffect(uiState.selectedDvNumber) {
+        val selectedId = uiState.selectedDvNumber
         if (selectedId != null) {
             listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail, selectedId)
         } else {
@@ -38,9 +38,9 @@ fun BookingsScreen(initialOrderId: String? = null, viewModel: BookingsViewModel 
         }
     }
 
-    LaunchedEffect(initialOrderId) {
-        if (initialOrderId != null) {
-            viewModel.selectReservation(initialOrderId)
+    LaunchedEffect(initialDvNumber) {
+        if (initialDvNumber != null) {
+            viewModel.selectReservation(initialDvNumber)
         }
     }
 
@@ -49,7 +49,7 @@ fun BookingsScreen(initialOrderId: String? = null, viewModel: BookingsViewModel 
         listPane = {
             BookingsList(
                 sncfReservations = uiState.sncfReservations,
-                onReservationClick = { orderId -> viewModel.selectReservation(orderId) }
+                onReservationClick = { dvNumber -> viewModel.selectReservation(dvNumber) }
             )
         },
         detailPane = {

@@ -14,7 +14,7 @@ class SncfApiFetchReservationsUseCase @Inject constructor(
     private val sncfApiRepository: SncfApiRepository,
     private val sncfReservationDao: SncfReservationDao
 ) {
-    data class Output(val sncfReservations: List<SncfReservation>, val newSncfReservationsOrderId: List<String>)
+    data class Output(val sncfReservations: List<SncfReservation>, val newSncfReservationsDvNumber: List<String>)
 
     @Throws(SncfApiException::class)
     suspend operator fun invoke(sncfCustomer: SncfCustomer): Output {
@@ -33,16 +33,16 @@ class SncfApiFetchReservationsUseCase @Inject constructor(
         }.getOrThrow()
 
         return runCatching {
-            val orderIds = sncfReservations.map { it.orderId }
-            val savedSncfReservations = sncfReservationDao.getReservationsByIds(orderIds)
+            val dvNumbers = sncfReservations.map { it.dvNumber }
+            val savedSncfReservations = sncfReservationDao.getReservationsByIds(dvNumbers)
                 .map { it.toDomain() }
-                .associateBy { it.orderId }
+                .associateBy { it.dvNumber }
 
             val sncfReservationsToUpsert = mutableListOf<SncfReservation>()
-            val newSncfReservationsOrderId = mutableListOf<String>()
+            val newSncfReservationsDvNumber = mutableListOf<String>()
 
             for (reservation in sncfReservations) {
-                val savedReservation = savedSncfReservations[reservation.orderId]
+                val savedReservation = savedSncfReservations[reservation.dvNumber]
 
                 if (savedReservation != null) {
                     reservation.updateDetails(
@@ -58,7 +58,7 @@ class SncfApiFetchReservationsUseCase @Inject constructor(
                     sncfReservationDao.insertStationIfNotExists(
                         reservation.destination.toEntity()
                     )
-                    newSncfReservationsOrderId.add(reservation.orderId)
+                    newSncfReservationsDvNumber.add(reservation.dvNumber)
                 }
 
                 sncfReservationsToUpsert.add(reservation)
@@ -72,7 +72,7 @@ class SncfApiFetchReservationsUseCase @Inject constructor(
 
             return@runCatching Output(
                 sncfReservations = sncfReservationsToUpsert,
-                newSncfReservationsOrderId = newSncfReservationsOrderId
+                newSncfReservationsDvNumber = newSncfReservationsDvNumber
             )
         }.onFailure { throwable ->
             Log.e(

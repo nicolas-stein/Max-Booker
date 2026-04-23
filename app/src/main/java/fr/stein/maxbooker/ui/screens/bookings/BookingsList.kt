@@ -43,10 +43,10 @@ fun BookingsList(
             ).fillMaxWidth().fillMaxHeight()
         ) {
             items(sncfReservations, key = {
-                it.orderId
+                it.dvNumber
             }) { sncfReservation ->
                 BookingsListItem(sncfReservation, onReservationClick = {
-                    onReservationClick(sncfReservation.orderId)
+                    onReservationClick(sncfReservation.dvNumber)
                 })
             }
         }

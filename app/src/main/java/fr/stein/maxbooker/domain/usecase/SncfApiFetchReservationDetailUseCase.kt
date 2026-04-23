@@ -16,13 +16,13 @@ class SncfApiFetchReservationDetailUseCase @Inject constructor(
     @Throws(SncfApiException::class)
     suspend operator fun invoke(customer: SncfCustomer, sncfReservation: SncfReservation): SncfReservation {
         return runCatching {
-            Log.d("Max Book", "SncfApiFetchReservationDetailUseCase: fetching reservation ${sncfReservation.orderId}")
+            Log.d("Max Book", "SncfApiFetchReservationDetailUseCase: fetching reservation ${sncfReservation.dvNumber}")
             val sncfReservationDetailed = sncfApiRepository.getTravel(customer, sncfReservation)
             return@runCatching sncfReservationDetailed
         }.onSuccess { sncfReservationDetailed ->
             Log.d(
                 "Max Book",
-                "SncfApiFetchReservationDetailUseCase: successfully fetched reservation ${sncfReservation.orderId}"
+                "SncfApiFetchReservationDetailUseCase: successfully fetched reservation ${sncfReservation.dvNumber}"
             )
             return runCatching {
                 sncfReservationDao.upsertReservation(sncfReservationDetailed.toEntity())

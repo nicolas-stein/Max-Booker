@@ -31,14 +31,14 @@ class SncfReservationConfirmWorker @AssistedInject constructor(
     companion object {
         val WORKER_TAG = "SncfReservationConfirmWorker"
         fun getWorkerName(sncfReservation: SncfReservation): String =
-            "SncfReservationConfirmWorker-${sncfReservation.orderId}"
+            "SncfReservationConfirmWorker-${sncfReservation.dvNumber}"
     }
 
     override suspend fun doWork(): Result {
         Log.d("Max Book", "SncfReservationConfirmWorker: doWork() with params ${workerParams.inputData}")
-        val sncfReservationOrderId = workerParams.inputData.getString("orderId")
-        if (sncfReservationOrderId == null) {
-            Log.e("Max Book", "SncfReservationConfirmWorker: input parameters missing orderId")
+        val sncfReservationDvNumber = workerParams.inputData.getString("dvNumber")
+        if (sncfReservationDvNumber == null) {
+            Log.e("Max Book", "SncfReservationConfirmWorker: input parameters missing dvNumber")
             return Result.failure()
         }
 
@@ -50,12 +50,12 @@ class SncfReservationConfirmWorker @AssistedInject constructor(
 
         val sncfReservation: SncfReservation = runCatching {
             return@runCatching sncfApiFetchReservationsUseCase(sncfCustomer).sncfReservations.first {
-                it.orderId ==
-                    sncfReservationOrderId
+                it.dvNumber ==
+                    sncfReservationDvNumber
             }
         }.getOrElse { throwable ->
             Log.e("Max Book", "SncfReservationConfirmWorker: failed to fetch sncf reservation", throwable)
-            val sncfReservationLocal = sncfReservationDao.getReservationById(sncfReservationOrderId)?.toDomain()
+            val sncfReservationLocal = sncfReservationDao.getReservationById(sncfReservationDvNumber)?.toDomain()
             if (sncfReservationLocal != null) {
                 sendBookingConfirmedFailedNotification(applicationContext, sncfReservationLocal)
             }
@@ -84,7 +84,7 @@ class SncfReservationConfirmWorker @AssistedInject constructor(
             return Result.failure()
         }
 
-        Log.i("Max Book", "SncfReservationConfirmWorker: confirming sncf reservation ${sncfReservation.orderId}")
+        Log.i("Max Book", "SncfReservationConfirmWorker: confirming sncf reservation ${sncfReservation.dvNumber}")
         return runCatching {
             sncfApiConfirmTravelUseCase.invoke(sncfReservation)
             NotificationUtils.sendBookingConfirmedNotification(applicationContext, sncfReservation)

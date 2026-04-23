@@ -81,7 +81,7 @@ class WorkerScheduler @Inject constructor(
                 .setBackoffCriteria(BackoffPolicy.LINEAR, 30, TimeUnit.MINUTES)
                 .setInputData(
                     Data.Builder()
-                        .putString("orderId", sncfReservation.orderId)
+                        .putString("dvNumber", sncfReservation.dvNumber)
                         .build()
                 )
                 .addTag(SncfReservationConfirmWorker.WORKER_TAG)
@@ -103,7 +103,7 @@ class WorkerScheduler @Inject constructor(
     }
 
     fun cancelSncfReservationConfirmWorker(workManager: WorkManager, sncfReservation: SncfReservation) {
-        Log.i("Max Book", "WorkerScheduler: stopping SncfReservationConfirmWorker for ${sncfReservation.orderId}")
+        Log.i("Max Book", "WorkerScheduler: stopping SncfReservationConfirmWorker for ${sncfReservation.dvNumber}")
         workManager.cancelUniqueWork(SncfReservationConfirmWorker.getWorkerName(sncfReservation))
     }
 }
