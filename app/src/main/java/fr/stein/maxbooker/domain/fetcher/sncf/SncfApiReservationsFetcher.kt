@@ -48,7 +48,7 @@ class SncfApiReservationsFetcher @Inject constructor(
         runCatching {
             return@runCatching sncfApiFetchReservationsUseCase(customer)
         }.onSuccess { output ->
-            val sncfReservations = output.sncfReservations
+            val sncfReservations = output.newSncfReservations + output.updatedSncfReservations
             _reservationsState.value = DataState.Success(sncfReservations)
             sncfReservations.forEach { sncfReservation ->
                 sncfApiReservationsDetailFetcher.fetchReservationDetail(

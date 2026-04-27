@@ -21,13 +21,9 @@ interface SncfReservationDao {
     @Transaction
     fun observeAllReservations(): Flow<List<SncfReservationWithStations>>
 
-    @Query("SELECT * FROM SncfReservationEntity WHERE dv_number=:dvNumber")
+    @Query("SELECT * FROM SncfReservationEntity WHERE dv_number=:dvNumber AND train_number=:trainNumber")
     @Transaction
-    suspend fun getReservationById(dvNumber: String): SncfReservationWithStations?
-
-    @Query("SELECT * FROM SncfReservationEntity WHERE dv_number IN (:dvNumbers)")
-    @Transaction
-    suspend fun getReservationsByIds(dvNumbers: List<String>): List<SncfReservationWithStations>
+    suspend fun getReservation(dvNumber: String, trainNumber: String): SncfReservationWithStations?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertStationIfNotExists(sncfStationEntity: SncfStationEntity)

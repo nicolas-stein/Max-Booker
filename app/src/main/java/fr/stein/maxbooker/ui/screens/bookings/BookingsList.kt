@@ -21,7 +21,7 @@ import fr.stein.maxbooker.domain.model.sncf.reservation.SncfReservation
 @Composable
 fun BookingsList(
     sncfReservations: List<SncfReservation>,
-    onReservationClick: (String) -> Unit,
+    onReservationClick: (String, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -43,10 +43,10 @@ fun BookingsList(
             ).fillMaxWidth().fillMaxHeight()
         ) {
             items(sncfReservations, key = {
-                it.dvNumber
+                "${it.dvNumber}-${it.trainNumber}"
             }) { sncfReservation ->
                 BookingsListItem(sncfReservation, onReservationClick = {
-                    onReservationClick(sncfReservation.dvNumber)
+                    onReservationClick(sncfReservation.dvNumber, sncfReservation.trainNumber)
                 })
             }
         }

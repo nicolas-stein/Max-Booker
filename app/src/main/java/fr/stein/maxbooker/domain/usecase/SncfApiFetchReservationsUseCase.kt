@@ -14,7 +14,7 @@ class SncfApiFetchReservationsUseCase @Inject constructor(
     private val sncfApiRepository: SncfApiRepository,
     private val sncfReservationDao: SncfReservationDao
 ) {
-    data class Output(val sncfReservations: List<SncfReservation>, val newSncfReservationsDvNumber: List<String>)
+    data class Output(val updatedSncfReservations: List<SncfReservation>, val newSncfReservations: List<SncfReservation>)
 
     @Throws(SncfApiException::class)
     suspend operator fun invoke(sncfCustomer: SncfCustomer): Output {
@@ -33,16 +33,11 @@ class SncfApiFetchReservationsUseCase @Inject constructor(
         }.getOrThrow()
 
         return runCatching {
-            val dvNumbers = sncfReservations.map { it.dvNumber }
-            val savedSncfReservations = sncfReservationDao.getReservationsByIds(dvNumbers)
-                .map { it.toDomain() }
-                .associateBy { it.dvNumber }
-
-            val sncfReservationsToUpsert = mutableListOf<SncfReservation>()
-            val newSncfReservationsDvNumber = mutableListOf<String>()
+            val updatedSncfReservations = mutableListOf<SncfReservation>()
+            val newSncfReservations = mutableListOf<SncfReservation>()
 
             for (reservation in sncfReservations) {
-                val savedReservation = savedSncfReservations[reservation.dvNumber]
+                val savedReservation = sncfReservationDao.getReservation(reservation.dvNumber, reservation.trainNumber)?.toDomain()
 
                 if (savedReservation != null) {
                     reservation.updateDetails(
@@ -53,26 +48,25 @@ class SncfApiFetchReservationsUseCase @Inject constructor(
                         tcn = savedReservation.tcn,
                         transportationServiceOffer = savedReservation.transportationServiceOffer
                     )
+                    updatedSncfReservations.add(reservation)
                 } else {
                     sncfReservationDao.insertStationIfNotExists(reservation.origin.toEntity())
                     sncfReservationDao.insertStationIfNotExists(
                         reservation.destination.toEntity()
                     )
-                    newSncfReservationsDvNumber.add(reservation.dvNumber)
+                    newSncfReservations.add(reservation)
                 }
-
-                sncfReservationsToUpsert.add(reservation)
             }
 
             sncfReservationDao.upsertReservations(
-                sncfReservationsToUpsert.map {
+                (updatedSncfReservations + newSncfReservations).map {
                     it.toEntity()
                 }
             )
 
             return@runCatching Output(
-                sncfReservations = sncfReservationsToUpsert,
-                newSncfReservationsDvNumber = newSncfReservationsDvNumber
+                updatedSncfReservations = updatedSncfReservations,
+                newSncfReservations = newSncfReservations
             )
         }.onFailure { throwable ->
             Log.e(

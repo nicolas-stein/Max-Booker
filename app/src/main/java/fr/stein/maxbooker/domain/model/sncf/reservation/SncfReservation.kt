@@ -1,5 +1,7 @@
 package fr.stein.maxbooker.domain.model.sncf.reservation
 
+import android.net.Uri
+import androidx.core.net.toUri
 import java.time.ZonedDateTime
 
 data class SncfReservation(
@@ -27,7 +29,7 @@ data class SncfReservation(
     var tcn: String? = null,
     var transportationServiceOffer: String? = null
 ) {
-    data class Seat(val facingForward: Boolean, val seatPosition: String, val spaceType: String, val tgvDeck: String?)
+    data class Seat(val facingForward: Boolean, val seatPosition: String, val spaceComfort: String?, val spaceType: String, val tgvDeck: String?)
 
     fun updateDetails(
         amount: String?,
@@ -46,4 +48,6 @@ data class SncfReservation(
 
         return this
     }
+
+    fun buildDeepLink(): Uri = ("maxbooker://bookings?dvNumber=${dvNumber}&trainNumber=${trainNumber}").toUri()
 }

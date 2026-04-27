@@ -17,30 +17,29 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
-fun BookingsScreen(initialDvNumber: String? = null, viewModel: BookingsViewModel = hiltViewModel<BookingsViewModel>()) {
+fun BookingsScreen(initialTrainNumber: String? = null, initialDvNumber: String? = null, viewModel: BookingsViewModel = hiltViewModel<BookingsViewModel>()) {
     val uiState by viewModel.uiState.collectAsState()
     val scope = rememberCoroutineScope()
 
     val listDetailNavigator = rememberListDetailPaneScaffoldNavigator<String>()
 
-    LaunchedEffect(uiState.selectedDvNumber) {
-        val selectedId = uiState.selectedDvNumber
-        if (selectedId != null) {
-            listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail, selectedId)
+    LaunchedEffect(uiState.selectedDvNumber, uiState.selectedTrainNumber) {
+        if (uiState.selectedDvNumber != null && uiState.selectedTrainNumber != null) {
+            listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail, "${uiState.selectedDvNumber}-${uiState.selectedTrainNumber}")
         } else {
-            listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.List, selectedId)
+            listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.List, null)
         }
     }
 
     LaunchedEffect(listDetailNavigator.currentDestination) {
         if (listDetailNavigator.currentDestination?.pane == ListDetailPaneScaffoldRole.List) {
-            viewModel.selectReservation(null)
+            viewModel.selectReservation(null, null)
         }
     }
 
-    LaunchedEffect(initialDvNumber) {
-        if (initialDvNumber != null) {
-            viewModel.selectReservation(initialDvNumber)
+    LaunchedEffect(initialDvNumber, initialTrainNumber) {
+        if (initialDvNumber != null && initialTrainNumber != null) {
+            viewModel.selectReservation(initialDvNumber, initialTrainNumber)
         }
     }
 
@@ -49,7 +48,7 @@ fun BookingsScreen(initialDvNumber: String? = null, viewModel: BookingsViewModel
         listPane = {
             BookingsList(
                 sncfReservations = uiState.sncfReservations,
-                onReservationClick = { dvNumber -> viewModel.selectReservation(dvNumber) }
+                onReservationClick = { dvNumber, trainNumber -> viewModel.selectReservation(dvNumber, trainNumber) }
             )
         },
         detailPane = {

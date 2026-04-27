@@ -25,10 +25,11 @@ import kotlinx.coroutines.launch
 data class BookingsUiState(
     val sncfReservationsFetcherState: DataState<List<SncfReservation>> = DataState.Offline(null),
     val sncfReservations: List<SncfReservation> = emptyList(),
-    val selectedDvNumber: String? = null
+    val selectedDvNumber: String? = null,
+    val selectedTrainNumber: String? = null
 ) {
     val selectedSncfReservation: SncfReservation?
-        get() = sncfReservations.find { it.dvNumber == selectedDvNumber }
+        get() = sncfReservations.find { it.dvNumber == selectedDvNumber && it.trainNumber == selectedTrainNumber }
 }
 
 @HiltViewModel
@@ -55,8 +56,8 @@ class BookingsViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun selectReservation(dvNumber: String?) {
-        _uiState.update { it.copy(selectedDvNumber = dvNumber) }
+    fun selectReservation(dvNumber: String?, trainNumber: String?) {
+        _uiState.update { it.copy(selectedDvNumber = dvNumber, selectedTrainNumber = trainNumber) }
     }
 
     fun deleteReservation(sncfReservation: SncfReservation) {

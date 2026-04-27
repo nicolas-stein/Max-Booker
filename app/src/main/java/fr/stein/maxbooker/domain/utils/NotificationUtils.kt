@@ -111,7 +111,7 @@ object NotificationUtils {
             return
         }
 
-        val deepLinkUri = "maxbooker://bookings?dvNumber=${sncfReservation.dvNumber}".toUri()
+        val deepLinkUri = sncfReservation.buildDeepLink()
         val intent = Intent(Intent.ACTION_VIEW, deepLinkUri).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
@@ -167,7 +167,7 @@ object NotificationUtils {
             return
         }
 
-        val deepLinkUri = "maxbooker://bookings?dvNumber=${sncfReservation.dvNumber}".toUri()
+        val deepLinkUri = sncfReservation.buildDeepLink()
         val intent = Intent(Intent.ACTION_VIEW, deepLinkUri).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }

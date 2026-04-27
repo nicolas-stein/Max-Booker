@@ -30,5 +30,5 @@ data class SncfReservationEntity(
     @ColumnInfo(name = "tcn") val tcn: String?,
     @ColumnInfo(name = "transportation_service_offer") val transportationServiceOffer: String?
 ) {
-    data class Seat(val facingForward: Boolean, val seatPosition: String, val spaceType: String, val tgvDeck: String?)
+    data class Seat(val facingForward: Boolean, val seatPosition: String, val spaceComfort: String?, val spaceType: String, val tgvDeck: String?)
 }

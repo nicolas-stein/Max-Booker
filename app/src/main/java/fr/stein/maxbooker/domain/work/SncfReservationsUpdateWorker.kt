@@ -40,20 +40,17 @@ class SncfReservationsUpdateWorker @AssistedInject constructor(
 
         return runCatching {
             val output = sncfApiFetchReservationsUseCase(sncfCustomer)
-            if (output.newSncfReservationsDvNumber.isNotEmpty()) {
+            if (output.newSncfReservations.isNotEmpty()) {
                 NotificationUtils.sendNewBookingAddedNotification(
                     applicationContext,
-                    output.sncfReservations.filter {
-                        it.dvNumber in
-                            output.newSncfReservationsDvNumber
-                    }
+                    output.newSncfReservations
                 )
             }
 
             return Result.success(
                 Data.Builder().putString(
                     OUTPUT_DATA_KEY,
-                    objectMapper.writeValueAsString(output.sncfReservations)
+                    objectMapper.writeValueAsString(output.newSncfReservations + output.updatedSncfReservations)
                 ).build()
             )
         }.onFailure { throwable ->

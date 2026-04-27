@@ -20,22 +20,22 @@ class SncfApiReservationsDetailFetcher @Inject constructor(
     val reservationsState = _reservationsState.asStateFlow()
 
     suspend fun fetchReservationDetail(customer: SncfCustomer, sncfReservation: SncfReservation) {
-        if (_reservationsState.value[sncfReservation.dvNumber] is DataState.Loading) return
+        if (_reservationsState.value["${sncfReservation.dvNumber}-${sncfReservation.trainNumber}"] is DataState.Loading) return
 
-        _reservationsState.value[sncfReservation.dvNumber] = DataState.Loading
+        _reservationsState.value["${sncfReservation.dvNumber}-${sncfReservation.trainNumber}"] = DataState.Loading
         Log.d("Max Book", "SncfApiReservationsFetcher: fetching reservations...")
 
         runCatching {
             return@runCatching sncfApiFetchReservationDetailUseCase(customer, sncfReservation)
         }.onSuccess { result ->
-            _reservationsState.value[sncfReservation.dvNumber] = DataState.Success(result)
+            _reservationsState.value["${sncfReservation.dvNumber}-${sncfReservation.trainNumber}"] = DataState.Success(result)
         }.onFailure { throwable ->
             when (throwable) {
                 is SncfApiException.NetworkException ->
-                    _reservationsState.value[sncfReservation.dvNumber] =
+                    _reservationsState.value["${sncfReservation.dvNumber}-${sncfReservation.trainNumber}"] =
                         DataState.Offline(null)
                 else ->
-                    _reservationsState.value[sncfReservation.dvNumber] =
+                    _reservationsState.value["${sncfReservation.dvNumber}-${sncfReservation.trainNumber}"] =
                         DataState.Error(SncfApiException.UnexpectedException(throwable))
             }
             Log.e("Max Book", "SncfApiReservationsDetailFetcher: error fetching reservations detail", throwable)

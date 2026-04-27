@@ -80,6 +80,7 @@ fun SncfReservationWithStations.toDomain(): SncfReservation = SncfReservation(
 fun SncfReservationEntity.Seat.toDomain(): SncfReservation.Seat = SncfReservation.Seat(
     facingForward = facingForward,
     seatPosition = seatPosition,
+    spaceComfort = spaceComfort,
     spaceType = spaceType,
     tgvDeck = tgvDeck
 )
@@ -117,6 +118,7 @@ fun SncfReservation.toEntity(): SncfReservationEntity = SncfReservationEntity(
 fun SncfReservation.Seat.toEntity(): SncfReservationEntity.Seat = SncfReservationEntity.Seat(
     facingForward = facingForward,
     seatPosition = seatPosition,
+    spaceComfort = spaceComfort,
     spaceType = spaceType,
     tgvDeck = tgvDeck
 )
@@ -138,6 +140,7 @@ fun SncfGetTravelDto.toDomain(sncfReservation: SncfReservation): SncfReservation
 fun SncfGetTravelDto.Seat.toDomain(): SncfReservation.Seat = SncfReservation.Seat(
     facingForward = facingForward,
     seatPosition = seatPosition,
+    spaceComfort = spaceComfort,
     spaceType = spaceType,
     tgvDeck = tgvDeck
 )

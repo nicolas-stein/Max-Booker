@@ -351,6 +351,7 @@ private fun BookingsDetailsPreview() {
                 seat = SncfReservation.Seat(
                     facingForward = false,
                     seatPosition = "AFEN",
+                    spaceComfort = "MOM",
                     spaceType = "ADOC",
                     tgvDeck = "ANVH"
                 ),

@@ -23,6 +23,7 @@ import java.time.ZonedDateTime
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlinx.coroutines.flow.first
+import java.time.format.DateTimeFormatter
 
 class WorkerScheduler @Inject constructor(
     @param:ApplicationContext private val context: Context,
@@ -82,6 +83,7 @@ class WorkerScheduler @Inject constructor(
                 .setInputData(
                     Data.Builder()
                         .putString("dvNumber", sncfReservation.dvNumber)
+                        .putString("trainNumber", sncfReservation.trainNumber)
                         .build()
                 )
                 .addTag(SncfReservationConfirmWorker.WORKER_TAG)
@@ -103,7 +105,7 @@ class WorkerScheduler @Inject constructor(
     }
 
     fun cancelSncfReservationConfirmWorker(workManager: WorkManager, sncfReservation: SncfReservation) {
-        Log.i("Max Book", "WorkerScheduler: stopping SncfReservationConfirmWorker for ${sncfReservation.dvNumber}")
+        Log.i("Max Book", "WorkerScheduler: stopping SncfReservationConfirmWorker for ${sncfReservation.dvNumber}-${sncfReservation.trainNumber}")
         workManager.cancelUniqueWork(SncfReservationConfirmWorker.getWorkerName(sncfReservation))
     }
 }

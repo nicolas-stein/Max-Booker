@@ -31,14 +31,18 @@ class SncfReservationConfirmWorker @AssistedInject constructor(
     companion object {
         val WORKER_TAG = "SncfReservationConfirmWorker"
         fun getWorkerName(sncfReservation: SncfReservation): String =
-            "SncfReservationConfirmWorker-${sncfReservation.dvNumber}"
+            "SncfReservationConfirmWorker-${sncfReservation.dvNumber}-${sncfReservation.trainNumber}"
     }
 
     override suspend fun doWork(): Result {
         Log.d("Max Book", "SncfReservationConfirmWorker: doWork() with params ${workerParams.inputData}")
         val sncfReservationDvNumber = workerParams.inputData.getString("dvNumber")
+        val sncfReservationTrainNumber = workerParams.inputData.getString("trainNumber")
         if (sncfReservationDvNumber == null) {
             Log.e("Max Book", "SncfReservationConfirmWorker: input parameters missing dvNumber")
+            return Result.failure()
+        } else if (sncfReservationTrainNumber == null) {
+            Log.e("Max Book", "SncfReservationConfirmWorker: input parameters missing trainNumber")
             return Result.failure()
         }
 
@@ -49,13 +53,12 @@ class SncfReservationConfirmWorker @AssistedInject constructor(
         }
 
         val sncfReservation: SncfReservation = runCatching {
-            return@runCatching sncfApiFetchReservationsUseCase(sncfCustomer).sncfReservations.first {
-                it.dvNumber ==
-                    sncfReservationDvNumber
+            return@runCatching sncfApiFetchReservationsUseCase(sncfCustomer).updatedSncfReservations.first {
+                it.dvNumber == sncfReservationDvNumber && it.trainNumber == sncfReservationTrainNumber
             }
         }.getOrElse { throwable ->
             Log.e("Max Book", "SncfReservationConfirmWorker: failed to fetch sncf reservation", throwable)
-            val sncfReservationLocal = sncfReservationDao.getReservationById(sncfReservationDvNumber)?.toDomain()
+            val sncfReservationLocal = sncfReservationDao.getReservation(sncfReservationDvNumber, sncfReservationTrainNumber)?.toDomain()
             if (sncfReservationLocal != null) {
                 sendBookingConfirmedFailedNotification(applicationContext, sncfReservationLocal)
             }
@@ -84,7 +87,7 @@ class SncfReservationConfirmWorker @AssistedInject constructor(
             return Result.failure()
         }
 
-        Log.i("Max Book", "SncfReservationConfirmWorker: confirming sncf reservation ${sncfReservation.dvNumber}")
+        Log.i("Max Book", "SncfReservationConfirmWorker: confirming sncf reservation ${sncfReservation.dvNumber}-${sncfReservation.trainNumber}")
         return runCatching {
             sncfApiConfirmTravelUseCase.invoke(sncfReservation)
             NotificationUtils.sendBookingConfirmedNotification(applicationContext, sncfReservation)
