@@ -25,9 +25,7 @@ class SncfApiRepositoryImpl(private val sncfApi: SncfApi, private val sncfApiExe
         Log.d("Max Book", "SncfApiRepositoryImpl: requested getCustomer")
         val sncfCustomerDto = sncfApiExecutor.executeNonNullBody {
             sncfApi.getCustomer(
-                SncfCustomerRequest(
-                    productTypes = listOf("TGV_MAX_JEUNE", "FIDEL", "IDTGV_MAX")
-                ),
+                productTypes = listOf("TGV_MAX_JEUNE", "FIDEL", "IDTGV_MAX").joinToString(","),
                 cookiesOverride = cookiesOverride
             )
         }

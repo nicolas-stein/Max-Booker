@@ -10,16 +10,18 @@ import fr.stein.maxbooker.domain.model.sncf.reservation.SncfGetTravelRequest
 import fr.stein.maxbooker.domain.model.sncf.reservation.SncfTravelConsultationRequest
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface SncfApi {
     @POST("auth/refresh")
     suspend fun refreshAuth(@Header("Cookie") cookie: String): Response<JsonNode>
 
-    @POST("customer/read-customer")
+    @GET("customer/read-customer")
     suspend fun getCustomer(
-        @Body sncfCustomerRequest: SncfCustomerRequest,
+        @Query("productTypes") productTypes: String,
         @Header("Cookie") cookiesOverride: String?
     ): Response<SncfCustomerDto>
 
